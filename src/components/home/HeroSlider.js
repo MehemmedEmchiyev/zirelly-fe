@@ -25,7 +25,7 @@ export default function HeroSlider() {
     >
       {heroSlides.map((slide) => (
         <SwiperSlide key={slide.id}>
-          <div className="relative  sm:flex  sm:items-center min-h-[80vh]">
+          <div className="relative min-h-[88vh] sm:flex sm:items-center">
             {slide.image ? (
               <Image
                 src={slide.image}
@@ -37,8 +37,6 @@ export default function HeroSlider() {
             ) : (
               <div className="absolute inset-0 bg-[linear-gradient(135deg,#e5e5e5_25%,#f5f5f5_25%,#f5f5f5_50%,#e5e5e5_50%,#e5e5e5_75%,#f5f5f5_75%)] bg-[length:32px_32px]" />
             )}
-
-            <div className="absolute inset-0 bg-black/25" />
 
             <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-10 px-4 pb-4 sm:static sm:w-full sm:gap-6 sm:px-10 sm:py-14 lg:px-16 lg:py-16">
               <h1 className="max-w-[640px]  font-semibold md:font-bold   text-white sm:text-[32px] md:leading-[40px]">

@@ -68,3 +68,20 @@ body {
 .testimonials-swiper .swiper-slide {
   height: auto;
 }
+
+.products-page-swiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+.products-page-swiper .swiper-slide {
+  height: auto;
+}
+
+.products-page-swiper-mobile .swiper-slide {
+  display: flex;
+}
+
+.products-page-swiper-mobile .swiper-slide > * {
+  width: 100%;
+  height: 100%;
+}

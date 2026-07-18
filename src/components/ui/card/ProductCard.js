@@ -4,7 +4,7 @@ import shoppingBagIcon from "@/assets/images/card/shopping_bag.svg";
 
 function ProductImage({ image, title, originalPrice, inStock }) {
   return (
-    <div className="relative aspect-square overflow-hidden rounded-[32px] bg-[#F5F0EB]">
+    <div className="relative aspect-square overflow-hidden rounded-3xl bg-[#F5F0EB]">
       {image ? (
         <Image src={image} alt={title} fill className="object-cover object-center" />
       ) : (
@@ -14,7 +14,7 @@ function ProductImage({ image, title, originalPrice, inStock }) {
       )}
 
       {originalPrice && (
-        <span className="absolute left-2 top-2 rounded-[32px] bg-[var(--background-tertiary,#EBEBEB)] px-2 py-1 text-xs font-normal leading-[18px] text-foreground line-through">
+        <span className="absolute left-2 top-2 rounded-3xl bg-[var(--background-tertiary,#EBEBEB)] px-2 py-1 text-xs font-normal leading-[18px] text-foreground line-through">
           {originalPrice}
         </span>
       )}
@@ -48,9 +48,12 @@ export default function ProductCard({
   image,
   slug,
   onAddToCart,
+  className = "",
 }) {
   return (
-    <article className="flex flex-col gap-5 rounded-[40px] border border-[var(--content-secondary-inverse)] bg-white px-3 py-2">
+    <article
+      className={`flex flex-col gap-5 rounded-[40px] border border-[var(--content-secondary-inverse)] bg-white px-3 py-2 ${className}`}
+    >
       {slug ? (
         <Link href={`/products/${slug}`} className="flex flex-col gap-5">
           <ProductImage
