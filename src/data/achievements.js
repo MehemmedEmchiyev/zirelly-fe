@@ -3,6 +3,7 @@ export const achievements = [
     id: 1,
     title: "Lorem Ipsum",
     value: "300+",
+    mobileValue: "450+",
     description: "Lorem Ipsum",
     background: "var(--content-brand, #755C44)",
     textColor: "text-white",

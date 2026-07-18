@@ -1,5 +1,6 @@
 import AchievementsSection from "@/components/home/AchievementsSection";
 import HeroSlider from "@/components/home/HeroSlider";
+import ProductsSection from "@/components/home/ProductsSection";
 
 export default function HomePage() {
   return (
@@ -11,6 +12,7 @@ export default function HomePage() {
       </section>
 
       <AchievementsSection />
+      <ProductsSection />
     </>
   );
 }

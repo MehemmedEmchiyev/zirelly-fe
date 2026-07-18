@@ -12,6 +12,9 @@
   --content-brand: #755c44;
   --content-primary: #1a1a1a;
   --background-primary: #ffffff;
+  --background-tertiary: #ebebeb;
+  --background-positive-subtle: #d7f3e3;
+  --background-brand: #755c44;
 }
 
 @theme inline {
@@ -31,8 +34,14 @@ body {
 }
 
 .hero-swiper .swiper-pagination {
-  bottom: 24px !important;
+  bottom: 72px !important;
   line-height: 0;
+}
+
+@media (min-width: 640px) {
+  .hero-swiper .swiper-pagination {
+    bottom: 24px !important;
+  }
 }
 
 .hero-swiper .swiper-pagination-bullet {
