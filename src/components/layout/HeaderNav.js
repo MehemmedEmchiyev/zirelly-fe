@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const navLinks = [
-  { href: "/about", label: "About us" },
-  { href: "/blogs", label: "Blogs" },
-  { href: "/contact", label: "Contact us" },
+  { href: "/about", labelKey: "nav.about" },
+  { href: "/blogs", labelKey: "nav.blogs" },
+  { href: "/contact", labelKey: "nav.contact" },
 ];
 
 function ChevronDownIcon({ className }) {
@@ -32,6 +33,7 @@ function ChevronDownIcon({ className }) {
 
 export default function HeaderNav() {
   const [isProductsOpen, setIsProductsOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <nav className="hidden items-center gap-10 lg:flex">
@@ -41,7 +43,7 @@ export default function HeaderNav() {
           href={link.href}
           className="font-normal text-foreground transition-colors hover:text-brand-primary"
         >
-          {link.label}
+          {t(link.labelKey)}
         </Link>
       ))}
 
@@ -54,7 +56,7 @@ export default function HeaderNav() {
           href="/products"
           className="flex items-center gap-1.5  font-normal text-foreground transition-colors hover:text-brand-primary"
         >
-          Products
+          {t("nav.products")}
           <ChevronDownIcon
             className={`transition-transform ${isProductsOpen ? "rotate-180" : ""}`}
           />
@@ -67,7 +69,7 @@ export default function HeaderNav() {
                 href="/products"
                 className="block px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-header-icon-bg"
               >
-                All Products
+                {t("nav.allProducts")}
               </Link>
             </div>
           </div>
@@ -80,7 +82,7 @@ export default function HeaderNav() {
           href={link.href}
           className=" font-normal text-foreground transition-colors hover:text-brand-primary"
         >
-          {link.label}
+          {t(link.labelKey)}
         </Link>
       ))}
     </nav>

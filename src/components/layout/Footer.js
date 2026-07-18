@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/images/header/Logo.svg";
@@ -5,12 +7,13 @@ import facebookIcon from "@/assets/images/footer/facebook.svg";
 import instagramIcon from "@/assets/images/footer/instagram.svg";
 import linkedinIcon from "@/assets/images/footer/linkedin.svg";
 import tiktokIcon from "@/assets/images/footer/tiktok.svg";
+import { useLanguage } from "@/context/LanguageContext";
 
 const learnLinks = [
-  { href: "/about", label: "About us" },
-  { href: "/products", label: "Products" },
-  { href: "/blogs", label: "Blogs" },
-  { href: "/contact", label: "Contact us" },
+  { href: "/about", labelKey: "nav.about" },
+  { href: "/products", labelKey: "nav.products" },
+  { href: "/blogs", labelKey: "nav.blogs" },
+  { href: "/contact", labelKey: "nav.contact" },
 ];
 
 const socialLinks = [
@@ -21,6 +24,8 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="mt-auto mb-10 w-full">
       <div className="mx-auto w-full px-4 sm:px-6 lg:px-[108px]">
@@ -35,9 +40,7 @@ export default function Footer() {
                 />
               </Link>
               <p className="max-w-[320px] text-sm leading-6 text-zinc-500">
-                We believe every beauty routine should reflect your style.
-                Discover carefully selected haircare, skincare, and beauty
-                essentials at Zirelley.az
+                {t("footer.description")}
               </p>
             </div>
 
@@ -45,7 +48,7 @@ export default function Footer() {
               <div className="flex flex-col justify-between gap-8 lg:min-h-[220px]">
                 <div>
                   <h3 className="text-xs font-normal leading-[18px] text-zinc-400">
-                    LEARN
+                    {t("footer.learn")}
                   </h3>
                   <nav className="mt-3 flex flex-col gap-3">
                     {learnLinks.map((link) => (
@@ -54,22 +57,22 @@ export default function Footer() {
                         href={link.href}
                         className="text-xl font-normal leading-6 text-foreground transition-colors hover:text-brand-primary"
                       >
-                        {link.label}
+                        {t(link.labelKey)}
                       </Link>
                     ))}
                   </nav>
                 </div>
 
                 <div className="hidden text-sm leading-6 text-zinc-500 lg:block">
-                  <p>© 2025 Copyright</p>
-                  <p>All rights reserved</p>
+                  <p>{t("footer.copyright")}</p>
+                  <p>{t("footer.rights")}</p>
                 </div>
               </div>
 
               <div className="flex flex-col justify-between gap-8 lg:min-h-[220px]">
                 <div>
                   <h3 className="text-xs font-normal leading-[18px] text-zinc-400">
-                    SOCIAL MEDIA
+                    {t("footer.socialMedia")}
                   </h3>
                   <div className="mt-3 grid w-fit grid-cols-2 gap-3">
                     {socialLinks.map((social) => (
@@ -100,8 +103,8 @@ export default function Footer() {
 
             <div className="flex items-end justify-between gap-4 lg:hidden">
               <div className="text-sm leading-6 text-zinc-500">
-                <p>© 2025 Copyright</p>
-                <p>All rights reserved</p>
+                <p>{t("footer.copyright")}</p>
+                <p>{t("footer.rights")}</p>
               </div>
 
               <div className="text-right text-sm leading-6 text-foreground">

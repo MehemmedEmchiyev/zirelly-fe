@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { faqs } from "@/data/faqs";
+import { useLanguage } from "@/context/LanguageContext";
 
 function ChevronIcon({ className }) {
   return (
@@ -59,34 +59,39 @@ function FaqItem({ question, answer, isOpen, onToggle }) {
   );
 }
 
-export default function FaqSection() {
+export default function FaqSection({ title, items }) {
   const [openId, setOpenId] = useState(null);
+  const { t } = useLanguage();
+
+  if (!items?.length) {
+    return null;
+  }
 
   return (
     <section className="w-full px-4 py-10 sm:px-6 sm:py-16 lg:px-[108px] lg:py-20">
       <div className="mx-auto flex max-w-[1224px] flex-col gap-10 lg:flex-row lg:items-stretch lg:gap-16">
         <div className="flex flex-col justify-between gap-8 lg:min-h-[320px] lg:w-[42%] lg:shrink-0">
           <p className="text-base font-bold leading-5 text-zinc-400">
-            Frequently Asked Questions
+            {t("home.faqLabel")}
           </p>
 
           <h2 className="text-[40px] font-[510] leading-[48px] text-foreground sm:text-[52px] sm:leading-[60px] lg:text-[64px] lg:leading-[72px]">
-            Have a question? Let’s answer it!
+            {title || t("home.faqTitle")}
           </h2>
 
           <p className="text-base font-normal leading-5 text-zinc-500">
-            Still have questions? Contact us at{" "}
+            {t("home.faqContact")}
             <Link
               href="/contact"
               className="text-foreground transition-colors hover:text-brand-primary"
             >
-              Zirelley.az
+              Zirelly.az
             </Link>
           </p>
         </div>
 
         <div className="flex flex-1 flex-col gap-4">
-          {faqs.map((faq) => (
+          {items.map((faq) => (
             <FaqItem
               key={faq.id}
               question={faq.question}

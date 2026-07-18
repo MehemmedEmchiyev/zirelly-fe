@@ -5,7 +5,7 @@ import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import emptyStarIcon from "@/assets/images/testimonials/EmptyStar.svg";
 import starIcon from "@/assets/images/testimonials/Star.svg";
-import { testimonials } from "@/data/testimonials";
+import { useLanguage } from "@/context/LanguageContext";
 
 import "swiper/css";
 
@@ -59,12 +59,26 @@ function TestimonialCard({ text, name, rating, avatar }) {
   );
 }
 
-export default function TestimonialsSection() {
+export default function TestimonialsSection({ title, items }) {
+  const { t } = useLanguage();
+
+  if (!items?.length) {
+    return null;
+  }
+
+  const slides = items.map((item) => ({
+    id: item.id,
+    text: item.comment,
+    name: item.name,
+    rating: item.rating,
+    avatar: item.image?.url ?? null,
+  }));
+
   return (
     <section className="w-full overflow-hidden px-4 py-10 sm:px-6 sm:py-16 lg:px-[108px] lg:py-20">
       <div className="mx-auto max-w-[1224px]">
         <h2 className="mb-10 text-center text-[32px] font-bold leading-[40px] text-foreground">
-          What Our Clients Say
+          {title || t("home.testimonialsTitle")}
         </h2>
 
         <Swiper
@@ -90,7 +104,7 @@ export default function TestimonialsSection() {
           }}
           className="testimonials-swiper !overflow-visible"
         >
-          {testimonials.map((item) => (
+          {slides.map((item) => (
             <SwiperSlide key={item.id} className="!h-auto">
               <TestimonialCard
                 text={item.text}

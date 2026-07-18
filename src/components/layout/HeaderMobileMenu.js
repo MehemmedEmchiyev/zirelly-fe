@@ -7,16 +7,18 @@ import menuIcon from "@/assets/images/header/Menu.svg";
 import cartIcon from "@/assets/images/header/cart.svg";
 import LanguageDropdown from "@/components/layout/LanguageDropdown";
 import LoginButton from "@/components/layout/LoginButton";
+import { useLanguage } from "@/context/LanguageContext";
 
 const navLinks = [
-  { href: "/about", label: "About us" },
-  { href: "/products", label: "Products" },
-  { href: "/blogs", label: "Blogs" },
-  { href: "/contact", label: "Contact us" },
+  { href: "/about", labelKey: "nav.about" },
+  { href: "/products", labelKey: "nav.products" },
+  { href: "/blogs", labelKey: "nav.blogs" },
+  { href: "/contact", labelKey: "nav.contact" },
 ];
 
 export default function HeaderMobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -55,7 +57,7 @@ export default function HeaderMobileMenu() {
                   onClick={() => setIsOpen(false)}
                   className="rounded-xl px-3 py-3 text-[15px] text-foreground transition-colors hover:bg-header-icon-bg"
                 >
-                  {link.label}
+                  {t(link.labelKey)}
                 </Link>
               ))}
             </nav>

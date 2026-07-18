@@ -4,12 +4,18 @@ import Image from "next/image";
 import { Pagination, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Button } from "@/components/ui/button";
-import { heroSlides } from "@/data/hero-slides";
+import { useLanguage } from "@/context/LanguageContext";
 
 import "swiper/css";
 import "swiper/css/pagination";
 
-export default function HeroSlider() {
+export default function HeroSlider({ slides }) {
+  const { t } = useLanguage();
+
+  if (!slides?.length) {
+    return null;
+  }
+
   return (
     <Swiper
       modules={[Pagination, Autoplay]}
@@ -20,18 +26,18 @@ export default function HeroSlider() {
         pauseOnMouseEnter: true,
       }}
       speed={600}
-      loop
+      loop={slides.length > 1}
       className="hero-swiper w-full overflow-hidden rounded-3xl"
     >
-      {heroSlides.map((slide) => (
+      {slides.map((slide, index) => (
         <SwiperSlide key={slide.id}>
           <div className="relative min-h-[88vh] sm:flex sm:items-center">
-            {slide.image ? (
+            {slide.image?.url ? (
               <Image
-                src={slide.image}
+                src={slide.image.url}
                 alt=""
                 fill
-                priority={slide.id === 1}
+                priority={index === 0}
                 className="object-cover"
               />
             ) : (
@@ -44,10 +50,10 @@ export default function HeroSlider() {
               </h1>
 
               <Button
-                href={slide.buttonHref}
+                href={slide.link || "/products"}
                 className="w-full -mb-2 md:w-max sm:w-auto"
               >
-                {slide.buttonText}
+                {slide.button_text || t("home.seeProducts")}
               </Button>
             </div>
           </div>

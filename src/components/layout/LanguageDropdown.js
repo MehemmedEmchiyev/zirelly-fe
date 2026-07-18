@@ -5,15 +5,16 @@ import { useEffect, useRef, useState } from "react";
 import azerbaijanFlag from "@/assets/images/header/Azerbaijan.svg";
 import languageIcon from "@/assets/images/header/language.svg";
 import russianFlag from "@/assets/images/header/Russian.svg";
+import { useLanguage } from "@/context/LanguageContext";
 
-const languages = [
-  { code: "az", label: "Azerbaijan", flag: azerbaijanFlag },
-  { code: "ru", label: "Russian", flag: russianFlag },
-];
+const flags = {
+  az: azerbaijanFlag,
+  ru: russianFlag,
+};
 
 export default function LanguageDropdown() {
+  const { language, languages, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState("az");
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -36,8 +37,12 @@ export default function LanguageDropdown() {
   }, [isOpen]);
 
   function handleSelect(code) {
-    setSelected(code);
+    setLanguage(code);
     setIsOpen(false);
+  }
+
+  if (!languages.length) {
+    return null;
   }
 
   return (
@@ -72,23 +77,29 @@ export default function LanguageDropdown() {
         aria-hidden={!isOpen}
       >
         <div className="flex flex-col gap-3 rounded-2xl border border-[var(--content-secondary-inverse)] bg-[var(--content-primary-inverse)] p-3 shadow-[0px_0px_4px_0px_#00000014,0px_4px_8px_0px_#0000001A]">
-          {languages.map((language) => (
+          {languages.map((item) => (
             <button
-              key={language.code}
+              key={item.code}
               type="button"
-              onClick={() => handleSelect(language.code)}
+              onClick={() => handleSelect(item.code)}
               className={`flex cursor-pointer items-center gap-3 rounded-xl px-1 py-1 text-left text-[15px] text-foreground transition-colors hover:bg-header-icon-bg ${
-                selected === language.code ? "bg-header-icon-bg" : ""
+                language === item.code ? "bg-header-icon-bg" : ""
               }`}
             >
-              <Image
-                src={language.flag}
-                alt=""
-                width={24}
-                height={24}
-                className="h-6 w-6 shrink-0 rounded-full"
-              />
-              {language.label}
+              {flags[item.code] ? (
+                <Image
+                  src={flags[item.code]}
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="h-6 w-6 shrink-0 rounded-full"
+                />
+              ) : (
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-header-icon-bg text-[10px] font-medium uppercase text-foreground">
+                  {item.code}
+                </span>
+              )}
+              {item.native_name}
             </button>
           ))}
         </div>

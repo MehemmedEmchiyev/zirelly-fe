@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import LoginModal from "@/components/layout/LoginModal";
+import { useLanguage } from "@/context/LanguageContext";
 import { isAuthenticated } from "@/utils/auth";
 
 function UserIcon() {
@@ -28,6 +29,7 @@ function UserIcon() {
 export default function LoginButton({ className = "" }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setIsLoggedIn(isAuthenticated());
@@ -40,7 +42,7 @@ export default function LoginButton({ className = "" }) {
         className={`flex h-11 items-center gap-2 rounded-full bg-brand-primary px-5 text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover ${className}`}
       >
         <UserIcon />
-        Profile
+        {t("header.profile")}
       </Link>
     );
   }
@@ -53,7 +55,7 @@ export default function LoginButton({ className = "" }) {
         className={`flex h-11 cursor-pointer items-center gap-2 rounded-full bg-brand-primary px-5 text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover ${className}`}
       >
         <UserIcon />
-        Log In
+        {t("header.login")}
       </button>
 
       <LoginModal

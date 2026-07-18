@@ -1,8 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import shoppingBagIcon from "@/assets/images/card/shopping_bag.svg";
+import { useLanguage } from "@/context/LanguageContext";
 
-function ProductImage({ image, title, originalPrice, inStock }) {
+function ProductImage({ image, title, originalPrice, inStock, inStockLabel }) {
   return (
     <div className="relative aspect-square overflow-hidden rounded-3xl bg-[#F5F0EB]">
       {image ? (
@@ -21,7 +24,7 @@ function ProductImage({ image, title, originalPrice, inStock }) {
 
       {inStock && (
         <span className="absolute right-2 top-2 rounded-full bg-[var(--background-positive-subtle,#D7F3E3)] px-2 py-1 text-xs font-normal leading-[18px] text-[#2F7A4E]">
-          In Stock
+          {inStockLabel}
         </span>
       )}
     </div>
@@ -50,6 +53,8 @@ export default function ProductCard({
   onAddToCart,
   className = "",
 }) {
+  const { t } = useLanguage();
+
   return (
     <article
       className={`flex flex-col gap-5 rounded-[40px] border border-[var(--content-secondary-inverse)] bg-white px-3 py-2 ${className}`}
@@ -61,6 +66,7 @@ export default function ProductCard({
             title={title}
             originalPrice={originalPrice}
             inStock={inStock}
+            inStockLabel={t("card.inStock")}
           />
           <ProductInfo title={title} description={description} />
         </Link>
@@ -71,6 +77,7 @@ export default function ProductCard({
             title={title}
             originalPrice={originalPrice}
             inStock={inStock}
+            inStockLabel={t("card.inStock")}
           />
           <ProductInfo title={title} description={description} />
         </>
@@ -93,7 +100,7 @@ export default function ProductCard({
             height={16}
             className="h-4 w-4 shrink-0"
           />
-          Add to Card
+          {t("card.addToCart")}
         </button>
       </div>
     </article>
