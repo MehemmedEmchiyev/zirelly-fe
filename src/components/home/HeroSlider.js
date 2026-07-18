@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { Pagination, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Button } from "@/components/ui/button";
 import { heroSlides } from "@/data/hero-slides";
 
 import "swiper/css";
@@ -45,12 +45,12 @@ export default function HeroSlider() {
                 {slide.title}
               </h1>
 
-              <Link
+              <Button
                 href={slide.buttonHref}
-                className="w-full -mb-2 md:w-max rounded-full bg-[var(--content-brand,#755C44)] px-6 py-4 text-center text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover sm:w-auto sm:bg-brand-primary"
+                className="w-full -mb-2 md:w-max sm:w-auto"
               >
                 {slide.buttonText}
-              </Link>
+              </Button>
             </div>
           </div>
         </SwiperSlide>

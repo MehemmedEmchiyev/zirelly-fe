@@ -60,3 +60,11 @@ body {
   background: #755c44 !important;
   opacity: 1 !important;
 }
+
+.testimonials-swiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+.testimonials-swiper .swiper-slide {
+  height: auto;
+}

@@ -1,6 +1,9 @@
 import AchievementsSection from "@/components/home/AchievementsSection";
+import BannerSection from "@/components/home/BannerSection";
+import FaqSection from "@/components/home/FaqSection";
 import HeroSlider from "@/components/home/HeroSlider";
 import ProductsSection from "@/components/home/ProductsSection";
+import TestimonialsSection from "@/components/home/TestimonialsSection";
 
 export default function HomePage() {
   return (
@@ -13,6 +16,9 @@ export default function HomePage() {
 
       <AchievementsSection />
       <ProductsSection />
+      <BannerSection />
+      <TestimonialsSection />
+      <FaqSection />
     </>
   );
 }
