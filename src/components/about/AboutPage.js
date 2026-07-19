@@ -63,9 +63,10 @@ export default function AboutPage() {
               )}
 
               {hero?.description && (
-                <p className="whitespace-pre-line text-base leading-5 text-foreground">
-                  {hero.description}
-                </p>
+                <div
+                  className="flex flex-col gap-4 text-base leading-5 text-foreground [&_a]:text-brand-primary [&_a]:underline [&_li]:ml-5 [&_ol]:list-decimal [&_ul]:list-disc"
+                  dangerouslySetInnerHTML={{ __html: hero.description }}
+                />
               )}
             </div>
 
@@ -108,9 +109,10 @@ export default function AboutPage() {
                         <h3 className="text-2xl font-bold leading-8 text-foreground">
                           {item.title}
                         </h3>
-                        <p className="text-base leading-5 text-[#666666]">
-                          {item.description}
-                        </p>
+                        <div
+                          className="text-base leading-5 text-[#666666] [&_p]:mb-2 [&_p:last-child]:mb-0"
+                          dangerouslySetInnerHTML={{ __html: item.description }}
+                        />
                       </div>
                     </article>
                   ))}

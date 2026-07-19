@@ -113,10 +113,10 @@ export default function ContactPage() {
   }
 
   const categories = [
-    t("contact.catGeneral"),
-    t("contact.catOrder"),
-    t("contact.catProduct"),
-    t("contact.catOther"),
+    { value: "general", label: t("contact.catGeneral") },
+    { value: "order", label: t("contact.catOrder") },
+    { value: "product", label: t("contact.catProduct") },
+    { value: "other", label: t("contact.catOther") },
   ];
 
   return (
@@ -196,8 +196,8 @@ export default function ContactPage() {
             >
               <option value="">{t("contact.chooseCategory")}</option>
               {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+                <option key={category.value} value={category.value}>
+                  {category.label}
                 </option>
               ))}
             </select>

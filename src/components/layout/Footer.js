@@ -2,12 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import logo from "@/assets/images/header/Logo.svg";
 import facebookIcon from "@/assets/images/footer/facebook.svg";
 import instagramIcon from "@/assets/images/footer/instagram.svg";
 import linkedinIcon from "@/assets/images/footer/linkedin.svg";
 import tiktokIcon from "@/assets/images/footer/tiktok.svg";
 import { useLanguage } from "@/context/LanguageContext";
+import { apiFetch } from "@/utils/api";
+
+const FALLBACK_PHONE = "+994 (55) 730 00 36";
 
 const learnLinks = [
   { href: "/about", labelKey: "nav.about" },
@@ -25,6 +29,22 @@ const socialLinks = [
 
 export default function Footer() {
   const { t } = useLanguage();
+  const [phone, setPhone] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    apiFetch("/contact")
+      .then((response) => {
+        if (cancelled) return;
+        setPhone(response.data?.phone || null);
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <footer className="mt-auto mb-10 w-full">
@@ -95,7 +115,7 @@ export default function Footer() {
                 </div>
 
                 <div className="hidden text-sm leading-6 text-foreground lg:block">
-                  <p>+994 (55) 730 00 36</p>
+                  <p>{phone ?? FALLBACK_PHONE}</p>
                   <p>Zirelly.az</p>
                 </div>
               </div>
@@ -108,7 +128,7 @@ export default function Footer() {
               </div>
 
               <div className="text-right text-sm leading-6 text-foreground">
-                <p>+994 (55) 730 00 36</p>
+                <p>{phone ?? FALLBACK_PHONE}</p>
                 <p>Zirelly.az</p>
               </div>
             </div>
