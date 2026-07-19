@@ -45,16 +45,20 @@ export default function HeroSlider({ slides }) {
             )}
 
             <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-10 px-4 pb-4 sm:static sm:w-full sm:gap-6 sm:px-10 sm:py-14 lg:px-16 lg:py-16">
-              <h1 className="max-w-[640px]  font-semibold md:font-bold   text-white sm:text-[32px] md:leading-[40px]">
-                {slide.title}
-              </h1>
+              {slide.title && (
+                <h1 className="max-w-[640px]  font-semibold md:font-bold   text-white sm:text-[32px] md:leading-[40px]">
+                  {slide.title}
+                </h1>
+              )}
 
-              <Button
-                href={slide.link || "/products"}
-                className="w-full -mb-2 md:w-max sm:w-auto"
-              >
-                {slide.button_text || t("home.seeProducts")}
-              </Button>
+              {!slide.hide_button && (
+                <Button
+                  href={slide.link || "/products"}
+                  className="w-full -mb-2 md:w-max sm:w-auto"
+                >
+                  {slide.button_text || t("home.seeProducts")}
+                </Button>
+              )}
             </div>
           </div>
         </SwiperSlide>

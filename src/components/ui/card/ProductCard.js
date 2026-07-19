@@ -2,8 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import shoppingBagIcon from "@/assets/images/card/shopping_bag.svg";
+import AuthModals from "@/components/layout/AuthModals";
 import { useLanguage } from "@/context/LanguageContext";
+import { authFetch } from "@/utils/api";
+import { isAuthenticated } from "@/utils/auth";
 
 function ProductImage({ image, title, originalPrice, inStock, inStockLabel }) {
   return (
@@ -43,6 +47,7 @@ function ProductInfo({ title, description }) {
 }
 
 export default function ProductCard({
+  productId,
   title,
   description,
   price,
@@ -54,6 +59,38 @@ export default function ProductCard({
   className = "",
 }) {
   const { t } = useLanguage();
+  const [authOpen, setAuthOpen] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [added, setAdded] = useState(false);
+
+  async function handleAddToCart() {
+    if (onAddToCart) {
+      onAddToCart();
+      return;
+    }
+
+    if (!productId) return;
+
+    if (!isAuthenticated()) {
+      setAuthOpen(true);
+      return;
+    }
+
+    setAdding(true);
+
+    try {
+      await authFetch("/basket/items", {
+        method: "POST",
+        body: JSON.stringify({ product_id: productId, quantity: 1 }),
+      });
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2000);
+    } catch {
+      // sorğu alınmadıqda düymə sadəcə əvvəlki vəziyyətinə qayıdır
+    } finally {
+      setAdding(false);
+    }
+  }
 
   return (
     <article
@@ -90,8 +127,9 @@ export default function ProductCard({
 
         <button
           type="button"
-          onClick={onAddToCart}
-          className="flex cursor-pointer items-center gap-2 rounded-[40px] bg-[var(--background-brand,#755C44)] px-3 py-2 text-sm font-medium leading-[18px] text-white transition-colors hover:bg-brand-primary-hover"
+          disabled={adding}
+          onClick={handleAddToCart}
+          className="flex cursor-pointer items-center gap-2 rounded-[40px] bg-[var(--background-brand,#755C44)] px-3 py-2 text-sm font-medium leading-[18px] text-white transition-colors hover:bg-brand-primary-hover disabled:cursor-default disabled:opacity-60"
         >
           <Image
             src={shoppingBagIcon}
@@ -100,9 +138,11 @@ export default function ProductCard({
             height={16}
             className="h-4 w-4 shrink-0"
           />
-          {t("card.addToCart")}
+          {added ? t("card.added") : t("card.addToCart")}
         </button>
       </div>
+
+      <AuthModals isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </article>
   );
 }

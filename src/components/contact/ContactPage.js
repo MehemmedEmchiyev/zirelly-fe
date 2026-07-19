@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
-import { API_URL, apiFetch } from "@/utils/api";
+import { apiFetch } from "@/utils/api";
 
 const MESSAGE_LIMIT = 500;
 
@@ -82,12 +82,9 @@ export default function ContactPage() {
     setSending(true);
 
     try {
-      const response = await fetch(`${API_URL}/contact/messages`, {
+      await apiFetch("/contact/messages", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        lang: language,
         body: JSON.stringify({
           name: form.name,
           email: form.email,
@@ -97,16 +94,13 @@ export default function ContactPage() {
         }),
       });
 
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        setStatus({ ok: false, text: data.message || t("contact.error") });
-        return;
-      }
-
       setStatus({ ok: true, text: t("contact.success") });
       setForm({ name: "", email: "", phone: "", subject: "", message: "" });
-    } catch {
-      setStatus({ ok: false, text: t("contact.error") });
+    } catch (err) {
+      setStatus({
+        ok: false,
+        text: err.status ? err.message : t("contact.error"),
+      });
     } finally {
       setSending(false);
     }

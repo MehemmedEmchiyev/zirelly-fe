@@ -4,14 +4,16 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ProfileForm from "@/components/profile/ProfileForm";
 import ProfileSidebar from "@/components/profile/ProfileSidebar";
-import RecentlyViewedEmpty from "@/components/profile/RecentlyViewedEmpty";
+import RecentlyViewed from "@/components/profile/RecentlyViewed";
 import { STORAGE_KEYS } from "@/constants/storage-keys";
+import { authFetch } from "@/utils/api";
 
 export default function ProfilePage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("profile");
 
   function handleLogout() {
+    authFetch("/auth/logout", { method: "POST" }).catch(() => {});
     localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
     router.push("/");
     router.refresh();
@@ -28,7 +30,7 @@ export default function ProfilePage() {
 
         {activeTab === "profile" && <ProfileForm />}
 
-        {activeTab === "recently-viewed" && <RecentlyViewedEmpty />}
+        {activeTab === "recently-viewed" && <RecentlyViewed />}
       </div>
     </section>
   );

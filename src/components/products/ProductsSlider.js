@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { ProductCard } from "@/components/ui/card";
-import { products, productsFeaturedImage } from "@/data/products";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -95,7 +94,7 @@ function useSliderNav() {
   };
 }
 
-export default function ProductsSlider() {
+export default function ProductsSlider({ products, featuredImage }) {
   const mobileNav = useSliderNav();
   const desktopNav = useSliderNav();
 
@@ -113,7 +112,7 @@ export default function ProductsSlider() {
           <SwiperSlide className="!h-auto">
             <div className="relative h-full w-full overflow-hidden rounded-2xl">
               <Image
-                src={productsFeaturedImage}
+                src={featuredImage}
                 alt="Featured product"
                 fill
                 className="object-cover object-center"
@@ -126,6 +125,7 @@ export default function ProductsSlider() {
             <SwiperSlide key={product.id} className="!h-auto">
               <ProductCard
                 className="h-full"
+                productId={product.id}
                 slug={product.slug}
                 title={product.title}
                 description={product.description}
@@ -150,7 +150,7 @@ export default function ProductsSlider() {
         <div className="grid grid-cols-[1.15fr_1fr] items-stretch gap-8">
           <div className="relative min-h-full w-full overflow-hidden rounded-2xl">
             <Image
-              src={productsFeaturedImage}
+              src={featuredImage}
               alt="Featured product"
               fill
               className="object-cover object-center"
@@ -169,6 +169,7 @@ export default function ProductsSlider() {
               {products.map((product) => (
                 <SwiperSlide key={product.id} className="!h-auto">
                   <ProductCard
+                    productId={product.id}
                     slug={product.slug}
                     title={product.title}
                     description={product.description}

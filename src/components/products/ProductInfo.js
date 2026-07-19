@@ -1,9 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import commentsIcon from "@/assets/images/products/Comments.svg";
 import phoneIcon from "@/assets/images/products/Phone.svg";
 import reviewIcon from "@/assets/images/products/Review.svg";
+import emptyStarIcon from "@/assets/images/testimonials/EmptyStar.svg";
 import starIcon from "@/assets/images/testimonials/Star.svg";
+import { useLanguage } from "@/context/LanguageContext";
 
 function PlusIcon() {
   return (
@@ -26,7 +30,17 @@ function IconBackground({ children }) {
   );
 }
 
-export default function ProductInfo({ product }) {
+function formatPrice(value) {
+  return `${Number(value).toFixed(2)} ₼`;
+}
+
+export default function ProductInfo({ product, phone }) {
+  const { t } = useLanguage();
+
+  const ratingAverage = Math.round(product.rating?.average ?? 0);
+  const ratingCount = product.rating?.count ?? 0;
+  const telHref = `tel:${(phone || "+994557300036").replace(/[\s()-]/g, "")}`;
+
   return (
     <div className="flex h-full flex-col justify-between gap-6">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-base font-normal leading-5 text-foreground">
@@ -38,28 +52,24 @@ export default function ProductInfo({ product }) {
             height={18}
             className="h-[18px] w-[18px]"
           />
-          <span>{product.reviewsCount} Reviews</span>
+          <span>
+            {ratingCount} {t("product.reviews")}
+          </span>
         </div>
 
         <div className="flex items-center gap-1.5">
           {Array.from({ length: 5 }, (_, index) => (
             <Image
               key={index}
-              src={starIcon}
+              src={index < ratingAverage ? starIcon : emptyStarIcon}
               alt=""
               width={18}
               height={18}
               className="h-[18px] w-[18px]"
             />
           ))}
-          <span>({product.ratingCount})</span>
+          <span>({ratingCount})</span>
         </div>
-
-        {product.onlineOrdersOnly && (
-          <span className="ml-auto text-base font-normal leading-5 text-foreground">
-            Online Orders Only
-          </span>
-        )}
       </div>
 
       <h1 className="text-[32px] font-normal leading-[40px] text-foreground">
@@ -67,20 +77,27 @@ export default function ProductInfo({ product }) {
       </h1>
 
       <div className="flex flex-col gap-1">
-        <p className="text-xl font-[510] leading-7 text-zinc-400 line-through">
-          {product.originalPrice}
-        </p>
+        {product.discount != null && (
+          <p className="text-xl font-[510] leading-7 text-zinc-400 line-through">
+            {formatPrice(product.price)}
+          </p>
+        )}
         <p className="text-[32px] font-bold leading-[40px] text-foreground">
-          {product.price}
+          {formatPrice(product.final_price ?? product.price)}
         </p>
       </div>
 
-      <p className="text-sm font-normal leading-5 text-[#333333]">
-        <span className="font-bold text-foreground">Note:</span> {product.note}
-      </p>
+      {product.description && (
+        <div
+          className="text-sm font-normal leading-5 text-[#333333] [&_a]:text-brand-primary [&_a]:underline [&_p]:mb-2 [&_p:last-child]:mb-0"
+          dangerouslySetInnerHTML={{ __html: product.description }}
+        />
+      )}
 
       <div className="mt-2 flex flex-col gap-3">
-        <p className="text-sm font-normal leading-5 text-foreground">Məlumat</p>
+        <p className="text-sm font-normal leading-5 text-foreground">
+          {t("product.info")}
+        </p>
 
         <button
           type="button"
@@ -97,10 +114,10 @@ export default function ProductInfo({ product }) {
           </IconBackground>
           <span className="flex-1">
             <span className="block text-sm font-semibold leading-5 text-foreground">
-              Reviews
+              {t("product.reviewsTitle")}
             </span>
             <span className="block text-sm font-normal leading-5 text-zinc-500">
-              Click to view
+              {t("product.clickToView")}
             </span>
           </span>
           <IconBackground>
@@ -120,17 +137,17 @@ export default function ProductInfo({ product }) {
           </IconBackground>
           <span className="flex-1">
             <span className="block text-sm font-semibold leading-5 text-foreground">
-              Any questions?
+              {t("product.anyQuestions")}
             </span>
             <span className="block text-sm font-normal leading-5 text-zinc-500">
-              Call and ask
+              {t("product.callAndAsk")}
             </span>
           </span>
           <Link
-            href="tel:+994557300036"
+            href={telHref}
             className="rounded-xl bg-[var(--background-brand,#755C44)] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover"
           >
-            Zəng et
+            {t("product.call")}
           </Link>
         </div>
       </div>

@@ -2,34 +2,13 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import AuthModals from "@/components/layout/AuthModals";
 import { useLanguage } from "@/context/LanguageContext";
-import { API_URL } from "@/utils/api";
+import { authFetch } from "@/utils/api";
 import { getAuthToken } from "@/utils/auth";
 
 function formatPrice(value) {
   return `${Number(value).toFixed(2)} ₼`;
-}
-
-async function basketFetch(path, options = {}) {
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getAuthToken()}`,
-      ...options.headers,
-    },
-  });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    const error = new Error(data.message || `API request failed: ${response.status}`);
-    error.status = response.status;
-    throw error;
-  }
-
-  return data;
 }
 
 function MinusIcon() {
@@ -174,14 +153,16 @@ export default function CartPage() {
   const [promo, setPromo] = useState(null);
   const [promoError, setPromoError] = useState(null);
   const [status, setStatus] = useState(null);
+  const [authOpen, setAuthOpen] = useState(false);
 
   const loadBasket = useCallback(async () => {
     try {
-      const response = await basketFetch("/basket");
+      const response = await authFetch("/basket");
       setBasket(response.data);
     } catch (err) {
       if (err.status === 401) {
         setLoggedOut(true);
+        setAuthOpen(true);
       }
     } finally {
       setLoading(false);
@@ -191,6 +172,7 @@ export default function CartPage() {
   useEffect(() => {
     if (!getAuthToken()) {
       setLoggedOut(true);
+      setAuthOpen(true);
       setLoading(false);
       return;
     }
@@ -203,7 +185,7 @@ export default function CartPage() {
     setBusy(true);
 
     try {
-      await basketFetch(`/basket/items/${item.id}`, {
+      await authFetch(`/basket/items/${item.id}`, {
         method: "PUT",
         body: JSON.stringify({ quantity }),
       });
@@ -220,7 +202,7 @@ export default function CartPage() {
     setBusy(true);
 
     try {
-      await basketFetch(`/basket/items/${item.id}`, { method: "DELETE" });
+      await authFetch(`/basket/items/${item.id}`, { method: "DELETE" });
       await loadBasket();
       setPromo(null);
     } catch {
@@ -235,7 +217,7 @@ export default function CartPage() {
     setPromoError(null);
 
     try {
-      const response = await basketFetch("/promocodes/preview", {
+      const response = await authFetch("/promocodes/preview", {
         method: "POST",
         body: JSON.stringify({ code: promoInput.trim() }),
       });
@@ -251,7 +233,7 @@ export default function CartPage() {
     setStatus(null);
 
     try {
-      await basketFetch("/checkout", {
+      await authFetch("/checkout", {
         method: "POST",
         body: JSON.stringify(promo ? { promocode: promo.code } : {}),
       });
@@ -288,7 +270,16 @@ export default function CartPage() {
           )}
 
           {!loading && loggedOut && (
-            <p className="py-6 text-zinc-500">{t("cart.loginRequired")}</p>
+            <div className="flex flex-col items-start gap-4 py-6">
+              <p className="text-zinc-500">{t("cart.loginRequired")}</p>
+              <button
+                type="button"
+                onClick={() => setAuthOpen(true)}
+                className="flex h-11 cursor-pointer items-center rounded-full bg-brand-primary px-5 text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover"
+              >
+                {t("header.login")}
+              </button>
+            </div>
           )}
 
           {!loading && !loggedOut && items.length === 0 && (
@@ -407,6 +398,8 @@ export default function CartPage() {
           </aside>
         )}
       </div>
+
+      <AuthModals isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </section>
   );
 }

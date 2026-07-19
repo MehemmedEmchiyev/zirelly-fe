@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import LoginModal from "@/components/layout/LoginModal";
+import AuthModals from "@/components/layout/AuthModals";
 import { useLanguage } from "@/context/LanguageContext";
 import { isAuthenticated } from "@/utils/auth";
 
@@ -58,7 +58,7 @@ export default function LoginButton({ className = "" }) {
         {t("header.login")}
       </button>
 
-      <LoginModal
+      <AuthModals
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />

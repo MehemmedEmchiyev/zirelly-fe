@@ -7,17 +7,29 @@ import {
   ProfileLogoutIcon,
   ProfileUserIcon,
 } from "@/components/profile/ProfileIcons";
+import { useLanguage } from "@/context/LanguageContext";
 
 const TABS = [
-  { id: "profile", label: "Profile", icon: ProfileUserIcon, type: "tab" },
+  { id: "profile", labelKey: "profile.title", icon: ProfileUserIcon, type: "tab" },
   {
     id: "recently-viewed",
-    label: "Recently Viewed",
+    labelKey: "profile.recentlyViewed",
     icon: ProfileEyeIcon,
     type: "tab",
   },
-  { id: "cart", label: "Cart", icon: ProfileCartIcon, type: "link", href: "/cart" },
-  { id: "logout", label: "Log out", icon: ProfileLogoutIcon, type: "action" },
+  {
+    id: "cart",
+    labelKey: "profile.cartTab",
+    icon: ProfileCartIcon,
+    type: "link",
+    href: "/cart",
+  },
+  {
+    id: "logout",
+    labelKey: "profile.logout",
+    icon: ProfileLogoutIcon,
+    type: "action",
+  },
 ];
 
 function TabContent({ Icon, label }) {
@@ -30,6 +42,7 @@ function TabContent({ Icon, label }) {
 }
 
 export default function ProfileSidebar({ activeTab, onTabChange, onLogout }) {
+  const { t } = useLanguage();
   const itemBase =
     "flex w-full items-center gap-3 rounded-[20px] p-2 text-left transition-colors";
 
@@ -40,6 +53,7 @@ export default function ProfileSidebar({ activeTab, onTabChange, onLogout }) {
     >
       {TABS.map((tab) => {
         const isActive = activeTab === tab.id;
+        const label = t(tab.labelKey);
         const classes = `${itemBase} ${
           isActive
             ? "bg-[#AD8E71] text-white"
@@ -49,7 +63,7 @@ export default function ProfileSidebar({ activeTab, onTabChange, onLogout }) {
         if (tab.type === "link") {
           return (
             <Link key={tab.id} href={tab.href} className={classes}>
-              <TabContent Icon={tab.icon} label={tab.label} />
+              <TabContent Icon={tab.icon} label={label} />
             </Link>
           );
         }
@@ -57,7 +71,7 @@ export default function ProfileSidebar({ activeTab, onTabChange, onLogout }) {
         if (tab.type === "action") {
           return (
             <button key={tab.id} type="button" onClick={onLogout} className={classes}>
-              <TabContent Icon={tab.icon} label={tab.label} />
+              <TabContent Icon={tab.icon} label={label} />
             </button>
           );
         }
@@ -70,7 +84,7 @@ export default function ProfileSidebar({ activeTab, onTabChange, onLogout }) {
             className={classes}
             aria-current={isActive ? "page" : undefined}
           >
-            <TabContent Icon={tab.icon} label={tab.label} />
+            <TabContent Icon={tab.icon} label={label} />
           </button>
         );
       })}

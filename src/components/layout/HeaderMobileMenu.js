@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import menuIcon from "@/assets/images/header/Menu.svg";
-import cartIcon from "@/assets/images/header/cart.svg";
+import CartLink from "@/components/layout/CartLink";
 import LanguageDropdown from "@/components/layout/LanguageDropdown";
 import LoginButton from "@/components/layout/LoginButton";
 import { useLanguage } from "@/context/LanguageContext";
@@ -64,20 +64,7 @@ export default function HeaderMobileMenu() {
 
             <div className="mt-6 flex items-center justify-between border-t border-header-border pt-6">
               <div className="flex items-center gap-3">
-                <Link
-                  href="/cart"
-                  aria-label="Cart"
-                  onClick={() => setIsOpen(false)}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center"
-                >
-                  <Image
-                    src={cartIcon}
-                    alt=""
-                    width={48}
-                    height={48}
-                    className="h-11 w-11"
-                  />
-                </Link>
+                <CartLink onNavigate={() => setIsOpen(false)} />
 
                 <LanguageDropdown />
               </div>

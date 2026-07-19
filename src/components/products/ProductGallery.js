@@ -36,6 +36,14 @@ export default function ProductGallery({ images }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
+  if (!images?.length) {
+    return (
+      <div className="flex h-full min-h-[360px] w-full items-center justify-center rounded-3xl bg-[#F5F0EB] sm:min-h-[420px]">
+        <div className="h-24 w-24 rounded-full bg-[#EBE6E0]" />
+      </div>
+    );
+  }
+
   const activeImage = images[activeIndex] ?? images[0];
 
   return (

@@ -1,4 +1,5 @@
 import CartPage from "@/components/cart/CartPage";
+import RequireAuth from "@/components/common/RequireAuth";
 
 export const metadata = {
   title: "My Cart",
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function Cart() {
-  return <CartPage />;
+  return (
+    <RequireAuth>
+      <CartPage />
+    </RequireAuth>
+  );
 }
