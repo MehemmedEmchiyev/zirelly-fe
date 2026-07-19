@@ -50,8 +50,8 @@ export default function Footer() {
     <footer className="mt-auto mb-10 w-full">
       <div className="mx-auto w-full px-4 sm:px-6 lg:px-[108px]">
         <div className="mx-auto max-w-[1224px] rounded-[40px] border-t border-[var(--content-secondary-inverse)] bg-[var(--background-primary,#FFFFFF)] py-10 shadow-[0px_0px_4px_0px_#00000014,0px_4px_8px_0px_#0000001A] ">
-          <div className="flex flex-col gap-8 px-6 sm:px-10 lg:grid lg:grid-cols-3 lg:gap-16">
-            <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-8 px-6 sm:px-10 lg:flex-row lg:items-stretch lg:justify-between lg:gap-16">
+            <div className="flex flex-col gap-4 lg:max-w-[400px]">
               <Link href="/" className="shrink-0">
                 <Image
                   src={logo}

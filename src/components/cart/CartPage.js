@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import basketImage from "@/assets/images/basket.png";
 import AuthModals from "@/components/layout/AuthModals";
 import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
@@ -287,9 +289,31 @@ export default function CartPage() {
           )}
 
           {!loading && !loggedOut && items.length === 0 && (
-            <p className="py-6 text-zinc-500">
-              {status?.ok ? status.text : t("cart.empty")}
-            </p>
+            <div className="flex flex-col items-center justify-center gap-6 rounded-3xl bg-header-icon-bg px-4 py-12 sm:py-16">
+              <Image
+                src={basketImage}
+                alt=""
+                width={180}
+                height={180}
+                className="h-auto w-[140px] object-contain sm:w-[180px]"
+              />
+
+              <div className="flex max-w-[400px] flex-col items-center gap-2 text-center">
+                <h2 className="text-xl font-bold leading-7 text-foreground">
+                  {status?.ok ? status.text : t("cart.emptyTitle")}
+                </h2>
+                <p className="text-sm font-normal leading-5 text-[#666666]">
+                  {t("cart.emptyText")}
+                </p>
+              </div>
+
+              <Link
+                href="/products"
+                className="inline-flex w-max cursor-pointer items-center justify-center rounded-3xl bg-brand-primary px-5 py-3 text-sm font-medium leading-5 text-white transition-colors hover:bg-brand-primary-hover"
+              >
+                {t("cart.startShopping")}
+              </Link>
+            </div>
           )}
 
           {!loading && !loggedOut && items.length > 0 && (

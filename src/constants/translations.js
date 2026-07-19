@@ -78,6 +78,10 @@ export const TRANSLATIONS = {
     "contact.error": "Mesaj göndərilmədi. Yenidən cəhd edin.",
     "cart.title": "Səbətim",
     "cart.empty": "Səbətiniz boşdur.",
+    "cart.emptyTitle": "Səbətiniz boşdur",
+    "cart.emptyText":
+      "Məhsulları səbətə əlavə edin ki, onları istənilən vaxt asanlıqla sifariş edə biləsiniz.",
+    "cart.startShopping": "Alış-verişə başla",
     "cart.loginRequired": "Səbəti görmək üçün daxil olun.",
     "cart.overview": "Xülasə",
     "cart.items": "məhsul",
@@ -195,6 +199,10 @@ export const TRANSLATIONS = {
     "contact.error": "Message could not be sent. Please try again.",
     "cart.title": "My Cart",
     "cart.empty": "Your cart is empty.",
+    "cart.emptyTitle": "Your cart is empty",
+    "cart.emptyText":
+      "Add products to your cart so you can easily order them anytime.",
+    "cart.startShopping": "Start Shopping",
     "cart.loginRequired": "Log in to see your cart.",
     "cart.overview": "Overview",
     "cart.items": "item",
@@ -312,6 +320,10 @@ export const TRANSLATIONS = {
     "contact.error": "Не удалось отправить сообщение. Попробуйте ещё раз.",
     "cart.title": "Моя корзина",
     "cart.empty": "Ваша корзина пуста.",
+    "cart.emptyTitle": "Ваша корзина пуста",
+    "cart.emptyText":
+      "Добавляйте товары в корзину, чтобы легко оформить заказ в любое время.",
+    "cart.startShopping": "Начать покупки",
     "cart.loginRequired": "Войдите, чтобы увидеть корзину.",
     "cart.overview": "Итого",
     "cart.items": "товар",
