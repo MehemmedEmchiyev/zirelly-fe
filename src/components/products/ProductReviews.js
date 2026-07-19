@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import emptyStarIcon from "@/assets/images/testimonials/EmptyStar.svg";
 import starIcon from "@/assets/images/testimonials/Star.svg";
 import AuthModals from "@/components/layout/AuthModals";
-import ModalShell from "@/components/layout/ModalShell";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch, authFetch } from "@/utils/api";
 import { formatDate } from "@/utils/blog";
@@ -45,7 +44,7 @@ function Stars({ value, size = 18, onSelect }) {
   );
 }
 
-export default function ProductReviewsModal({ productId, isOpen, onClose }) {
+export default function ProductReviews({ productId }) {
   const { language, t } = useLanguage();
   const [reviews, setReviews] = useState(null);
   const [rating, setRating] = useState(5);
@@ -55,7 +54,7 @@ export default function ProductReviewsModal({ productId, isOpen, onClose }) {
   const [authOpen, setAuthOpen] = useState(false);
 
   useEffect(() => {
-    if (!isOpen || !productId) return;
+    if (!productId) return;
 
     let cancelled = false;
 
@@ -75,7 +74,7 @@ export default function ProductReviewsModal({ productId, isOpen, onClose }) {
     return () => {
       cancelled = true;
     };
-  }, [isOpen, productId, language]);
+  }, [productId, language]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -106,23 +105,15 @@ export default function ProductReviewsModal({ productId, isOpen, onClose }) {
   }
 
   return (
-    <>
-      <ModalShell
-        isOpen={isOpen}
-        onClose={onClose}
-        titleId="reviews-modal-title"
-        maxWidthClass="max-w-[560px]"
-      >
-        <h2
-          id="reviews-modal-title"
-          className="pt-2 text-center text-xl font-semibold text-foreground"
-        >
-          {t("product.reviewsTitle")}
-        </h2>
+    <section id="product-reviews" className="w-full scroll-mt-28">
+      <h2 className="mb-6 text-[32px] font-bold leading-[40px] text-foreground">
+        {t("product.reviewsTitle")}
+      </h2>
 
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
         <form
           onSubmit={handleSubmit}
-          className="mt-6 flex flex-col gap-3 rounded-2xl bg-header-icon-bg p-4"
+          className="flex w-full flex-col gap-3 rounded-3xl bg-header-icon-bg p-5 lg:w-[400px] lg:shrink-0"
         >
           <p className="text-sm font-medium text-foreground">
             {t("review.write")}
@@ -135,7 +126,7 @@ export default function ProductReviewsModal({ productId, isOpen, onClose }) {
             onChange={(event) => setComment(event.target.value)}
             placeholder={t("review.placeholder")}
             maxLength={2000}
-            rows={3}
+            rows={4}
             className="w-full resize-none rounded-xl border border-[#CCCCCC] bg-white p-3 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
           />
 
@@ -156,16 +147,16 @@ export default function ProductReviewsModal({ productId, isOpen, onClose }) {
           </button>
         </form>
 
-        <div className="mt-6 flex flex-col gap-4">
+        <div className="flex w-full min-w-0 flex-1 flex-col gap-4">
           {reviews === null && (
             <>
-              <div className="h-20 w-full animate-pulse rounded-2xl bg-header-icon-bg" />
-              <div className="h-20 w-full animate-pulse rounded-2xl bg-header-icon-bg" />
+              <div className="h-24 w-full animate-pulse rounded-3xl bg-header-icon-bg" />
+              <div className="h-24 w-full animate-pulse rounded-3xl bg-header-icon-bg" />
             </>
           )}
 
           {reviews !== null && reviews.length === 0 && (
-            <p className="py-4 text-center text-sm text-zinc-500">
+            <p className="rounded-3xl bg-header-icon-bg px-5 py-8 text-center text-sm text-zinc-500">
               {t("review.empty")}
             </p>
           )}
@@ -174,7 +165,7 @@ export default function ProductReviewsModal({ productId, isOpen, onClose }) {
             reviews.map((review) => (
               <article
                 key={review.id}
-                className="flex flex-col gap-2 rounded-2xl border border-header-border p-4"
+                className="flex flex-col gap-2 rounded-3xl border border-header-border bg-white p-5"
               >
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-sm font-semibold text-foreground">
@@ -197,9 +188,9 @@ export default function ProductReviewsModal({ productId, isOpen, onClose }) {
               </article>
             ))}
         </div>
-      </ModalShell>
+      </div>
 
       <AuthModals isOpen={authOpen} onClose={() => setAuthOpen(false)} />
-    </>
+    </section>
   );
 }
