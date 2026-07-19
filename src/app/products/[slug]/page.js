@@ -4,7 +4,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
 
   return {
-    title: slug,
+    title: "Product Detail",
     description: `Product details for ${slug}`,
   };
 }
