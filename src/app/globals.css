@@ -23,6 +23,7 @@
   --color-brand-primary: var(--brand-primary);
   --color-brand-primary-hover: var(--brand-primary-hover);
   --color-header-icon-bg: var(--header-icon-bg);
+  --color-header-border: var(--header-border);
   --font-sans: var(--font-geist-sans);
   --font-serif: var(--font-cormorant);
 }
@@ -59,29 +60,4 @@ body {
 .hero-swiper .swiper-pagination-bullet-active {
   background: #755c44 !important;
   opacity: 1 !important;
-}
-
-.testimonials-swiper .swiper-wrapper {
-  align-items: stretch;
-}
-
-.testimonials-swiper .swiper-slide {
-  height: auto;
-}
-
-.products-page-swiper .swiper-wrapper {
-  align-items: stretch;
-}
-
-.products-page-swiper .swiper-slide {
-  height: auto;
-}
-
-.products-page-swiper-mobile .swiper-slide {
-  display: flex;
-}
-
-.products-page-swiper-mobile .swiper-slide > * {
-  width: 100%;
-  height: 100%;
 }
