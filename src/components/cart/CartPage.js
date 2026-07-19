@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import AuthModals from "@/components/layout/AuthModals";
+import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { authFetch } from "@/utils/api";
 import { getAuthToken } from "@/utils/auth";
@@ -145,6 +146,7 @@ function CartItem({ item, onQuantityChange, onRemove, busy }) {
 
 export default function CartPage() {
   const { t } = useLanguage();
+  const { refresh: refreshBasketContext } = useBasket();
   const [basket, setBasket] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loggedOut, setLoggedOut] = useState(false);
@@ -204,6 +206,7 @@ export default function CartPage() {
     try {
       await authFetch(`/basket/items/${item.id}`, { method: "DELETE" });
       await loadBasket();
+      refreshBasketContext();
       setPromo(null);
     } catch {
       setStatus({ ok: false, text: t("cart.error") });
@@ -241,6 +244,7 @@ export default function CartPage() {
       setPromo(null);
       setPromoInput("");
       await loadBasket();
+      refreshBasketContext();
     } catch (err) {
       setStatus({ ok: false, text: err.message || t("cart.error") });
     } finally {

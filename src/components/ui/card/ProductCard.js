@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 import shoppingBagIcon from "@/assets/images/card/shopping_bag.svg";
 import AuthModals from "@/components/layout/AuthModals";
+import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { authFetch } from "@/utils/api";
 import { isAuthenticated } from "@/utils/auth";
 
 function ProductImage({ image, title, originalPrice, inStock, inStockLabel }) {
@@ -39,9 +39,10 @@ function ProductInfo({ title, description }) {
   return (
     <div className="flex flex-col gap-1">
       <h3 className="text-lg font-[590] leading-6 text-foreground">{title}</h3>
-      <p className="text-xs font-[510] leading-[18px] text-zinc-500">
-        {description}
-      </p>
+      <div
+        className="line-clamp-2 text-xs font-[510] leading-[18px] text-zinc-500"
+        dangerouslySetInnerHTML={{ __html: description ?? "" }}
+      />
     </div>
   );
 }
@@ -59,9 +60,12 @@ export default function ProductCard({
   className = "",
 }) {
   const { t } = useLanguage();
+  const { has, addProduct } = useBasket();
   const [authOpen, setAuthOpen] = useState(false);
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
+
+  const inBasket = productId ? has(productId) : false;
 
   async function handleAddToCart() {
     if (onAddToCart) {
@@ -79,10 +83,7 @@ export default function ProductCard({
     setAdding(true);
 
     try {
-      await authFetch("/basket/items", {
-        method: "POST",
-        body: JSON.stringify({ product_id: productId, quantity: 1 }),
-      });
+      await addProduct(productId);
       setAdded(true);
       setTimeout(() => setAdded(false), 2000);
     } catch {
@@ -138,7 +139,11 @@ export default function ProductCard({
             height={16}
             className="h-4 w-4 shrink-0"
           />
-          {added ? t("card.added") : t("card.addToCart")}
+          {added
+            ? t("card.added")
+            : inBasket
+              ? t("card.inCart")
+              : t("card.addToCart")}
         </button>
       </div>
 

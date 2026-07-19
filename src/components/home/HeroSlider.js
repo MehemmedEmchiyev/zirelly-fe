@@ -46,7 +46,7 @@ export default function HeroSlider({ slides }) {
 
             <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-10 px-4 pb-4 sm:static sm:w-full sm:gap-6 sm:px-10 sm:py-14 lg:px-16 lg:py-16">
               {slide.title && (
-                <h1 className="max-w-[640px]  font-semibold md:font-bold   text-white sm:text-[32px] md:leading-[40px]">
+                <h1 className="max-w-[420px] font-semibold text-white sm:max-w-[520px] sm:text-[32px] md:font-bold md:leading-[40px]">
                   {slide.title}
                 </h1>
               )}

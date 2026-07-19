@@ -34,7 +34,7 @@ function formatPrice(value) {
   return `${Number(value).toFixed(2)} ₼`;
 }
 
-export default function ProductInfo({ product, phone }) {
+export default function ProductInfo({ product, phone, onOpenReviews }) {
   const { t } = useLanguage();
 
   const ratingAverage = Math.round(product.rating?.average ?? 0);
@@ -101,6 +101,7 @@ export default function ProductInfo({ product, phone }) {
 
         <button
           type="button"
+          onClick={onOpenReviews}
           className="flex w-full cursor-pointer items-center gap-3 rounded-3xl bg-[#F3F3F3] p-4 text-left opacity-100 transition-colors hover:bg-[#ececec]"
         >
           <IconBackground>

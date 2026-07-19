@@ -35,6 +35,7 @@ function ArrowIcon({ direction }) {
 export default function ProductGallery({ images }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [zoomOrigin, setZoomOrigin] = useState(null);
 
   if (!images?.length) {
     return (
@@ -48,13 +49,31 @@ export default function ProductGallery({ images }) {
 
   return (
     <div className="flex h-full w-full flex-col gap-4">
-      <div className="relative min-h-[360px] flex-1 overflow-hidden rounded-3xl bg-[#F5F0EB] sm:min-h-[420px] lg:min-h-0">
+      <div
+        className="relative min-h-[360px] flex-1 cursor-zoom-in overflow-hidden rounded-3xl bg-[#F5F0EB] sm:min-h-[420px] lg:min-h-0"
+        onMouseMove={(event) => {
+          const rect = event.currentTarget.getBoundingClientRect();
+          setZoomOrigin({
+            x: ((event.clientX - rect.left) / rect.width) * 100,
+            y: ((event.clientY - rect.top) / rect.height) * 100,
+          });
+        }}
+        onMouseLeave={() => setZoomOrigin(null)}
+      >
         <Image
           src={activeImage}
           alt="Product"
           fill
           priority
-          className="object-cover object-center"
+          className="object-cover object-center transition-transform duration-200 ease-out"
+          style={
+            zoomOrigin
+              ? {
+                  transform: "scale(2)",
+                  transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
+                }
+              : undefined
+          }
         />
       </div>
 

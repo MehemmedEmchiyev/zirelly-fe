@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import NotFoundPage from "@/components/common/NotFoundPage";
 import ProductFeatures from "@/components/products/ProductFeatures";
 import ProductGallery from "@/components/products/ProductGallery";
+import ProductHowToUse from "@/components/products/ProductHowToUse";
 import ProductInfo from "@/components/products/ProductInfo";
+import ProductReviewsModal from "@/components/products/ProductReviewsModal";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch, authFetch } from "@/utils/api";
 import { isAuthenticated } from "@/utils/auth";
@@ -30,6 +32,7 @@ export default function ProductDetailPage({ slug }) {
   const [product, setProduct] = useState(null);
   const [phone, setPhone] = useState(null);
   const [notFound, setNotFound] = useState(false);
+  const [reviewsOpen, setReviewsOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -83,11 +86,26 @@ export default function ProductDetailPage({ slug }) {
                 <ProductGallery images={images} />
               </div>
               <div className="lg:min-h-full">
-                <ProductInfo product={product} phone={phone} />
+                <ProductInfo
+                  product={product}
+                  phone={phone}
+                  onOpenReviews={() => setReviewsOpen(true)}
+                />
               </div>
             </div>
 
             {features.length > 0 && <ProductFeatures features={features} />}
+
+            <ProductHowToUse
+              steps={product.how_to_use ?? []}
+              proTip={product.pro_tip}
+            />
+
+            <ProductReviewsModal
+              productId={product.id}
+              isOpen={reviewsOpen}
+              onClose={() => setReviewsOpen(false)}
+            />
           </>
         )}
       </div>
