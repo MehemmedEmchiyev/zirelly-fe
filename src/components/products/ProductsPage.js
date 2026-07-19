@@ -41,14 +41,7 @@ export default function ProductsPage() {
     };
   }, [language]);
 
-  const heroSlides = (page?.slides ?? []).map((slide) => ({
-    id: slide.id,
-    title: "",
-    button_text: "",
-    link: "",
-    image: slide,
-    hide_button: true,
-  }));
+  const heroSlides = page?.slides ?? [];
 
   const items = (products ?? []).map((product) => ({
     id: product.id,
