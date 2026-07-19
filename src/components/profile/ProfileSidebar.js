@@ -21,8 +21,7 @@ const TABS = [
     id: "cart",
     labelKey: "profile.cartTab",
     icon: ProfileCartIcon,
-    type: "link",
-    href: "/cart",
+    type: "tab",
   },
   {
     id: "logout",

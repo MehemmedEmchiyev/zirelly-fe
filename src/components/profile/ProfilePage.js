@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import CartContent from "@/components/cart/CartContent";
 import ProfileForm from "@/components/profile/ProfileForm";
 import ProfileSidebar from "@/components/profile/ProfileSidebar";
 import RecentlyViewed from "@/components/profile/RecentlyViewed";
@@ -31,6 +32,8 @@ export default function ProfilePage() {
         {activeTab === "profile" && <ProfileForm />}
 
         {activeTab === "recently-viewed" && <RecentlyViewed />}
+
+        {activeTab === "cart" && <CartContent variant="profile" />}
       </div>
     </section>
   );
