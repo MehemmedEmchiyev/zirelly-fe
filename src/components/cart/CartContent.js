@@ -197,6 +197,7 @@ export default function CartContent({ variant = "page" }) {
         body: JSON.stringify({ quantity }),
       });
       await loadBasket();
+      refreshBasketContext();
       setPromo(null);
     } catch {
       setStatus({ ok: false, text: t("cart.error") });

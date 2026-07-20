@@ -75,7 +75,7 @@ export default function FaqSection({ title, items }) {
             {t("home.faqLabel")}
           </p>
 
-          <h2 className="text-[40px] font-[510] leading-[48px] text-foreground sm:text-[52px] sm:leading-[60px] lg:text-[64px] lg:leading-[72px]">
+          <h2 className="text-[28px] font-[510] leading-9 text-foreground sm:text-[52px] sm:leading-[60px] lg:text-[64px] lg:leading-[72px]">
             {title || t("home.faqTitle")}
           </h2>
 

@@ -51,12 +51,12 @@ export default function BannerSection({ banner }) {
           />
         </div>
 
-        <p className="relative z-10 ml-auto max-w-[400px] text-left text-2xl font-[590] leading-8 text-white">
+        <p className="relative z-10 ml-auto max-w-[400px] text-left text-xl font-[590] leading-8 text-white">
           {t("home.bannerText1")}
         </p>
 
         <div className="relative z-10 mt-auto flex items-end justify-between gap-8 pt-16">
-          <p className="max-w-[400px] text-2xl font-[590] leading-8 text-white">
+          <p className="max-w-[400px] text-xl font-[590] leading-8 text-white">
             {t("home.bannerText2")}
           </p>
 

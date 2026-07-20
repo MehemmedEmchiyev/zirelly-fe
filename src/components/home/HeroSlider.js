@@ -46,9 +46,9 @@ export default function HeroSlider({ slides }) {
               <div className="absolute inset-0 bg-[linear-gradient(135deg,#e5e5e5_25%,#f5f5f5_25%,#f5f5f5_50%,#e5e5e5_50%,#e5e5e5_75%,#f5f5f5_75%)] bg-[length:32px_32px]" />
             )}
 
-            <div className="absolute inset-0 z-10 flex flex-col justify-between gap-6 px-5 pb-12 pt-6 sm:static sm:w-full sm:justify-center sm:px-10 sm:py-14 lg:px-16 lg:py-16">
+            <div className="absolute inset-0 z-10 flex flex-col justify-between gap-6 px-5 pb-12 pt-6 sm:static sm:w-full sm:items-start sm:justify-center sm:gap-4 sm:px-10 sm:py-14 lg:px-16 lg:py-16">
               {slide.title && (
-                <h1 className="max-w-[280px] text-[18px] font-semibold leading-6 text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)] sm:max-w-[520px] sm:text-[32px] sm:drop-shadow-none md:font-bold md:leading-[40px]">
+                <h1 className="max-w-[260px] text-base font-semibold leading-5 text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)] sm:max-w-[440px] sm:text-2xl sm:leading-8 sm:drop-shadow-none md:font-bold">
                   {slide.title}
                 </h1>
               )}
@@ -56,7 +56,7 @@ export default function HeroSlider({ slides }) {
               {!slide.hide_button && (
                 <Button
                   href={slide.link || "/products"}
-                  className="w-full sm:mt-6 sm:w-auto md:w-max"
+                  className="w-full sm:w-auto md:w-max"
                 >
                   {slide.button_text || t("home.seeProducts")}
                 </Button>

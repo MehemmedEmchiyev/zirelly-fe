@@ -100,29 +100,30 @@ export default function ProductsSlider({ products, featuredImage }) {
 
   return (
     <>
-      {/* Mobile: featured image + cards in one horizontal slider */}
+      {/* Mobile: featured image on top, cards in a horizontal slider below */}
       <div className="flex flex-col gap-6 lg:hidden">
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl">
+          <Image
+            src={featuredImage}
+            alt="Featured product"
+            fill
+            priority
+            quality={90}
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        </div>
+
         <Swiper
           modules={[Navigation]}
           {...mobileNav.swiperProps}
-          spaceBetween={12}
-          slidesPerView={1.15}
+          spaceBetween={16}
+          slidesPerView={1}
+          breakpoints={{
+            640: { slidesPerView: 2, spaceBetween: 16 },
+          }}
           className="products-page-swiper products-page-swiper-mobile w-full"
         >
-          <SwiperSlide className="!h-auto">
-            <div className="relative h-full w-full overflow-hidden rounded-2xl">
-              <Image
-                src={featuredImage}
-                alt="Featured product"
-                fill
-                priority
-                quality={90}
-                sizes="(max-width: 1024px) 90vw, 600px"
-                className="object-cover object-center"
-              />
-            </div>
-          </SwiperSlide>
-
           {products.map((product) => (
             <SwiperSlide key={product.id} className="!h-auto">
               <ProductCard

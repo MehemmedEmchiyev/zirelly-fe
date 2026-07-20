@@ -25,12 +25,10 @@ export function BasketProvider({ children }) {
 
     try {
       const response = await authFetch("/basket");
+      const items = response.data?.items ?? [];
+
       setProductIds(
-        new Set(
-          (response.data?.items ?? [])
-            .map((item) => item.product?.id)
-            .filter(Boolean),
-        ),
+        new Set(items.map((item) => item.product?.id).filter(Boolean)),
       );
     } catch {
       // səbəti oxumaq alınmasa mövcud vəziyyət saxlanılır
@@ -49,6 +47,8 @@ export function BasketProvider({ children }) {
     });
 
     setProductIds((prev) => {
+      if (prev.has(productId)) return prev;
+
       const next = new Set(prev);
       next.add(productId);
       return next;
@@ -58,8 +58,8 @@ export function BasketProvider({ children }) {
   const has = useCallback((productId) => productIds.has(productId), [productIds]);
 
   const value = useMemo(
-    () => ({ has, addProduct, refresh }),
-    [has, addProduct, refresh],
+    () => ({ has, count: productIds.size, addProduct, refresh }),
+    [has, productIds, addProduct, refresh],
   );
 
   return (

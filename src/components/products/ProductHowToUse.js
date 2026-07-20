@@ -33,7 +33,7 @@ export default function ProductHowToUse({ steps, proTip }) {
                 className="flex flex-col gap-4 rounded-2xl border border-header-border bg-white p-5"
               >
                 <div className="flex items-start justify-between">
-                  <span className="text-[32px] font-semibold leading-[40px] text-[#AD8E71]">
+                  <span className="text-[28px] font-semibold leading-9 text-[#AD8E71] sm:text-[32px] sm:leading-10">
                     {String(index + 1).padStart(2, "0")}
                   </span>
 
