@@ -34,8 +34,9 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
+/* Nöqtələr mobildə düymənin üstündə, desktopda aşağı mərkəzdə dayanır */
 .hero-swiper .swiper-pagination {
-  bottom: 14px !important;
+  bottom: 116px !important;
   line-height: 0;
 }
 

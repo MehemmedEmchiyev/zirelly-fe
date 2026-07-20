@@ -57,6 +57,7 @@ export const TRANSLATIONS = {
     "auth.registerSuccess":
       "Qeydiyyat tamamlandı! E-poçtunuza təsdiq linki göndərildi.",
     "auth.registerError": "Qeydiyyat alınmadı. Yenidən cəhd edin.",
+    "auth.phoneInvalid": "Nömrə düzgün deyil. Nümunə: +994501234567",
     "contact.label": "Əlaqə",
     "contact.title1": "Sualınız var?",
     "contact.title2": "Gəlin cavablandıraq!",
@@ -178,6 +179,7 @@ export const TRANSLATIONS = {
     "auth.registerSuccess":
       "Registration complete! A verification link was sent to your email.",
     "auth.registerError": "Registration failed. Please try again.",
+    "auth.phoneInvalid": "Invalid phone number. Example: +994501234567",
     "contact.label": "Contact",
     "contact.title1": "Have a question?",
     "contact.title2": "Let’s answer it!",
@@ -299,6 +301,7 @@ export const TRANSLATIONS = {
     "auth.registerSuccess":
       "Регистрация завершена! Ссылка для подтверждения отправлена на почту.",
     "auth.registerError": "Не удалось зарегистрироваться. Попробуйте ещё раз.",
+    "auth.phoneInvalid": "Неверный номер. Пример: +994501234567",
     "contact.label": "Контакты",
     "contact.title1": "Есть вопрос?",
     "contact.title2": "Давайте ответим!",

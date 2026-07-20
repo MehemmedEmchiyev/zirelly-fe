@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import basketImage from "@/assets/images/basket.png";
-import AuthModals from "@/components/layout/AuthModals";
 import { useAuth } from "@/context/AuthContext";
 import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
@@ -149,7 +148,7 @@ function CartItem({ item, onQuantityChange, onRemove, busy }) {
 export default function CartContent({ variant = "page" }) {
   const { t } = useLanguage();
   const { refresh: refreshBasketContext } = useBasket();
-  const { isLoggedIn, isReady } = useAuth();
+  const { isLoggedIn, isReady, openAuth } = useAuth();
   const [basket, setBasket] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loggedOut, setLoggedOut] = useState(false);
@@ -158,7 +157,6 @@ export default function CartContent({ variant = "page" }) {
   const [promo, setPromo] = useState(null);
   const [promoError, setPromoError] = useState(null);
   const [status, setStatus] = useState(null);
-  const [authOpen, setAuthOpen] = useState(false);
 
   const loadBasket = useCallback(async () => {
     try {
@@ -167,7 +165,7 @@ export default function CartContent({ variant = "page" }) {
     } catch (err) {
       if (err.status === 401) {
         setLoggedOut(true);
-        setAuthOpen(true);
+        openAuth();
       }
     } finally {
       setLoading(false);
@@ -179,7 +177,7 @@ export default function CartContent({ variant = "page" }) {
 
     if (!isLoggedIn) {
       setLoggedOut(true);
-      setAuthOpen(true);
+      openAuth();
       setLoading(false);
       return;
     }
@@ -274,7 +272,7 @@ export default function CartContent({ variant = "page" }) {
               </h1>
             </div>
           ) : (
-            <h1 className="text-[32px] font-bold leading-10 text-foreground">
+            <h1 className="text-2xl font-bold leading-8 text-foreground sm:text-[32px] sm:leading-10">
               {t("cart.title")}
             </h1>
           )}
@@ -437,7 +435,6 @@ export default function CartContent({ variant = "page" }) {
             </button>
           </aside>
         )}
-      <AuthModals isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </div>
   );
 }

@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import emptyStarIcon from "@/assets/images/testimonials/EmptyStar.svg";
 import starIcon from "@/assets/images/testimonials/Star.svg";
-import AuthModals from "@/components/layout/AuthModals";
 import ModalShell from "@/components/layout/ModalShell";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
@@ -47,13 +46,12 @@ function Stars({ value, size = 18, onSelect }) {
 
 export default function ProductReviews({ productId, isOpen, onClose }) {
   const { language, t } = useLanguage();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, openAuth } = useAuth();
   const [reviews, setReviews] = useState(null);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [status, setStatus] = useState(null);
   const [sending, setSending] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false);
 
   useEffect(() => {
     if (!isOpen || !productId) return;
@@ -82,7 +80,7 @@ export default function ProductReviews({ productId, isOpen, onClose }) {
     event.preventDefault();
 
     if (!isLoggedIn) {
-      setAuthOpen(true);
+      openAuth();
       return;
     }
 
@@ -107,8 +105,7 @@ export default function ProductReviews({ productId, isOpen, onClose }) {
   }
 
   return (
-    <>
-      <ModalShell
+    <ModalShell
         isOpen={isOpen}
         onClose={onClose}
         titleId="reviews-modal-title"
@@ -198,9 +195,6 @@ export default function ProductReviews({ productId, isOpen, onClose }) {
               </article>
             ))}
         </div>
-      </ModalShell>
-
-      <AuthModals isOpen={authOpen} onClose={() => setAuthOpen(false)} />
-    </>
+    </ModalShell>
   );
 }

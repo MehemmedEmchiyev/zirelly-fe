@@ -79,9 +79,9 @@ export default function BlogsPage() {
   const hasMore = meta && meta.current_page < meta.last_page;
 
   return (
-    <section className="mx-auto w-full px-4 pb-20 pt-16 sm:px-6 lg:px-[108px] lg:pt-[100px]">
+    <section className="mx-auto w-full px-4 pb-20 pt-6 sm:px-6 lg:px-[108px]">
       <div className="mx-auto w-full max-w-[1224px]">
-        <h1 className="text-[32px] font-bold leading-10 text-foreground">
+        <h1 className="text-2xl font-bold leading-8 text-foreground sm:text-[32px] sm:leading-10">
           {t("blogs.title")}
         </h1>
 

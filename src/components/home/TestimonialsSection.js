@@ -77,7 +77,7 @@ export default function TestimonialsSection({ title, items }) {
   return (
     <section className="w-full overflow-hidden px-4 py-10 sm:px-6 sm:py-16 lg:px-[108px] lg:py-20">
       <div className="mx-auto max-w-[1224px]">
-        <h2 className="mb-10 text-center text-[32px] font-bold leading-[40px] text-foreground">
+        <h2 className="mb-8 text-center text-2xl font-bold leading-8 text-foreground sm:mb-10 sm:text-[32px] sm:leading-10">
           {title || t("home.testimonialsTitle")}
         </h2>
 

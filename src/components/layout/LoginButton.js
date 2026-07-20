@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import AuthModals from "@/components/layout/AuthModals";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -27,9 +25,8 @@ function UserIcon() {
 }
 
 export default function LoginButton({ className = "" }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useLanguage();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, openAuth } = useAuth();
 
   if (isLoggedIn) {
     return (
@@ -44,20 +41,13 @@ export default function LoginButton({ className = "" }) {
   }
 
   return (
-    <>
-      <button
+    <button
         type="button"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => openAuth()}
         className={`flex h-11 cursor-pointer items-center gap-2 rounded-full bg-brand-primary px-5 text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover ${className}`}
       >
         <UserIcon />
         {t("header.login")}
       </button>
-
-      <AuthModals
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
-    </>
   );
 }

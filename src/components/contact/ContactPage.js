@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch } from "@/utils/api";
+import { isValidPhone } from "@/utils/validation";
 
 const MESSAGE_LIMIT = 500;
 
@@ -79,6 +80,12 @@ export default function ContactPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     setStatus(null);
+
+    if (form.phone && !isValidPhone(form.phone)) {
+      setStatus({ ok: false, text: t("auth.phoneInvalid") });
+      return;
+    }
+
     setSending(true);
 
     try {
@@ -114,14 +121,14 @@ export default function ContactPage() {
   ];
 
   return (
-    <section className="mx-auto w-full px-4 pb-20 pt-16 sm:px-6 lg:px-[108px] lg:pt-[100px]">
+    <section className="mx-auto w-full px-4 pb-20 pt-6 sm:px-6 lg:px-[108px]">
       <div className="mx-auto flex w-full max-w-[1224px] flex-col gap-10 lg:flex-row lg:gap-[61px]">
         <div className="flex w-full flex-col justify-between gap-8 lg:min-h-[256px] lg:w-[496px] lg:shrink-0 lg:gap-0">
           <p className="text-[14px] font-medium leading-5 text-[#666666]">
             {t("contact.label")}
           </p>
 
-          <h1 className="text-[40px] font-medium leading-[48px] text-foreground sm:text-[52px] sm:leading-[60px] lg:text-[64px] lg:leading-[72px]">
+          <h1 className="text-[28px] font-medium leading-9 text-foreground sm:text-[52px] sm:leading-[60px] lg:text-[64px] lg:leading-[72px]">
             {contact?.title || (
               <>
                 {t("contact.title1")}
@@ -173,8 +180,10 @@ export default function ContactPage() {
             <Field label={t("contact.number")}>
               <input
                 type="tel"
+                inputMode="tel"
                 value={form.phone}
                 onChange={(event) => updateField("phone", event.target.value)}
+                placeholder="+994501234567"
                 className={inputClasses}
               />
             </Field>

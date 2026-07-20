@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import shoppingBagIcon from "@/assets/images/card/shopping_bag.svg";
-import AuthModals from "@/components/layout/AuthModals";
 import { useAuth } from "@/context/AuthContext";
 import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
@@ -68,8 +67,7 @@ export default function ProductCard({
 }) {
   const { t } = useLanguage();
   const { has, addProduct } = useBasket();
-  const { isLoggedIn } = useAuth();
-  const [authOpen, setAuthOpen] = useState(false);
+  const { isLoggedIn, openAuth } = useAuth();
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
 
@@ -84,7 +82,7 @@ export default function ProductCard({
     if (!productId) return;
 
     if (!isLoggedIn) {
-      setAuthOpen(true);
+      openAuth();
       return;
     }
 
@@ -154,8 +152,6 @@ export default function ProductCard({
               : t("card.addToCart")}
         </button>
       </div>
-
-      <AuthModals isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </article>
   );
 }

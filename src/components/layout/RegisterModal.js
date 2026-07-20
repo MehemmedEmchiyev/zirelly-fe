@@ -5,6 +5,7 @@ import ModalShell from "@/components/layout/ModalShell";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch } from "@/utils/api";
+import { isValidPhone, normalizePhone } from "@/utils/validation";
 
 const inputClasses =
   "h-12 w-full rounded-xl border border-[var(--content-secondary-inverse)] bg-white px-4 text-sm text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary";
@@ -33,12 +34,18 @@ export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }) {
   async function handleSubmit(event) {
     event.preventDefault();
     setError(null);
+
+    if (!isValidPhone(form.phone)) {
+      setError(t("auth.phoneInvalid"));
+      return;
+    }
+
     setLoading(true);
 
     try {
       const data = await apiFetch("/auth/register", {
         method: "POST",
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, phone: normalizePhone(form.phone) }),
       });
 
       login(data.token);
@@ -126,6 +133,7 @@ export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }) {
                 value={form.phone}
                 onChange={(event) => updateField("phone", event.target.value)}
                 placeholder="+994501234567"
+                inputMode="tel"
                 className={inputClasses}
               />
             </div>

@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { STORAGE_KEYS } from "@/constants/storage-keys";
@@ -17,6 +18,8 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const onCloseRef = useRef(null);
 
   useEffect(() => {
     setIsLoggedIn(isAuthenticated());
@@ -35,9 +38,22 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
+  const openAuth = useCallback((onClose) => {
+    onCloseRef.current = typeof onClose === "function" ? onClose : null;
+    setAuthModalOpen(true);
+  }, []);
+
+  const closeAuth = useCallback(() => {
+    setAuthModalOpen(false);
+    onCloseRef.current?.();
+    onCloseRef.current = null;
+  }, []);
+
   const login = useCallback((token) => {
     localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
     setIsLoggedIn(true);
+    setAuthModalOpen(false);
+    onCloseRef.current = null;
   }, []);
 
   const logout = useCallback(() => {
@@ -47,8 +63,16 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = useMemo(
-    () => ({ isLoggedIn, isReady, login, logout }),
-    [isLoggedIn, isReady, login, logout],
+    () => ({
+      isLoggedIn,
+      isReady,
+      authModalOpen,
+      openAuth,
+      closeAuth,
+      login,
+      logout,
+    }),
+    [isLoggedIn, isReady, authModalOpen, openAuth, closeAuth, login, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

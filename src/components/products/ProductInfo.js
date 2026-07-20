@@ -9,7 +9,6 @@ import phoneIcon from "@/assets/images/products/Phone.svg";
 import reviewIcon from "@/assets/images/products/Review.svg";
 import emptyStarIcon from "@/assets/images/testimonials/EmptyStar.svg";
 import starIcon from "@/assets/images/testimonials/Star.svg";
-import AuthModals from "@/components/layout/AuthModals";
 import { useAuth } from "@/context/AuthContext";
 import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
@@ -42,8 +41,7 @@ function formatPrice(value) {
 export default function ProductInfo({ product, phone, onOpenReviews }) {
   const { t } = useLanguage();
   const { has, addProduct } = useBasket();
-  const { isLoggedIn } = useAuth();
-  const [authOpen, setAuthOpen] = useState(false);
+  const { isLoggedIn, openAuth } = useAuth();
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
 
@@ -54,7 +52,7 @@ export default function ProductInfo({ product, phone, onOpenReviews }) {
 
   async function handleAddToCart() {
     if (!isLoggedIn) {
-      setAuthOpen(true);
+      openAuth();
       return;
     }
 
@@ -102,7 +100,7 @@ export default function ProductInfo({ product, phone, onOpenReviews }) {
         </div>
       </div>
 
-      <h1 className="text-[32px] font-normal leading-[40px] text-foreground">
+      <h1 className="text-2xl font-normal leading-8 text-foreground sm:text-[32px] sm:leading-10">
         {product.title}
       </h1>
 
@@ -112,7 +110,7 @@ export default function ProductInfo({ product, phone, onOpenReviews }) {
             {formatPrice(product.price)}
           </p>
         )}
-        <p className="text-[32px] font-bold leading-[40px] text-foreground">
+        <p className="text-2xl font-bold leading-8 text-foreground sm:text-[32px] sm:leading-10">
           {formatPrice(product.final_price ?? product.price)}
         </p>
       </div>
@@ -202,8 +200,6 @@ export default function ProductInfo({ product, phone, onOpenReviews }) {
           </Link>
         </div>
       </div>
-
-      <AuthModals isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </div>
   );
 }

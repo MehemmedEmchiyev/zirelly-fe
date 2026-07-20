@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ProfileCalendarIcon } from "@/components/profile/ProfileIcons";
 import { useLanguage } from "@/context/LanguageContext";
 import { authFetch } from "@/utils/api";
+import { isValidPhone, normalizePhone } from "@/utils/validation";
 
 const inputClasses =
   "w-full rounded-xl border border-[#CCCCCC] bg-white py-[14px] pl-4 pr-3 text-sm font-normal leading-5 text-[#666666] outline-none transition-colors placeholder:text-[#666666] focus:border-[var(--background-brand,#755C44)] focus:text-foreground";
@@ -68,12 +69,18 @@ export default function ProfileForm() {
   async function handleSubmit(event) {
     event.preventDefault();
     setStatus(null);
+
+    if (!isValidPhone(form.phone)) {
+      setStatus({ ok: false, text: t("auth.phoneInvalid") });
+      return;
+    }
+
     setSaving(true);
 
     try {
       const response = await authFetch("/auth/profile", {
         method: "PUT",
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, phone: normalizePhone(form.phone) }),
       });
 
       setForm(userToForm(response.data));
@@ -132,6 +139,7 @@ export default function ProfileForm() {
                 value={form.phone}
                 onChange={(event) => updateField("phone", event.target.value)}
                 placeholder="+994501234567"
+                inputMode="tel"
                 className={inputClasses}
               />
             </Field>

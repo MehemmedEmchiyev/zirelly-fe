@@ -62,7 +62,7 @@ export default function BlogDetailPage({ slug }) {
   }
 
   return (
-    <section className="mx-auto w-full px-4 pb-20 pt-16 sm:px-6 lg:px-[108px] lg:pt-[100px]">
+    <section className="mx-auto w-full px-4 pb-20 pt-6 sm:px-6 lg:px-[108px]">
       <div className="mx-auto w-full max-w-[1224px]">
         {error && (
           <p className="mt-10 text-center text-zinc-500">{t("blogs.error")}</p>
@@ -86,7 +86,7 @@ export default function BlogDetailPage({ slug }) {
             </div>
 
             <div className="flex w-full min-w-0 flex-col gap-12">
-              <h1 className="text-[32px] font-bold leading-10 text-foreground">
+              <h1 className="text-2xl font-bold leading-8 text-foreground sm:text-[32px] sm:leading-10">
                 {blog.title}
               </h1>
 

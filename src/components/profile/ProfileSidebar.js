@@ -57,7 +57,7 @@ export default function ProfileSidebar({ activeTab, onTabChange, onLogout }) {
           isActive
             ? "bg-[#AD8E71] text-white"
             : "bg-transparent text-[#666666] hover:bg-white/60"
-        } ${tab.id === "logout" ? "hidden lg:flex" : ""}`;
+        }`;
 
         if (tab.type === "link") {
           return (

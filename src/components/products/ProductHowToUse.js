@@ -22,7 +22,7 @@ export default function ProductHowToUse({ steps, proTip }) {
     <section className="w-full">
       {steps?.length > 0 && (
         <>
-          <h2 className="mb-6 text-[32px] font-bold leading-[40px] text-foreground">
+          <h2 className="mb-6 text-2xl font-bold leading-8 text-foreground sm:text-[32px] sm:leading-10">
             {t("product.howToUse")}
           </h2>
 

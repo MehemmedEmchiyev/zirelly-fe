@@ -77,7 +77,7 @@ export default function ProductDetailPage({ slug }) {
   }));
 
   return (
-    <div className="w-full px-4 py-8 sm:px-6 sm:py-12 lg:px-[108px] lg:py-16">
+    <div className="w-full px-4 pb-20 pt-6 sm:px-6 lg:px-[108px]">
       <div className="mx-auto flex max-w-[1224px] flex-col gap-10 lg:gap-14">
         {product === null ? (
           <DetailSkeleton />
