@@ -29,6 +29,9 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
       });
 
       login(data.token);
+      setEmail("");
+      setPassword("");
+      setError(null);
       onClose();
     } catch (err) {
       setError(

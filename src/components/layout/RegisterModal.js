@@ -49,6 +49,8 @@ export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }) {
       });
 
       login(data.token);
+      setForm(initialForm);
+      setError(null);
       onClose();
     } catch (err) {
       const firstError = err.errors ? Object.values(err.errors)[0]?.[0] : null;

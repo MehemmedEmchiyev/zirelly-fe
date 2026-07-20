@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import logo from "@/assets/images/header/Logo.svg";
 import menuIcon from "@/assets/images/header/Menu.svg";
 import CartLink from "@/components/layout/CartLink";
 import LanguageDropdown from "@/components/layout/LanguageDropdown";
@@ -16,6 +17,19 @@ const navLinks = [
   { href: "/blogs", labelKey: "nav.blogs" },
   { href: "/contact", labelKey: "nav.contact" },
 ];
+
+function CloseIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M2 2L14 14M14 2L2 14"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 
 export default function HeaderMobileMenu() {
   const [isMounted, setIsMounted] = useState(false);
@@ -36,7 +50,10 @@ export default function HeaderMobileMenu() {
       setIsMounted(true);
       document.body.style.overflow = "hidden";
 
-      const frame = requestAnimationFrame(() => setIsVisible(true));
+      let inner = 0;
+      const frame = requestAnimationFrame(() => {
+        inner = requestAnimationFrame(() => setIsVisible(true));
+      });
 
       function handleEscape(event) {
         if (event.key === "Escape") setIsOpen(false);
@@ -46,6 +63,7 @@ export default function HeaderMobileMenu() {
 
       return () => {
         cancelAnimationFrame(frame);
+        cancelAnimationFrame(inner);
         document.body.style.overflow = "";
         document.removeEventListener("keydown", handleEscape);
       };
@@ -77,35 +95,48 @@ export default function HeaderMobileMenu() {
             type="button"
             aria-label="Close menu"
             tabIndex={isOpen ? 0 : -1}
-            className={`fixed inset-0 z-40 bg-black/25 transition-opacity duration-300 ease-out ${
+            className={`fixed inset-0 z-40 bg-black/35 transition-opacity duration-300 ease-out ${
               isVisible ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
             onClick={() => setIsOpen(false)}
           />
 
-          <div
+          <aside
             aria-hidden={!isOpen}
-            className={`fixed inset-x-4 top-[104px] z-50 origin-top rounded-3xl border border-header-border bg-white p-4 shadow-[0px_0px_4px_0px_#00000014,0px_4px_8px_0px_#0000001A] transition-all duration-300 ease-out ${
-              isVisible
-                ? "translate-y-0 scale-100 opacity-100"
-                : "pointer-events-none -translate-y-3 scale-95 opacity-0"
+            className={`fixed inset-y-0 right-0 z-50 flex h-full w-[82%] max-w-[340px] flex-col bg-white shadow-[0px_0px_24px_0px_rgba(0,0,0,0.12)] transition-transform duration-300 ease-out ${
+              isVisible ? "translate-x-0" : "translate-x-full"
             }`}
           >
-            <nav className="flex flex-col">
+            <div className="flex items-center justify-between border-b border-header-border px-5 py-5">
+              <Link href="/" onClick={() => setIsOpen(false)}>
+                <Image src={logo} alt="Zirelly" className="h-5 w-auto" />
+              </Link>
+
+              <button
+                type="button"
+                aria-label="Close menu"
+                onClick={() => setIsOpen(false)}
+                className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-header-icon-bg text-foreground transition-colors hover:bg-[#e8e8e8]"
+              >
+                <CloseIcon />
+              </button>
+            </div>
+
+            <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="rounded-xl px-3 py-2 text-[15px] leading-6 text-foreground transition-colors hover:bg-header-icon-bg"
+                  className="rounded-xl px-3 py-3 text-base leading-6 text-foreground transition-colors hover:bg-header-icon-bg"
                 >
                   {t(link.labelKey)}
                 </Link>
               ))}
             </nav>
 
-            <div className="mt-4 flex items-center justify-between border-t border-header-border pt-4">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between gap-3 border-t border-header-border px-5 py-5">
+              <div className="flex items-center gap-2">
                 <CartLink onNavigate={() => setIsOpen(false)} />
 
                 <LanguageDropdown />
@@ -113,7 +144,7 @@ export default function HeaderMobileMenu() {
 
               <LoginButton />
             </div>
-          </div>
+          </aside>
         </>
       )}
     </div>
