@@ -46,7 +46,7 @@ export default function HeroSlider({ slides }) {
               <div className="absolute inset-0 bg-[linear-gradient(135deg,#e5e5e5_25%,#f5f5f5_25%,#f5f5f5_50%,#e5e5e5_50%,#e5e5e5_75%,#f5f5f5_75%)] bg-[length:32px_32px]" />
             )}
 
-            <div className="absolute inset-0 z-10 flex flex-col justify-between gap-6 px-5 pb-12 pt-6 sm:static sm:w-full sm:items-start sm:justify-center sm:gap-4 sm:px-10 sm:py-14 lg:px-16 lg:py-16">
+            <div className="absolute inset-0 z-10 flex flex-col justify-between gap-6 px-5 pb-6 pt-6 sm:static sm:w-full sm:items-start sm:justify-center sm:gap-4 sm:px-10 sm:py-14 lg:px-16 lg:py-16">
               {slide.title && (
                 <h1 className="max-w-[260px] text-base font-semibold leading-5 text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)] sm:max-w-[440px] sm:text-2xl sm:leading-8 sm:drop-shadow-none md:font-bold">
                   {slide.title}

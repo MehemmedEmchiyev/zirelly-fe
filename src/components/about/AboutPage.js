@@ -49,7 +49,7 @@ export default function AboutPage() {
   const section = about?.section;
 
   return (
-    <div className="mx-auto w-full px-4 pb-20 pt-6 sm:px-6 lg:px-[108px]">
+    <div className="mx-auto w-full px-4 pb-20 pt-6 sm:px-6 lg:px-[108px] lg:pt-16">
       <div className="mx-auto flex w-full max-w-[1224px] flex-col gap-16 lg:gap-20">
         {loading && <AboutSkeleton />}
 

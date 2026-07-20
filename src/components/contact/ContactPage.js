@@ -121,7 +121,7 @@ export default function ContactPage() {
   ];
 
   return (
-    <section className="mx-auto w-full px-4 pb-20 pt-6 sm:px-6 lg:px-[108px]">
+    <section className="mx-auto w-full px-4 pb-20 pt-6 sm:px-6 lg:px-[108px] lg:pt-16">
       <div className="mx-auto flex w-full max-w-[1224px] flex-col gap-10 lg:flex-row lg:gap-[61px]">
         <div className="flex w-full flex-col justify-between gap-8 lg:min-h-[256px] lg:w-[496px] lg:shrink-0 lg:gap-0">
           <p className="text-[14px] font-medium leading-5 text-[#666666]">

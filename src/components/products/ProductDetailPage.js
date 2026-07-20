@@ -33,7 +33,6 @@ export default function ProductDetailPage({ slug }) {
   const [product, setProduct] = useState(null);
   const [phone, setPhone] = useState(null);
   const [notFound, setNotFound] = useState(false);
-  const [reviewsOpen, setReviewsOpen] = useState(false);
 
   useEffect(() => {
     if (!isReady) return;
@@ -77,7 +76,7 @@ export default function ProductDetailPage({ slug }) {
   }));
 
   return (
-    <div className="w-full px-4 pb-20 pt-6 sm:px-6 lg:px-[108px]">
+    <div className="w-full px-4 pb-20 pt-6 sm:px-6 lg:px-[108px] lg:pt-16">
       <div className="mx-auto flex max-w-[1224px] flex-col gap-10 lg:gap-14">
         {product === null ? (
           <DetailSkeleton />
@@ -91,7 +90,11 @@ export default function ProductDetailPage({ slug }) {
                 <ProductInfo
                   product={product}
                   phone={phone}
-                  onOpenReviews={() => setReviewsOpen(true)}
+                  onOpenReviews={() =>
+                    document
+                      .getElementById("product-reviews")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
                 />
               </div>
             </div>
@@ -103,11 +106,7 @@ export default function ProductDetailPage({ slug }) {
               proTip={product.pro_tip}
             />
 
-            <ProductReviews
-              productId={product.id}
-              isOpen={reviewsOpen}
-              onClose={() => setReviewsOpen(false)}
-            />
+            <ProductReviews productId={product.id} />
           </>
         )}
       </div>
