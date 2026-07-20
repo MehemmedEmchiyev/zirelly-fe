@@ -57,7 +57,7 @@ export default function AboutPage() {
           <section className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex w-full min-w-0 flex-col gap-4 lg:w-[600px]">
               {hero?.title && (
-                <h1 className="text-[32px] font-bold leading-10 text-foreground">
+                <h1 className="text-2xl font-bold leading-8 text-foreground sm:text-[32px] sm:leading-10">
                   {hero.title}
                 </h1>
               )}
@@ -88,7 +88,7 @@ export default function AboutPage() {
         {!loading && (section?.title || section?.items?.length > 0) && (
           <section className="flex flex-col gap-6">
             {section?.title && (
-              <h2 className="text-[32px] font-bold leading-10 text-foreground">
+              <h2 className="text-2xl font-bold leading-8 text-foreground sm:text-[32px] sm:leading-10">
                 {section.title}
               </h2>
             )}
@@ -101,12 +101,12 @@ export default function AboutPage() {
                       key={item.id}
                       className="flex flex-col gap-4 rounded-3xl border border-header-border bg-white p-6"
                     >
-                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary text-2xl font-bold leading-8 text-white">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary text-xl font-bold leading-7 text-white sm:text-2xl sm:leading-8">
                         {index + 1}
                       </span>
 
                       <div className="flex flex-col gap-2">
-                        <h3 className="text-2xl font-bold leading-8 text-foreground">
+                        <h3 className="text-xl font-bold leading-7 text-foreground sm:text-2xl sm:leading-8">
                           {item.title}
                         </h3>
                         <div

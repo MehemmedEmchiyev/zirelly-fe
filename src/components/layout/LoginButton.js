@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AuthModals from "@/components/layout/AuthModals";
+import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { isAuthenticated } from "@/utils/auth";
 
 function UserIcon() {
   return (
@@ -27,13 +27,9 @@ function UserIcon() {
 }
 
 export default function LoginButton({ className = "" }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useLanguage();
-
-  useEffect(() => {
-    setIsLoggedIn(isAuthenticated());
-  }, []);
+  const { isLoggedIn } = useAuth();
 
   if (isLoggedIn) {
     return (

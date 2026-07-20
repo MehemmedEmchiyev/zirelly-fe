@@ -2,11 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import shoppingBagIcon from "@/assets/images/card/shopping_bag.svg";
 import commentsIcon from "@/assets/images/products/Comments.svg";
 import phoneIcon from "@/assets/images/products/Phone.svg";
 import reviewIcon from "@/assets/images/products/Review.svg";
 import emptyStarIcon from "@/assets/images/testimonials/EmptyStar.svg";
 import starIcon from "@/assets/images/testimonials/Star.svg";
+import AuthModals from "@/components/layout/AuthModals";
+import { useAuth } from "@/context/AuthContext";
+import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
 
 function PlusIcon() {
@@ -36,10 +41,35 @@ function formatPrice(value) {
 
 export default function ProductInfo({ product, phone, onOpenReviews }) {
   const { t } = useLanguage();
+  const { has, addProduct } = useBasket();
+  const { isLoggedIn } = useAuth();
+  const [authOpen, setAuthOpen] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [added, setAdded] = useState(false);
 
   const ratingAverage = Math.round(product.rating?.average ?? 0);
   const ratingCount = product.rating?.count ?? 0;
   const telHref = `tel:${(phone || "+994557300036").replace(/[\s()-]/g, "")}`;
+  const inBasket = has(product.id);
+
+  async function handleAddToCart() {
+    if (!isLoggedIn) {
+      setAuthOpen(true);
+      return;
+    }
+
+    setAdding(true);
+
+    try {
+      await addProduct(product.id);
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2000);
+    } catch {
+      // sorğu alınmasa düymə əvvəlki vəziyyətinə qayıdır
+    } finally {
+      setAdding(false);
+    }
+  }
 
   return (
     <div className="flex h-full flex-col justify-between gap-6">
@@ -93,6 +123,26 @@ export default function ProductInfo({ product, phone, onOpenReviews }) {
           dangerouslySetInnerHTML={{ __html: product.description }}
         />
       )}
+
+      <button
+        type="button"
+        disabled={adding}
+        onClick={handleAddToCart}
+        className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-3xl bg-[var(--background-brand,#755C44)] px-6 text-base font-medium leading-5 text-white transition-colors hover:bg-brand-primary-hover disabled:cursor-default disabled:opacity-60 sm:w-max"
+      >
+        <Image
+          src={shoppingBagIcon}
+          alt=""
+          width={20}
+          height={20}
+          className="h-5 w-5 shrink-0"
+        />
+        {added
+          ? t("card.added")
+          : inBasket
+            ? t("card.inCart")
+            : t("card.addToCart")}
+      </button>
 
       <div className="mt-2 flex flex-col gap-3">
         <p className="text-sm font-normal leading-5 text-foreground">
@@ -152,6 +202,8 @@ export default function ProductInfo({ product, phone, onOpenReviews }) {
           </Link>
         </div>
       </div>
+
+      <AuthModals isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </div>
   );
 }

@@ -65,6 +65,8 @@ export default function ProductGallery({ images }) {
           alt="Product"
           fill
           priority
+          quality={100}
+          sizes="(max-width: 1024px) 100vw, 600px"
           className="object-cover object-center transition-transform duration-200 ease-out"
           style={
             zoomOrigin
@@ -113,6 +115,7 @@ export default function ProductGallery({ images }) {
                     src={image}
                     alt=""
                     fill
+                    sizes="120px"
                     className="object-cover object-center"
                   />
                 </span>

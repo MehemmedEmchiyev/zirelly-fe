@@ -17,13 +17,32 @@ const navLinks = [
 ];
 
 export default function HeaderMobileMenu() {
+  const [isMounted, setIsMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
+    if (!isOpen) {
+      setIsVisible(false);
+      return;
+    }
+
+    setIsMounted(true);
+    document.body.style.overflow = "hidden";
+
+    const frame = requestAnimationFrame(() => setIsVisible(true));
+
+    function handleEscape(event) {
+      if (event.key === "Escape") setIsOpen(false);
+    }
+
+    document.addEventListener("keydown", handleEscape);
+
     return () => {
+      cancelAnimationFrame(frame);
       document.body.style.overflow = "";
+      document.removeEventListener("keydown", handleEscape);
     };
   }, [isOpen]);
 
@@ -39,16 +58,29 @@ export default function HeaderMobileMenu() {
         <Image src={menuIcon} alt="" width={40} height={40} className="h-10 w-10" />
       </button>
 
-      {isOpen && (
+      {isMounted && (
         <>
           <button
             type="button"
             aria-label="Close menu"
-            className="fixed inset-0 z-40 bg-black/20"
+            tabIndex={isOpen ? 0 : -1}
+            className={`fixed inset-0 z-40 bg-black/25 transition-opacity duration-300 ease-out ${
+              isVisible ? "opacity-100" : "pointer-events-none opacity-0"
+            }`}
             onClick={() => setIsOpen(false)}
+            onTransitionEnd={() => {
+              if (!isOpen) setIsMounted(false);
+            }}
           />
 
-          <div className="fixed inset-x-4 top-[88px] z-50 rounded-3xl border border-header-border bg-white p-6 shadow-[0px_0px_4px_0px_#00000014,0px_4px_8px_0px_#0000001A]">
+          <div
+            aria-hidden={!isOpen}
+            className={`fixed inset-x-4 top-[104px] z-50 origin-top rounded-3xl border border-header-border bg-white p-6 shadow-[0px_0px_4px_0px_#00000014,0px_4px_8px_0px_#0000001A] transition-all duration-300 ease-out ${
+              isVisible
+                ? "translate-y-0 scale-100 opacity-100"
+                : "pointer-events-none -translate-y-3 scale-95 opacity-0"
+            }`}
+          >
             <nav className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link

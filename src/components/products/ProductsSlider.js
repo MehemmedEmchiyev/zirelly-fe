@@ -115,8 +115,10 @@ export default function ProductsSlider({ products, featuredImage }) {
                 src={featuredImage}
                 alt="Featured product"
                 fill
-                className="object-cover object-center"
                 priority
+                quality={90}
+                sizes="(max-width: 1024px) 90vw, 600px"
+                className="object-cover object-center"
               />
             </div>
           </SwiperSlide>
@@ -153,8 +155,10 @@ export default function ProductsSlider({ products, featuredImage }) {
               src={featuredImage}
               alt="Featured product"
               fill
-              className="object-cover object-center"
               priority
+              quality={90}
+              sizes="(max-width: 1024px) 90vw, 600px"
+              className="object-cover object-center"
             />
           </div>
 

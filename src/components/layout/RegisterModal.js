@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import ModalShell from "@/components/layout/ModalShell";
-import { STORAGE_KEYS } from "@/constants/storage-keys";
+import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch } from "@/utils/api";
 
@@ -21,6 +21,7 @@ const initialForm = {
 
 export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }) {
   const { t } = useLanguage();
+  const { login } = useAuth();
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -40,9 +41,8 @@ export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }) {
         body: JSON.stringify(form),
       });
 
-      localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.token);
+      login(data.token);
       onClose();
-      window.location.reload();
     } catch (err) {
       const firstError = err.errors ? Object.values(err.errors)[0]?.[0] : null;
       setError(

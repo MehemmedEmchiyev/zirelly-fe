@@ -5,15 +5,22 @@ import Link from "next/link";
 import { useState } from "react";
 import shoppingBagIcon from "@/assets/images/card/shopping_bag.svg";
 import AuthModals from "@/components/layout/AuthModals";
+import { useAuth } from "@/context/AuthContext";
 import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { isAuthenticated } from "@/utils/auth";
 
 function ProductImage({ image, title, originalPrice, inStock, inStockLabel }) {
   return (
     <div className="relative aspect-square overflow-hidden rounded-3xl bg-[#F5F0EB]">
       {image ? (
-        <Image src={image} alt={title} fill className="object-cover object-center" />
+        <Image
+          src={image}
+          alt={title}
+          fill
+          quality={90}
+          sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 300px"
+          className="object-cover object-center"
+        />
       ) : (
         <div className="flex h-full w-full items-center justify-center">
           <div className="h-24 w-24 rounded-full bg-[#EBE6E0]" />
@@ -61,6 +68,7 @@ export default function ProductCard({
 }) {
   const { t } = useLanguage();
   const { has, addProduct } = useBasket();
+  const { isLoggedIn } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
@@ -75,7 +83,7 @@ export default function ProductCard({
 
     if (!productId) return;
 
-    if (!isAuthenticated()) {
+    if (!isLoggedIn) {
       setAuthOpen(true);
       return;
     }

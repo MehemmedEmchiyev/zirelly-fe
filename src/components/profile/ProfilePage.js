@@ -6,18 +6,16 @@ import CartContent from "@/components/cart/CartContent";
 import ProfileForm from "@/components/profile/ProfileForm";
 import ProfileSidebar from "@/components/profile/ProfileSidebar";
 import RecentlyViewed from "@/components/profile/RecentlyViewed";
-import { STORAGE_KEYS } from "@/constants/storage-keys";
-import { authFetch } from "@/utils/api";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProfilePage() {
   const router = useRouter();
+  const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
 
   function handleLogout() {
-    authFetch("/auth/logout", { method: "POST" }).catch(() => {});
-    localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+    logout();
     router.push("/");
-    router.refresh();
   }
 
   return (

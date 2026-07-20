@@ -5,10 +5,10 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import basketImage from "@/assets/images/basket.png";
 import AuthModals from "@/components/layout/AuthModals";
+import { useAuth } from "@/context/AuthContext";
 import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { authFetch } from "@/utils/api";
-import { getAuthToken } from "@/utils/auth";
 
 function formatPrice(value) {
   return `${Number(value).toFixed(2)} ₼`;
@@ -149,6 +149,7 @@ function CartItem({ item, onQuantityChange, onRemove, busy }) {
 export default function CartContent({ variant = "page" }) {
   const { t } = useLanguage();
   const { refresh: refreshBasketContext } = useBasket();
+  const { isLoggedIn, isReady } = useAuth();
   const [basket, setBasket] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loggedOut, setLoggedOut] = useState(false);
@@ -174,15 +175,19 @@ export default function CartContent({ variant = "page" }) {
   }, []);
 
   useEffect(() => {
-    if (!getAuthToken()) {
+    if (!isReady) return;
+
+    if (!isLoggedIn) {
       setLoggedOut(true);
       setAuthOpen(true);
       setLoading(false);
       return;
     }
 
+    setLoggedOut(false);
+    setLoading(true);
     loadBasket();
-  }, [loadBasket]);
+  }, [loadBasket, isLoggedIn, isReady]);
 
   async function handleQuantityChange(item, quantity) {
     if (quantity < 1) return;

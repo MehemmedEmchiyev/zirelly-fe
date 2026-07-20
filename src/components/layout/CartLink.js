@@ -5,13 +5,14 @@ import Link from "next/link";
 import { useState } from "react";
 import AuthModals from "@/components/layout/AuthModals";
 import cartIcon from "@/assets/images/header/cart.svg";
-import { isAuthenticated } from "@/utils/auth";
+import { useAuth } from "@/context/AuthContext";
 
 export default function CartLink({ onNavigate }) {
   const [authOpen, setAuthOpen] = useState(false);
+  const { isLoggedIn } = useAuth();
 
   function handleClick(event) {
-    if (!isAuthenticated()) {
+    if (!isLoggedIn) {
       event.preventDefault();
       setAuthOpen(true);
     }

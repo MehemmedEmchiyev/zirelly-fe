@@ -7,9 +7,9 @@ import ProductGallery from "@/components/products/ProductGallery";
 import ProductHowToUse from "@/components/products/ProductHowToUse";
 import ProductInfo from "@/components/products/ProductInfo";
 import ProductReviews from "@/components/products/ProductReviews";
+import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch, authFetch } from "@/utils/api";
-import { isAuthenticated } from "@/utils/auth";
 
 function DetailSkeleton() {
   return (
@@ -29,17 +29,20 @@ function DetailSkeleton() {
 
 export default function ProductDetailPage({ slug }) {
   const { language } = useLanguage();
+  const { isLoggedIn, isReady } = useAuth();
   const [product, setProduct] = useState(null);
   const [phone, setPhone] = useState(null);
   const [notFound, setNotFound] = useState(false);
+  const [reviewsOpen, setReviewsOpen] = useState(false);
 
   useEffect(() => {
+    if (!isReady) return;
+
     let cancelled = false;
 
-    setProduct(null);
     setNotFound(false);
 
-    const fetchProduct = isAuthenticated() ? authFetch : apiFetch;
+    const fetchProduct = isLoggedIn ? authFetch : apiFetch;
 
     fetchProduct(`/products/slug/${encodeURIComponent(slug)}`, { lang: language })
       .then((response) => {
@@ -61,7 +64,7 @@ export default function ProductDetailPage({ slug }) {
     return () => {
       cancelled = true;
     };
-  }, [slug, language]);
+  }, [slug, language, isLoggedIn, isReady]);
 
   if (notFound) {
     return <NotFoundPage />;
@@ -88,11 +91,7 @@ export default function ProductDetailPage({ slug }) {
                 <ProductInfo
                   product={product}
                   phone={phone}
-                  onOpenReviews={() =>
-                    document
-                      .getElementById("product-reviews")
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
+                  onOpenReviews={() => setReviewsOpen(true)}
                 />
               </div>
             </div>
@@ -104,7 +103,11 @@ export default function ProductDetailPage({ slug }) {
               proTip={product.pro_tip}
             />
 
-            <ProductReviews productId={product.id} />
+            <ProductReviews
+              productId={product.id}
+              isOpen={reviewsOpen}
+              onClose={() => setReviewsOpen(false)}
+            />
           </>
         )}
       </div>

@@ -5,10 +5,11 @@ import { useEffect, useState } from "react";
 import emptyStarIcon from "@/assets/images/testimonials/EmptyStar.svg";
 import starIcon from "@/assets/images/testimonials/Star.svg";
 import AuthModals from "@/components/layout/AuthModals";
+import ModalShell from "@/components/layout/ModalShell";
+import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch, authFetch } from "@/utils/api";
 import { formatDate } from "@/utils/blog";
-import { isAuthenticated } from "@/utils/auth";
 
 function Stars({ value, size = 18, onSelect }) {
   return (
@@ -34,7 +35,7 @@ function Stars({ value, size = 18, onSelect }) {
             type="button"
             aria-label={`${index + 1}`}
             onClick={() => onSelect(index + 1)}
-            className="cursor-pointer"
+            className="cursor-pointer transition-transform hover:scale-110"
           >
             {star}
           </button>
@@ -44,8 +45,9 @@ function Stars({ value, size = 18, onSelect }) {
   );
 }
 
-export default function ProductReviews({ productId }) {
+export default function ProductReviews({ productId, isOpen, onClose }) {
   const { language, t } = useLanguage();
+  const { isLoggedIn } = useAuth();
   const [reviews, setReviews] = useState(null);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
@@ -54,7 +56,7 @@ export default function ProductReviews({ productId }) {
   const [authOpen, setAuthOpen] = useState(false);
 
   useEffect(() => {
-    if (!productId) return;
+    if (!isOpen || !productId) return;
 
     let cancelled = false;
 
@@ -74,12 +76,12 @@ export default function ProductReviews({ productId }) {
     return () => {
       cancelled = true;
     };
-  }, [productId, language]);
+  }, [isOpen, productId, language]);
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!isAuthenticated()) {
+    if (!isLoggedIn) {
       setAuthOpen(true);
       return;
     }
@@ -105,28 +107,36 @@ export default function ProductReviews({ productId }) {
   }
 
   return (
-    <section id="product-reviews" className="w-full scroll-mt-28">
-      <h2 className="mb-6 text-[32px] font-bold leading-[40px] text-foreground">
-        {t("product.reviewsTitle")}
-      </h2>
+    <>
+      <ModalShell
+        isOpen={isOpen}
+        onClose={onClose}
+        titleId="reviews-modal-title"
+        maxWidthClass="max-w-[560px]"
+      >
+        <h2
+          id="reviews-modal-title"
+          className="pt-2 text-center text-xl font-semibold text-foreground"
+        >
+          {t("product.reviewsTitle")}
+        </h2>
 
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
         <form
           onSubmit={handleSubmit}
-          className="flex w-full flex-col gap-3 rounded-3xl bg-header-icon-bg p-5 lg:w-[400px] lg:shrink-0"
+          className="mt-6 flex flex-col gap-3 rounded-2xl bg-header-icon-bg p-4"
         >
           <p className="text-sm font-medium text-foreground">
             {t("review.write")}
           </p>
 
-          <Stars value={rating} size={22} onSelect={setRating} />
+          <Stars value={rating} size={24} onSelect={setRating} />
 
           <textarea
             value={comment}
             onChange={(event) => setComment(event.target.value)}
             placeholder={t("review.placeholder")}
             maxLength={2000}
-            rows={4}
+            rows={3}
             className="w-full resize-none rounded-xl border border-[#CCCCCC] bg-white p-3 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
           />
 
@@ -147,16 +157,16 @@ export default function ProductReviews({ productId }) {
           </button>
         </form>
 
-        <div className="flex w-full min-w-0 flex-1 flex-col gap-4">
+        <div className="mt-6 flex flex-col gap-4">
           {reviews === null && (
             <>
-              <div className="h-24 w-full animate-pulse rounded-3xl bg-header-icon-bg" />
-              <div className="h-24 w-full animate-pulse rounded-3xl bg-header-icon-bg" />
+              <div className="h-24 w-full animate-pulse rounded-2xl bg-header-icon-bg" />
+              <div className="h-24 w-full animate-pulse rounded-2xl bg-header-icon-bg" />
             </>
           )}
 
           {reviews !== null && reviews.length === 0 && (
-            <p className="rounded-3xl bg-header-icon-bg px-5 py-8 text-center text-sm text-zinc-500">
+            <p className="py-4 text-center text-sm text-zinc-500">
               {t("review.empty")}
             </p>
           )}
@@ -165,7 +175,7 @@ export default function ProductReviews({ productId }) {
             reviews.map((review) => (
               <article
                 key={review.id}
-                className="flex flex-col gap-2 rounded-3xl border border-header-border bg-white p-5"
+                className="flex flex-col gap-2 rounded-2xl border border-header-border p-4"
               >
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-sm font-semibold text-foreground">
@@ -188,9 +198,9 @@ export default function ProductReviews({ productId }) {
               </article>
             ))}
         </div>
-      </div>
+      </ModalShell>
 
       <AuthModals isOpen={authOpen} onClose={() => setAuthOpen(false)} />
-    </section>
+    </>
   );
 }

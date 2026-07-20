@@ -8,16 +8,17 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useAuth } from "@/context/AuthContext";
 import { authFetch } from "@/utils/api";
-import { isAuthenticated } from "@/utils/auth";
 
 const BasketContext = createContext(null);
 
 export function BasketProvider({ children }) {
+  const { isLoggedIn, isReady } = useAuth();
   const [productIds, setProductIds] = useState(() => new Set());
 
   const refresh = useCallback(async () => {
-    if (!isAuthenticated()) {
+    if (!isLoggedIn) {
       setProductIds(new Set());
       return;
     }
@@ -34,11 +35,12 @@ export function BasketProvider({ children }) {
     } catch {
       // səbəti oxumaq alınmasa mövcud vəziyyət saxlanılır
     }
-  }, []);
+  }, [isLoggedIn]);
 
   useEffect(() => {
+    if (!isReady) return;
     refresh();
-  }, [refresh]);
+  }, [refresh, isReady]);
 
   const addProduct = useCallback(async (productId) => {
     await authFetch("/basket/items", {

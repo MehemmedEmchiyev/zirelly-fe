@@ -3,27 +3,24 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AuthModals from "@/components/layout/AuthModals";
-import { isAuthenticated } from "@/utils/auth";
+import { useAuth } from "@/context/AuthContext";
 
 export default function RequireAuth({ children }) {
   const router = useRouter();
-  const [authed, setAuthed] = useState(null);
+  const { isLoggedIn, isReady } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
 
   useEffect(() => {
-    const ok = isAuthenticated();
-    setAuthed(ok);
-
-    if (!ok) {
+    if (isReady && !isLoggedIn) {
       setAuthOpen(true);
     }
-  }, []);
+  }, [isReady, isLoggedIn]);
 
-  if (authed === null) {
+  if (!isReady) {
     return null;
   }
 
-  if (!authed) {
+  if (!isLoggedIn) {
     return (
       <AuthModals
         isOpen={authOpen}

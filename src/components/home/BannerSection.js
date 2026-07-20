@@ -23,11 +23,13 @@ export default function BannerSection({ banner }) {
           src={image}
           alt=""
           fill
+          quality={90}
+          sizes="100vw"
           className="object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/20" />
 
-        <p className="relative z-10 text-2xl font-[590] leading-8 text-white">
+        <p className="relative z-10 text-lg font-[590] leading-6 text-white sm:text-2xl sm:leading-8">
           {t("home.bannerText1")}
         </p>
 
@@ -43,6 +45,8 @@ export default function BannerSection({ banner }) {
             src={image}
             alt=""
             fill
+            quality={90}
+            sizes="(max-width: 1024px) 100vw, 1224px"
             className="object-cover object-center"
           />
         </div>

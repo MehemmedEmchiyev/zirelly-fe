@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import ModalShell from "@/components/layout/ModalShell";
-import { STORAGE_KEYS } from "@/constants/storage-keys";
+import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch } from "@/utils/api";
 
@@ -11,6 +11,7 @@ const inputClasses =
 
 export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   const { t } = useLanguage();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -27,9 +28,8 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
         body: JSON.stringify({ email, password }),
       });
 
-      localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.token);
+      login(data.token);
       onClose();
-      window.location.reload();
     } catch (err) {
       setError(
         err.status

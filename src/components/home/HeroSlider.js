@@ -31,22 +31,24 @@ export default function HeroSlider({ slides }) {
     >
       {slides.map((slide, index) => (
         <SwiperSlide key={slide.id}>
-          <div className="relative min-h-[88vh] sm:flex sm:items-center">
+          <div className="relative min-h-[420px] sm:flex sm:min-h-[520px] sm:items-center lg:min-h-[600px]">
             {slide.image?.url ? (
               <Image
                 src={slide.image.url}
                 alt=""
                 fill
                 priority={index === 0}
+                quality={90}
+                sizes="(max-width: 1024px) 100vw, 1224px"
                 className="object-cover"
               />
             ) : (
               <div className="absolute inset-0 bg-[linear-gradient(135deg,#e5e5e5_25%,#f5f5f5_25%,#f5f5f5_50%,#e5e5e5_50%,#e5e5e5_75%,#f5f5f5_75%)] bg-[length:32px_32px]" />
             )}
 
-            <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-10 px-4 pb-4 sm:static sm:w-full sm:gap-6 sm:px-10 sm:py-14 lg:px-16 lg:py-16">
+            <div className="absolute inset-0 z-10 flex flex-col justify-between gap-6 px-5 pb-12 pt-6 sm:static sm:w-full sm:justify-center sm:px-10 sm:py-14 lg:px-16 lg:py-16">
               {slide.title && (
-                <h1 className="max-w-[420px] font-semibold text-white sm:max-w-[520px] sm:text-[32px] md:font-bold md:leading-[40px]">
+                <h1 className="max-w-[280px] text-[18px] font-semibold leading-6 text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)] sm:max-w-[520px] sm:text-[32px] sm:drop-shadow-none md:font-bold md:leading-[40px]">
                   {slide.title}
                 </h1>
               )}
@@ -54,7 +56,7 @@ export default function HeroSlider({ slides }) {
               {!slide.hide_button && (
                 <Button
                   href={slide.link || "/products"}
-                  className="w-full -mb-2 md:w-max sm:w-auto"
+                  className="w-full sm:mt-6 sm:w-auto md:w-max"
                 >
                   {slide.button_text || t("home.seeProducts")}
                 </Button>
