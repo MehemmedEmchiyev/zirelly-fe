@@ -2,6 +2,7 @@ import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import Footer from "@/components/layout/Footer";
 import GlobalAuthModals from "@/components/layout/GlobalAuthModals";
 import Header from "@/components/layout/Header";
+import SitePopup from "@/components/layout/SitePopup";
 import { AuthProvider } from "@/context/AuthContext";
 import { BasketProvider } from "@/context/BasketContext";
 import { LanguageProvider } from "@/context/LanguageContext";
@@ -45,6 +46,7 @@ export default function RootLayout({ children }) {
               <main className="flex-1">{children}</main>
               <Footer />
               <GlobalAuthModals />
+              <SitePopup />
             </BasketProvider>
           </AuthProvider>
         </LanguageProvider>

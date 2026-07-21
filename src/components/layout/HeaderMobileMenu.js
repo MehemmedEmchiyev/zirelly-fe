@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import logo from "@/assets/images/header/Logo.svg";
 import menuIcon from "@/assets/images/header/Menu.svg";
 import CartLink from "@/components/layout/CartLink";
-import LanguageDropdown from "@/components/layout/LanguageDropdown";
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 import LoginButton from "@/components/layout/LoginButton";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -135,14 +135,14 @@ export default function HeaderMobileMenu() {
               ))}
             </nav>
 
-            <div className="flex items-center justify-between gap-3 border-t border-header-border px-5 py-5">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-4 border-t border-header-border px-5 py-5">
+              <LanguageSwitcher />
+
+              <div className="flex items-center justify-between gap-3">
                 <CartLink onNavigate={() => setIsOpen(false)} />
 
-                <LanguageDropdown />
+                <LoginButton />
               </div>
-
-              <LoginButton />
             </div>
           </aside>
         </>
