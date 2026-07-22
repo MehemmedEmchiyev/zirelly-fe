@@ -4,7 +4,9 @@ import { useState } from "react";
 import ModalShell from "@/components/layout/ModalShell";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch } from "@/utils/api";
+import DateSelect from "@/components/ui/DateSelect";
 import { isValidPhone, normalizePhone } from "@/utils/validation";
+import { isValidBirthDate } from "@/utils/date";
 
 const inputClasses =
   "h-12 w-full rounded-xl border border-[var(--content-secondary-inverse)] bg-white px-4 text-sm text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary";
@@ -40,6 +42,11 @@ export default function RegisterModal({
 
     if (!isValidPhone(form.phone)) {
       setError(t("auth.phoneInvalid"));
+      return;
+    }
+
+    if (!isValidBirthDate(form.birth_date)) {
+      setError(t("auth.birthInvalid"));
       return;
     }
 
@@ -150,15 +157,9 @@ export default function RegisterModal({
               >
                 {t("auth.birthDate")}
               </label>
-              <input
-                id="register-birth-date"
-                type="date"
-                required
+              <DateSelect
                 value={form.birth_date}
-                onChange={(event) =>
-                  updateField("birth_date", event.target.value)
-                }
-                className={inputClasses}
+                onChange={(value) => updateField("birth_date", value)}
               />
             </div>
           </div>

@@ -31,19 +31,23 @@ function MailIcon() {
   );
 }
 
-function Field({ label, children }) {
+function Field({ label, error, children }) {
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-1">
       <span className="text-[12px] font-semibold leading-[18px] text-[#333333]">
         {label}
       </span>
       {children}
+      {error && <span className="text-[12px] leading-4 text-red-600">{error}</span>}
     </div>
   );
 }
 
 const inputClasses =
   "h-11 w-full rounded-xl border border-[#CCCCCC] bg-white px-4 text-[14px] leading-5 text-foreground outline-none transition-colors placeholder:text-[#666666] focus:border-brand-primary";
+
+const inputErrorClasses =
+  "h-11 w-full rounded-xl border border-red-500 bg-white px-4 text-[14px] leading-5 text-foreground outline-none transition-colors placeholder:text-[#666666] focus:border-red-500";
 
 export default function ContactPage() {
   const { language, t } = useLanguage();
@@ -56,6 +60,7 @@ export default function ContactPage() {
     message: "",
   });
   const [status, setStatus] = useState(null);
+  const [errors, setErrors] = useState({});
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
@@ -75,17 +80,34 @@ export default function ContactPage() {
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
+  }
+
+  function validate() {
+    const next = {};
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (form.name.trim().length < 2) next.name = t("contact.errName");
+    if (!EMAIL_RE.test(form.email.trim())) next.email = t("contact.errEmail");
+    if (form.phone && !isValidPhone(form.phone))
+      next.phone = t("auth.phoneInvalid");
+    if (!form.subject) next.subject = t("contact.errSubject");
+    if (form.message.trim().length < 10) next.message = t("contact.errMessage");
+
+    return next;
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
     setStatus(null);
 
-    if (form.phone && !isValidPhone(form.phone)) {
-      setStatus({ ok: false, text: t("auth.phoneInvalid") });
+    const found = validate();
+    if (Object.keys(found).length > 0) {
+      setErrors(found);
       return;
     }
 
+    setErrors({});
     setSending(true);
 
     try {
@@ -103,6 +125,7 @@ export default function ContactPage() {
 
       setStatus({ ok: true, text: t("contact.success") });
       setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+      setErrors({});
     } catch (err) {
       setStatus({
         ok: false,
@@ -157,43 +180,41 @@ export default function ContactPage() {
           className="flex w-full min-w-0 flex-col gap-5"
         >
           <div className="flex flex-col gap-5 sm:flex-row">
-            <Field label={t("contact.fullName")}>
+            <Field label={t("contact.fullName")} error={errors.name}>
               <input
                 type="text"
-                required
                 value={form.name}
                 onChange={(event) => updateField("name", event.target.value)}
-                className={inputClasses}
+                className={errors.name ? inputErrorClasses : inputClasses}
               />
             </Field>
 
-            <Field label={t("contact.email")}>
+            <Field label={t("contact.email")} error={errors.email}>
               <input
                 type="email"
-                required
                 value={form.email}
                 onChange={(event) => updateField("email", event.target.value)}
-                className={inputClasses}
+                className={errors.email ? inputErrorClasses : inputClasses}
               />
             </Field>
 
-            <Field label={t("contact.number")}>
+            <Field label={t("contact.number")} error={errors.phone}>
               <input
                 type="tel"
                 inputMode="tel"
                 value={form.phone}
                 onChange={(event) => updateField("phone", event.target.value)}
                 placeholder="+994501234567"
-                className={inputClasses}
+                className={errors.phone ? inputErrorClasses : inputClasses}
               />
             </Field>
           </div>
 
-          <Field label={t("contact.subject")}>
+          <Field label={t("contact.subject")} error={errors.subject}>
             <select
               value={form.subject}
               onChange={(event) => updateField("subject", event.target.value)}
-              className={`${inputClasses} appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M5.5%208l4.5%204.5L14.5%208%22%20stroke%3D%22%231a1a1a%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_12px_center] bg-no-repeat pr-10 ${
+              className={`${errors.subject ? inputErrorClasses : inputClasses} appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M5.5%208l4.5%204.5L14.5%208%22%20stroke%3D%22%231a1a1a%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_12px_center] bg-no-repeat pr-10 ${
                 form.subject ? "" : "text-[#666666]"
               }`}
             >
@@ -206,15 +227,18 @@ export default function ContactPage() {
             </select>
           </Field>
 
-          <Field label={t("contact.helpLabel")}>
+          <Field label={t("contact.helpLabel")} error={errors.message}>
             <div className="relative w-full">
               <textarea
-                required
                 value={form.message}
                 maxLength={MESSAGE_LIMIT}
                 onChange={(event) => updateField("message", event.target.value)}
                 placeholder={t("contact.yourQuestion")}
-                className="h-[120px] w-full resize-none rounded-2xl border border-[#CCCCCC] bg-white p-3 text-[14px] leading-5 text-foreground outline-none transition-colors placeholder:text-[#666666] focus:border-brand-primary"
+                className={`h-[120px] w-full resize-none rounded-2xl border bg-white p-3 text-[14px] leading-5 text-foreground outline-none transition-colors placeholder:text-[#666666] ${
+                  errors.message
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-[#CCCCCC] focus:border-brand-primary"
+                }`}
               />
               <span className="pointer-events-none absolute bottom-3 left-3 text-[10px] leading-[14px] text-[#666666]">
                 {form.message.length}/{MESSAGE_LIMIT}

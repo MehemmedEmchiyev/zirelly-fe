@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ProfileCalendarIcon } from "@/components/profile/ProfileIcons";
+import DateSelect from "@/components/ui/DateSelect";
 import { useLanguage } from "@/context/LanguageContext";
 import { authFetch } from "@/utils/api";
 import { isValidPhone, normalizePhone } from "@/utils/validation";
+import { isValidBirthDate } from "@/utils/date";
 
 const inputClasses =
   "w-full rounded-xl border border-[#CCCCCC] bg-white py-[14px] pl-4 pr-3 text-sm font-normal leading-5 text-[#666666] outline-none transition-colors placeholder:text-[#666666] focus:border-[var(--background-brand,#755C44)] focus:text-foreground";
@@ -75,12 +76,22 @@ export default function ProfileForm() {
       return;
     }
 
+    if (!isValidBirthDate(form.birth_date)) {
+      setStatus({ ok: false, text: t("auth.birthInvalid") });
+      return;
+    }
+
     setSaving(true);
 
     try {
       const response = await authFetch("/auth/profile", {
         method: "PUT",
-        body: JSON.stringify({ ...form, phone: normalizePhone(form.phone) }),
+        body: JSON.stringify({
+          name: form.name,
+          surname: form.surname,
+          phone: normalizePhone(form.phone),
+          birth_date: form.birth_date,
+        }),
       });
 
       setForm(userToForm(response.data));
@@ -145,29 +156,19 @@ export default function ProfileForm() {
             </Field>
 
             <Field label={t("auth.birthDate")}>
-              <div className="relative flex items-center gap-5">
-                <input
-                  type="date"
-                  required
-                  value={form.birth_date}
-                  onChange={(event) =>
-                    updateField("birth_date", event.target.value)
-                  }
-                  className={`${inputClasses} pr-12 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-3 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:opacity-0`}
-                />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#666666]">
-                  <ProfileCalendarIcon />
-                </span>
-              </div>
+              <DateSelect
+                value={form.birth_date}
+                onChange={(value) => updateField("birth_date", value)}
+              />
             </Field>
 
             <Field label={t("auth.email")}>
               <input
                 type="email"
-                required
                 value={form.email}
-                onChange={(event) => updateField("email", event.target.value)}
-                className={inputClasses}
+                readOnly
+                disabled
+                className={`${inputClasses} cursor-not-allowed bg-[#efefef] text-[#999]`}
               />
             </Field>
           </div>
