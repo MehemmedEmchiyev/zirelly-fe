@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { MIN_AGE, MONTHS, daysInMonth, pad2, parseDate } from "@/utils/date";
 
@@ -10,7 +11,13 @@ export default function DateSelect({ value, onChange, minAge = MIN_AGE }) {
   const { language } = useLanguage();
   const months = MONTHS[language] ?? MONTHS.az;
 
-  const { year, month, day } = parseDate(value);
+  const [parts, setParts] = useState(() => parseDate(value));
+
+  useEffect(() => {
+    setParts(parseDate(value));
+  }, [value]);
+
+  const { year, month, day } = parts;
 
   const currentYear = new Date().getFullYear();
   const maxYear = currentYear - minAge;
@@ -23,18 +30,22 @@ export default function DateSelect({ value, onChange, minAge = MIN_AGE }) {
   for (let d = 1; d <= totalDays; d += 1) days.push(d);
 
   function emit(next) {
-    const y = next.year ?? year;
-    const m = next.month ?? month;
-    let d = next.day ?? day;
+    const y = next.year !== undefined ? next.year : year;
+    const m = next.month !== undefined ? next.month : month;
+    let d = next.day !== undefined ? next.day : day;
 
-    if (!y || !m || !d) {
-      onChange("");
-      return;
+    if (y && m && d) {
+      const maxDay = daysInMonth(y, m);
+      if (d > maxDay) d = maxDay;
     }
 
-    // Ay dəyişəndə gün həddi aşırsa, düzəlt
-    const maxDay = daysInMonth(y, m);
-    if (d > maxDay) d = maxDay;
+    const nextParts = { year: y || "", month: m || "", day: d || "" };
+    setParts(nextParts);
+
+    if (!y || !m || !d) {
+      if (value) onChange("");
+      return;
+    }
 
     onChange(`${y}-${pad2(m)}-${pad2(d)}`);
   }
