@@ -2,24 +2,20 @@
 
 import { useState } from "react";
 import ModalShell from "@/components/layout/ModalShell";
-import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch } from "@/utils/api";
 
 const inputClasses =
   "h-12 w-full rounded-xl border border-[var(--content-secondary-inverse)] bg-white px-4 text-sm text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary";
 
-export default function LoginModal({
+export default function ForgotPasswordModal({
   isOpen,
   onClose,
-  onSwitchToRegister,
-  onForgotPassword,
-  onOtpRequired,
+  onCodeSent,
+  onSwitchToLogin,
 }) {
   const { t } = useLanguage();
-  const { login } = useAuth();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -29,54 +25,39 @@ export default function LoginModal({
     setLoading(true);
 
     try {
-      const data = await apiFetch("/auth/login", {
+      await apiFetch("/auth/forgot-password", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email }),
       });
 
-      login(data.token);
+      onCodeSent(email);
       setEmail("");
-      setPassword("");
-      setError(null);
-      onClose();
     } catch (err) {
-      if (err.status === 403 && err.data?.email_unverified) {
-        onOtpRequired(err.data.email || email);
-        setPassword("");
-        return;
-      }
-      setError(
-        err.status
-          ? err.errors?.email?.[0] || err.message
-          : t("auth.error"),
-      );
+      setError(err.message || t("auth.error"));
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <ModalShell isOpen={isOpen} onClose={onClose} titleId="login-modal-title">
+    <ModalShell isOpen={isOpen} onClose={onClose} titleId="forgot-modal-title">
       <div className="pt-2 text-center">
-        <h2
-          id="login-modal-title"
-          className="text-xl font-semibold text-foreground"
-        >
-          {t("auth.title")}
+        <h2 id="forgot-modal-title" className="text-xl font-semibold text-foreground">
+          {t("auth.forgotTitle")}
         </h2>
-        <p className="mt-2 text-sm text-zinc-500">{t("auth.subtitle")}</p>
+        <p className="mt-2 text-sm text-zinc-500">{t("auth.forgotSubtitle")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
         <div>
           <label
-            htmlFor="login-email"
+            htmlFor="forgot-email"
             className="mb-2 block text-sm font-medium text-foreground"
           >
             {t("auth.email")}
           </label>
           <input
-            id="login-email"
+            id="forgot-email"
             type="email"
             required
             value={email}
@@ -86,32 +67,6 @@ export default function LoginModal({
           />
         </div>
 
-        <div>
-          <label
-            htmlFor="login-password"
-            className="mb-2 block text-sm font-medium text-foreground"
-          >
-            {t("auth.password")}
-          </label>
-          <input
-            id="login-password"
-            type="password"
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="****************"
-            className={inputClasses}
-          />
-
-          <button
-            type="button"
-            onClick={onForgotPassword}
-            className="mt-2 block cursor-pointer text-sm font-medium text-brand-primary hover:underline"
-          >
-            {t("auth.forgotLink")}
-          </button>
-        </div>
-
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         <button
@@ -119,17 +74,16 @@ export default function LoginModal({
           disabled={loading}
           className="mt-2 h-12 w-full cursor-pointer rounded-full bg-brand-primary text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover disabled:cursor-default disabled:opacity-60"
         >
-          {loading ? t("common.loading") : t("auth.submit")}
+          {loading ? t("common.loading") : t("auth.sendCode")}
         </button>
 
         <p className="text-center text-sm text-zinc-500">
-          {t("auth.noAccount")}{" "}
           <button
             type="button"
-            onClick={onSwitchToRegister}
+            onClick={onSwitchToLogin}
             className="cursor-pointer font-medium text-brand-primary hover:underline"
           >
-            {t("auth.registerLink")}
+            {t("auth.backToLogin")}
           </button>
         </p>
       </form>

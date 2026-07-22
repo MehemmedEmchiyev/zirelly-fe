@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import ModalShell from "@/components/layout/ModalShell";
-import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch } from "@/utils/api";
 import { isValidPhone, normalizePhone } from "@/utils/validation";
@@ -20,9 +19,13 @@ const initialForm = {
   password_confirmation: "",
 };
 
-export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }) {
+export default function RegisterModal({
+  isOpen,
+  onClose,
+  onSwitchToLogin,
+  onOtpRequired,
+}) {
   const { t } = useLanguage();
-  const { login } = useAuth();
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -43,15 +46,15 @@ export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }) {
     setLoading(true);
 
     try {
-      const data = await apiFetch("/auth/register", {
+      const submitted = { ...form, phone: normalizePhone(form.phone) };
+      await apiFetch("/auth/register", {
         method: "POST",
-        body: JSON.stringify({ ...form, phone: normalizePhone(form.phone) }),
+        body: JSON.stringify(submitted),
       });
 
-      login(data.token);
       setForm(initialForm);
       setError(null);
-      onClose();
+      onOtpRequired(submitted.email);
     } catch (err) {
       const firstError = err.errors ? Object.values(err.errors)[0]?.[0] : null;
       setError(

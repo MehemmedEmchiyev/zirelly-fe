@@ -35,6 +35,7 @@ async function request(path, { lang, ...options } = {}, extraHeaders = {}) {
     );
     error.status = response.status;
     error.errors = data.errors;
+    error.data = data;
     throw error;
   }
 
