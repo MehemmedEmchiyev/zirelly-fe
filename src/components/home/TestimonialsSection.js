@@ -1,13 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import emptyStarIcon from "@/assets/images/testimonials/EmptyStar.svg";
 import starIcon from "@/assets/images/testimonials/Star.svg";
 import { useLanguage } from "@/context/LanguageContext";
-
-import "swiper/css";
 
 function StarRating({ rating }) {
   return (
@@ -28,7 +24,7 @@ function StarRating({ rating }) {
 
 function TestimonialCard({ text, name, rating, avatar }) {
   return (
-    <article className="flex h-full flex-col gap-4 rounded-[40px] border border-[var(--content-secondary-inverse)] bg-[var(--content-secondary-inverse,#F3F3F3)] p-6">
+    <article className="flex h-full w-[300px] shrink-0 flex-col gap-4 rounded-[40px] border border-[var(--content-secondary-inverse)] bg-[var(--content-secondary-inverse,#F3F3F3)] p-6 sm:w-[360px] lg:w-[392px]">
       <p className="flex-1 text-base font-normal leading-5 text-foreground">
         {text}
       </p>
@@ -66,7 +62,7 @@ export default function TestimonialsSection({ title, items }) {
     return null;
   }
 
-  const slides = items.map((item) => ({
+  const base = items.map((item) => ({
     id: item.id,
     text: item.comment,
     name: item.name,
@@ -74,47 +70,37 @@ export default function TestimonialsSection({ title, items }) {
     avatar: item.image?.url ?? null,
   }));
 
-  return (
-    <section className="w-full overflow-hidden px-4 py-10 sm:px-6 sm:py-16 lg:px-[108px] lg:py-20">
-      <div className="mx-auto max-w-[1224px]">
-        <h2 className="mb-8 text-center text-2xl font-bold leading-8 text-foreground sm:mb-10 sm:text-[32px] sm:leading-10">
-          {title || t("home.testimonialsTitle")}
-        </h2>
+  // Ekranı doldurmaq üçün kifayət qədər kart, sonra fasiləsiz loop üçün iki dəfə
+  const filled = [];
+  const target = Math.max(base.length, 6);
+  for (let i = 0; i < target; i += 1) {
+    filled.push({ ...base[i % base.length], key: i });
+  }
 
-        <Swiper
-          modules={[Autoplay]}
-          loop
-          speed={700}
-          autoplay={{
-            delay: 3500,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-          }}
-          spaceBetween={16}
-          slidesPerView={1.15}
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 16,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 20,
-            },
-          }}
-          className="testimonials-swiper !overflow-visible"
+  const track = [...filled, ...filled];
+  const duration = filled.length * 5; // saniyə — kart sayına görə sabit sürət
+
+  return (
+    <section className="w-full overflow-hidden py-10 sm:py-16 lg:py-20">
+      <h2 className="mb-8 px-4 text-center text-2xl font-bold leading-8 text-foreground sm:mb-10 sm:px-6 sm:text-[32px] sm:leading-10">
+        {title || t("home.testimonialsTitle")}
+      </h2>
+
+      <div className="testimonials-marquee w-full overflow-hidden">
+        <div
+          className="testimonials-marquee-track flex w-max gap-5"
+          style={{ animationDuration: `${duration}s` }}
         >
-          {slides.map((item) => (
-            <SwiperSlide key={item.id} className="!h-auto">
-              <TestimonialCard
-                text={item.text}
-                name={item.name}
-                rating={item.rating}
-                avatar={item.avatar}
-              />
-            </SwiperSlide>
+          {track.map((item, index) => (
+            <TestimonialCard
+              key={`${item.key}-${index}`}
+              text={item.text}
+              name={item.name}
+              rating={item.rating}
+              avatar={item.avatar}
+            />
           ))}
-        </Swiper>
+        </div>
       </div>
     </section>
   );

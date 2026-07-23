@@ -13,6 +13,7 @@ function formatPrice(value) {
   return `${Number(value).toFixed(2)} ₼`;
 }
 
+
 function MinusIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">

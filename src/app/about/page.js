@@ -1,9 +1,12 @@
 import AboutPage from "@/components/about/AboutPage";
 import { API_URL } from "@/utils/api";
+import { getServerLang } from "@/utils/server-lang";
 
 export async function generateMetadata() {
+  const lang = await getServerLang();
+
   try {
-    const response = await fetch(`${API_URL}/about`);
+    const response = await fetch(`${API_URL}/about?lang=${lang}`);
 
     if (response.ok) {
       const { data } = await response.json();

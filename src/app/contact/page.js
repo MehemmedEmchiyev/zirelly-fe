@@ -1,9 +1,12 @@
 import ContactPage from "@/components/contact/ContactPage";
 import { API_URL } from "@/utils/api";
+import { getServerLang } from "@/utils/server-lang";
 
 export async function generateMetadata() {
+  const lang = await getServerLang();
+
   try {
-    const response = await fetch(`${API_URL}/contact`);
+    const response = await fetch(`${API_URL}/contact?lang=${lang}`);
 
     if (response.ok) {
       const { data } = await response.json();

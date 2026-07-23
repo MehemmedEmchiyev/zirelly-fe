@@ -17,6 +17,11 @@ import { apiFetch } from "@/utils/api";
 
 const LanguageContext = createContext(null);
 
+function writeLanguageCookie(code) {
+  // 1 il, bütün yollarda — server generateMetadata bunu oxuyur
+  document.cookie = `${STORAGE_KEYS.LANGUAGE}=${code}; path=/; max-age=31536000; SameSite=Lax`;
+}
+
 export function LanguageProvider({ children }) {
   const [language, setLanguageState] = useState(DEFAULT_LANGUAGE);
   const [languages, setLanguages] = useState([]);
@@ -25,6 +30,7 @@ export function LanguageProvider({ children }) {
     const stored = localStorage.getItem(STORAGE_KEYS.LANGUAGE);
     if (stored && TRANSLATIONS[stored]) {
       setLanguageState(stored);
+      writeLanguageCookie(stored);
     }
   }, []);
 
@@ -50,6 +56,7 @@ export function LanguageProvider({ children }) {
   const setLanguage = useCallback((code) => {
     setLanguageState(code);
     localStorage.setItem(STORAGE_KEYS.LANGUAGE, code);
+    writeLanguageCookie(code);
   }, []);
 
   const t = useCallback(

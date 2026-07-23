@@ -63,12 +63,25 @@ body {
   opacity: 1 !important;
 }
 
-.testimonials-swiper .swiper-wrapper {
-  align-items: stretch;
+/* Rəylər — fasiləsiz (infinite) marquee */
+@keyframes testimonials-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 10px)); /* yarısı + gap yarısı (gap-5 = 20px) */
+  }
 }
 
-.testimonials-swiper .swiper-slide {
-  height: auto;
+.testimonials-marquee-track {
+  animation-name: testimonials-marquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.testimonials-marquee:hover .testimonials-marquee-track {
+  animation-play-state: paused;
 }
 
 .products-page-swiper .swiper-wrapper {

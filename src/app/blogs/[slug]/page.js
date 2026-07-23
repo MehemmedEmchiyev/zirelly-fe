@@ -1,12 +1,14 @@
 import BlogDetailPage from "@/components/blogs/BlogDetailPage";
 import { API_URL } from "@/utils/api";
+import { getServerLang } from "@/utils/server-lang";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
+  const lang = await getServerLang();
 
   try {
     const response = await fetch(
-      `${API_URL}/blogs/slug/${encodeURIComponent(slug)}`,
+      `${API_URL}/blogs/slug/${encodeURIComponent(slug)}?lang=${lang}`,
     );
 
     if (response.ok) {
