@@ -243,18 +243,25 @@ export default function CartContent({ variant = "page" }) {
     setStatus(null);
 
     try {
-      await authFetch("/checkout", {
+      const response = await authFetch("/checkout", {
         method: "POST",
         body: JSON.stringify(promo ? { promocode: promo.code } : {}),
       });
+
+      if (response?.payment_url) {
+        setStatus({ ok: true, text: t("payment.redirecting") });
+        window.location.assign(response.payment_url);
+        return;
+      }
+
       setStatus({ ok: true, text: t("cart.orderSuccess") });
       setPromo(null);
       setPromoInput("");
       await loadBasket();
       refreshBasketContext();
+      setBusy(false);
     } catch (err) {
       setStatus({ ok: false, text: err.message || t("cart.error") });
-    } finally {
       setBusy(false);
     }
   }
