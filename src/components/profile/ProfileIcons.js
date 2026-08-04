@@ -119,3 +119,29 @@ export function ProfileCalendarIcon({ className = "" }) {
     </svg>
   );
 }
+
+export function ProfileOrdersIcon({ className = "" }) {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d="M3.75 6.25L10 2.75L16.25 6.25V13.75L10 17.25L3.75 13.75V6.25Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.75 6.25L10 9.75M10 9.75L16.25 6.25M10 9.75V17.25"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

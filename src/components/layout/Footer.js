@@ -86,6 +86,20 @@ export default function Footer() {
                 <div className="hidden text-sm leading-6 text-zinc-500 lg:block">
                   <p>{t("footer.copyright")}</p>
                   <p>{t("footer.rights")}</p>
+                  <p className="mt-2 flex flex-col gap-1">
+                    <Link
+                      href="/return-policy"
+                      className="transition-colors hover:text-brand-primary"
+                    >
+                      {t("legal.returnPolicy")}
+                    </Link>
+                    <Link
+                      href="/privacy-policy"
+                      className="transition-colors hover:text-brand-primary"
+                    >
+                      {t("legal.privacyPolicy")}
+                    </Link>
+                  </p>
                 </div>
               </div>
 
@@ -125,6 +139,20 @@ export default function Footer() {
               <div className="text-sm leading-6 text-zinc-500">
                 <p>{t("footer.copyright")}</p>
                 <p>{t("footer.rights")}</p>
+                <p className="mt-2 flex flex-col gap-1">
+                  <Link
+                    href="/return-policy"
+                    className="transition-colors hover:text-brand-primary"
+                  >
+                    {t("legal.returnPolicy")}
+                  </Link>
+                  <Link
+                    href="/privacy-policy"
+                    className="transition-colors hover:text-brand-primary"
+                  >
+                    {t("legal.privacyPolicy")}
+                  </Link>
+                </p>
               </div>
 
               <div className="text-right text-sm leading-6 text-foreground">

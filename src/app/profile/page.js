@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import ProfilePage from "@/components/profile/ProfilePage";
 import RequireAuth from "@/components/common/RequireAuth";
 import { getServerLang } from "@/utils/server-lang";
@@ -17,7 +18,9 @@ export async function generateMetadata() {
 export default function Profile() {
   return (
     <RequireAuth>
-      <ProfilePage />
+      <Suspense fallback={null}>
+        <ProfilePage />
+      </Suspense>
     </RequireAuth>
   );
 }

@@ -442,6 +442,24 @@ export default function CartContent({ variant = "page" }) {
               <CardIcon />
               {busy ? t("common.loading") : t("cart.placeOrder")}
             </button>
+
+            <p className="text-center text-[12px] leading-[18px] text-zinc-500">
+              {t("cart.agreeText")}{" "}
+              <Link
+                href="/return-policy"
+                className="text-brand-primary underline transition-colors hover:text-brand-primary-hover"
+              >
+                {t("legal.returnPolicy")}
+              </Link>{" "}
+              {t("cart.agreeAnd")}{" "}
+              <Link
+                href="/privacy-policy"
+                className="text-brand-primary underline transition-colors hover:text-brand-primary-hover"
+              >
+                {t("legal.privacyPolicy")}
+              </Link>{" "}
+              {t("cart.agreeSuffix")}
+            </p>
           </aside>
         )}
     </div>

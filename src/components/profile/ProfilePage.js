@@ -1,17 +1,25 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import CartContent from "@/components/cart/CartContent";
+import OrdersList from "@/components/profile/OrdersList";
 import ProfileForm from "@/components/profile/ProfileForm";
 import ProfileSidebar from "@/components/profile/ProfileSidebar";
 import RecentlyViewed from "@/components/profile/RecentlyViewed";
 import { useAuth } from "@/context/AuthContext";
 
+const VALID_TABS = ["profile", "orders", "recently-viewed", "cart"];
+
 export default function ProfilePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { logout } = useAuth();
-  const [activeTab, setActiveTab] = useState("profile");
+
+  const requestedTab = searchParams.get("tab");
+  const [activeTab, setActiveTab] = useState(
+    VALID_TABS.includes(requestedTab) ? requestedTab : "profile",
+  );
 
   function handleLogout() {
     logout();
@@ -28,6 +36,8 @@ export default function ProfilePage() {
         />
 
         {activeTab === "profile" && <ProfileForm />}
+
+        {activeTab === "orders" && <OrdersList />}
 
         {activeTab === "recently-viewed" && <RecentlyViewed />}
 

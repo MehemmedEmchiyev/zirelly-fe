@@ -5,12 +5,19 @@ import {
   ProfileCartIcon,
   ProfileEyeIcon,
   ProfileLogoutIcon,
+  ProfileOrdersIcon,
   ProfileUserIcon,
 } from "@/components/profile/ProfileIcons";
 import { useLanguage } from "@/context/LanguageContext";
 
 const TABS = [
   { id: "profile", labelKey: "profile.title", icon: ProfileUserIcon, type: "tab" },
+  {
+    id: "orders",
+    labelKey: "profile.orders",
+    icon: ProfileOrdersIcon,
+    type: "tab",
+  },
   {
     id: "recently-viewed",
     labelKey: "profile.recentlyViewed",

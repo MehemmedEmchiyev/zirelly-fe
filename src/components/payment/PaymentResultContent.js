@@ -60,7 +60,7 @@ export default function PaymentResultContent() {
           </Link>
         ) : (
           <Link
-            href="/profile"
+            href="/profile?tab=orders"
             className="rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
           >
             {t("payment.goOrders")}
