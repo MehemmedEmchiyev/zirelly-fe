@@ -13,6 +13,7 @@ export async function generateMetadata() {
 
       return {
         title: data.meta_title || "About Us",
+        alternates: { canonical: "/about" },
         description: data.meta_description || "Learn more about Zirelly",
       };
     }
@@ -22,6 +23,7 @@ export async function generateMetadata() {
 
   return {
     title: "About Us",
+    alternates: { canonical: "/about" },
     description: "Learn more about Zirelly",
   };
 }

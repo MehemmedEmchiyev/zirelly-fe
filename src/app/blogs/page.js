@@ -11,7 +11,11 @@ export async function generateMetadata() {
   const lang = await getServerLang();
   const meta = META[lang] || META.az;
 
-  return { title: meta.title, description: meta.description };
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: { canonical: "/blogs" },
+  };
 }
 
 export default function Blogs() {

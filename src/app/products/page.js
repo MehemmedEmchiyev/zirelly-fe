@@ -20,6 +20,7 @@ export async function generateMetadata() {
 
       return {
         title: data.meta_title || fallback.title,
+        alternates: { canonical: "/products" },
         description: data.meta_description || fallback.description,
       };
     }
@@ -27,7 +28,11 @@ export async function generateMetadata() {
     // API əlçatan olmayanda dilə uyğun defolt qalır
   }
 
-  return { title: fallback.title, description: fallback.description };
+  return {
+    title: fallback.title,
+    description: fallback.description,
+    alternates: { canonical: "/products" },
+  };
 }
 
 export default function Products() {

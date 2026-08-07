@@ -13,6 +13,7 @@ export async function generateMetadata() {
 
       return {
         title: data.meta_title || "Contact Us",
+        alternates: { canonical: "/contact" },
         description: data.meta_description || "Get in touch with Zirelly",
       };
     }
@@ -22,6 +23,7 @@ export async function generateMetadata() {
 
   return {
     title: "Contact Us",
+    alternates: { canonical: "/contact" },
     description: "Get in touch with Zirelly",
   };
 }
