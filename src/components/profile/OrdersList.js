@@ -7,6 +7,9 @@ import { authFetch } from "@/utils/api";
 
 const STATUS_STYLES = {
   paid: "bg-green-100 text-green-700",
+  preparing: "bg-blue-100 text-blue-700",
+  shipped: "bg-indigo-100 text-indigo-700",
+  delivered: "bg-emerald-100 text-emerald-700",
   pending: "bg-amber-100 text-amber-700",
   cancelled: "bg-red-100 text-red-600",
 };
@@ -169,7 +172,7 @@ export default function OrdersList() {
           <div className="flex flex-col items-center gap-4 py-10 text-center">
             <p className="text-base text-zinc-500">{t("orders.empty")}</p>
             <Link
-              href="/products"
+              href="/mehsullar"
               className="rounded-3xl bg-brand-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover"
             >
               {t("cart.startShopping")}

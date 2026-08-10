@@ -6,7 +6,7 @@ export default function robots() {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/profile", "/cart", "/payment/"],
+        disallow: ["/profil", "/sebet", "/odenis-neticesi"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

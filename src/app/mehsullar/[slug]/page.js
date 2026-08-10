@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
   const data = await fetchProduct(slug, lang);
 
   if (!data) {
-    return { title: slug, alternates: { canonical: `/products/${slug}` } };
+    return { title: slug, alternates: { canonical: `/mehsullar/${slug}` } };
   }
 
   const images = (data.images ?? [])
@@ -37,11 +37,11 @@ export async function generateMetadata({ params }) {
   return {
     title: data.meta_title || data.title || slug,
     description: data.meta_description || undefined,
-    alternates: { canonical: `/products/${slug}` },
+    alternates: { canonical: `/mehsullar/${slug}` },
     openGraph: {
       title: data.meta_title || data.title || slug,
       description: data.meta_description || undefined,
-      url: `/products/${slug}`,
+      url: `/mehsullar/${slug}`,
       images,
     },
   };
@@ -52,11 +52,11 @@ function productJsonLd(data, slug) {
     "@context": "https://schema.org",
     "@type": "Product",
     name: data.title || slug,
-    url: `${SITE_URL}/products/${slug}`,
+    url: `${SITE_URL}/mehsullar/${slug}`,
     image: (data.images ?? []).map((image) => image.url).filter(Boolean),
     offers: {
       "@type": "Offer",
-      url: `${SITE_URL}/products/${slug}`,
+      url: `${SITE_URL}/mehsullar/${slug}`,
       price: Number(data.final_price ?? data.price ?? 0).toFixed(2),
       priceCurrency: "AZN",
       availability: "https://schema.org/InStock",

@@ -53,14 +53,14 @@ export default function PaymentResultContent() {
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         {variant === VARIANTS.failed ? (
           <Link
-            href="/cart"
+            href="/sebet"
             className="rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
           >
             {t("payment.retry")}
           </Link>
         ) : (
           <Link
-            href="/profile?tab=orders"
+            href="/profil?tab=orders"
             className="rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
           >
             {t("payment.goOrders")}

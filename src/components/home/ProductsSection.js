@@ -24,7 +24,7 @@ export default function ProductsSection({ products }) {
           </h2>
 
           <Link
-            href="/products"
+            href="/mehsullar"
             className="shrink-0 text-sm font-normal leading-[18px] text-zinc-500 transition-colors hover:text-foreground"
           >
             {t("home.seeMore")}

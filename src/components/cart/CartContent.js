@@ -327,7 +327,7 @@ export default function CartContent({ variant = "page" }) {
               </div>
 
               <Link
-                href="/products"
+                href="/mehsullar"
                 className="inline-flex w-max cursor-pointer items-center justify-center rounded-3xl bg-brand-primary px-5 py-3 text-sm font-medium leading-5 text-white transition-colors hover:bg-brand-primary-hover"
               >
                 {t("cart.startShopping")}
@@ -446,14 +446,14 @@ export default function CartContent({ variant = "page" }) {
             <p className="text-center text-[12px] leading-[18px] text-zinc-500">
               {t("cart.agreeText")}{" "}
               <Link
-                href="/return-policy"
+                href="/geri-qaytarma"
                 className="text-brand-primary underline transition-colors hover:text-brand-primary-hover"
               >
                 {t("legal.returnPolicy")}
               </Link>{" "}
               {t("cart.agreeAnd")}{" "}
               <Link
-                href="/privacy-policy"
+                href="/mexfilik-siyaseti"
                 className="text-brand-primary underline transition-colors hover:text-brand-primary-hover"
               >
                 {t("legal.privacyPolicy")}

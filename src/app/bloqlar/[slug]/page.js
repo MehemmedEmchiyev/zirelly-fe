@@ -26,18 +26,18 @@ export async function generateMetadata({ params }) {
   const data = await fetchBlog(slug, lang);
 
   if (!data) {
-    return { title: slug, alternates: { canonical: `/blogs/${slug}` } };
+    return { title: slug, alternates: { canonical: `/bloqlar/${slug}` } };
   }
 
   return {
     title: data.meta_title || data.title || slug,
     description: data.meta_description || undefined,
-    alternates: { canonical: `/blogs/${slug}` },
+    alternates: { canonical: `/bloqlar/${slug}` },
     openGraph: {
       type: "article",
       title: data.meta_title || data.title || slug,
       description: data.meta_description || undefined,
-      url: `/blogs/${slug}`,
+      url: `/bloqlar/${slug}`,
       images: data.image ? [data.image] : [],
       publishedTime: data.created_at || undefined,
     },
@@ -49,8 +49,8 @@ function blogJsonLd(data, slug) {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: data.title || slug,
-    url: `${SITE_URL}/blogs/${slug}`,
-    mainEntityOfPage: `${SITE_URL}/blogs/${slug}`,
+    url: `${SITE_URL}/bloqlar/${slug}`,
+    mainEntityOfPage: `${SITE_URL}/bloqlar/${slug}`,
     author: {
       "@type": "Organization",
       name: "Zirelly",

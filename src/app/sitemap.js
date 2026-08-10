@@ -31,12 +31,12 @@ async function fetchAllPages(path) {
 export default async function sitemap() {
   const staticRoutes = [
     { path: "", priority: 1, changeFrequency: "daily" },
-    { path: "/products", priority: 0.9, changeFrequency: "daily" },
-    { path: "/blogs", priority: 0.7, changeFrequency: "weekly" },
-    { path: "/about", priority: 0.5, changeFrequency: "monthly" },
-    { path: "/contact", priority: 0.5, changeFrequency: "monthly" },
-    { path: "/return-policy", priority: 0.3, changeFrequency: "yearly" },
-    { path: "/privacy-policy", priority: 0.3, changeFrequency: "yearly" },
+    { path: "/mehsullar", priority: 0.9, changeFrequency: "daily" },
+    { path: "/bloqlar", priority: 0.7, changeFrequency: "weekly" },
+    { path: "/haqqimizda", priority: 0.5, changeFrequency: "monthly" },
+    { path: "/elaqe", priority: 0.5, changeFrequency: "monthly" },
+    { path: "/geri-qaytarma", priority: 0.3, changeFrequency: "yearly" },
+    { path: "/mexfilik-siyaseti", priority: 0.3, changeFrequency: "yearly" },
   ].map((route) => ({
     url: `${SITE_URL}${route.path}`,
     lastModified: new Date(),
@@ -52,7 +52,7 @@ export default async function sitemap() {
   const productRoutes = products
     .filter((product) => product.slug)
     .map((product) => ({
-      url: `${SITE_URL}/products/${product.slug}`,
+      url: `${SITE_URL}/mehsullar/${product.slug}`,
       lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
@@ -61,7 +61,7 @@ export default async function sitemap() {
   const blogRoutes = blogs
     .filter((blog) => blog.slug)
     .map((blog) => ({
-      url: `${SITE_URL}/blogs/${blog.slug}`,
+      url: `${SITE_URL}/bloqlar/${blog.slug}`,
       lastModified: blog.created_at ? new Date(blog.created_at) : new Date(),
       changeFrequency: "monthly",
       priority: 0.6,

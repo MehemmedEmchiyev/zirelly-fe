@@ -14,10 +14,10 @@ import { apiFetch } from "@/utils/api";
 const FALLBACK_PHONE = "+994 (55) 730 00 36";
 
 const learnLinks = [
-  { href: "/about", labelKey: "nav.about" },
-  { href: "/products", labelKey: "nav.products" },
-  { href: "/blogs", labelKey: "nav.blogs" },
-  { href: "/contact", labelKey: "nav.contact" },
+  { href: "/haqqimizda", labelKey: "nav.about" },
+  { href: "/mehsullar", labelKey: "nav.products" },
+  { href: "/bloqlar", labelKey: "nav.blogs" },
+  { href: "/elaqe", labelKey: "nav.contact" },
 ];
 
 const socialLinks = [
@@ -88,13 +88,13 @@ export default function Footer() {
                   <p>{t("footer.rights")}</p>
                   <p className="mt-2 flex flex-col gap-1">
                     <Link
-                      href="/return-policy"
+                      href="/geri-qaytarma"
                       className="transition-colors hover:text-brand-primary"
                     >
                       {t("legal.returnPolicy")}
                     </Link>
                     <Link
-                      href="/privacy-policy"
+                      href="/mexfilik-siyaseti"
                       className="transition-colors hover:text-brand-primary"
                     >
                       {t("legal.privacyPolicy")}
@@ -141,13 +141,13 @@ export default function Footer() {
                 <p>{t("footer.rights")}</p>
                 <p className="mt-2 flex flex-col gap-1">
                   <Link
-                    href="/return-policy"
+                    href="/geri-qaytarma"
                     className="transition-colors hover:text-brand-primary"
                   >
                     {t("legal.returnPolicy")}
                   </Link>
                   <Link
-                    href="/privacy-policy"
+                    href="/mexfilik-siyaseti"
                     className="transition-colors hover:text-brand-primary"
                   >
                     {t("legal.privacyPolicy")}

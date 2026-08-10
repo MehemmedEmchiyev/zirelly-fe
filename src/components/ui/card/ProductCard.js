@@ -104,7 +104,7 @@ export default function ProductCard({
       className={`flex flex-col gap-5 rounded-[40px] border border-[var(--content-secondary-inverse)] bg-white px-3 py-2 ${className}`}
     >
       {slug ? (
-        <Link href={`/products/${slug}`} className="flex flex-col gap-5">
+        <Link href={`/mehsullar/${slug}`} className="flex flex-col gap-5">
           <ProductImage
             image={image}
             title={title}

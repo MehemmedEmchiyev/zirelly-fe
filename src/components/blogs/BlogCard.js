@@ -10,7 +10,7 @@ export default function BlogCard({ blog }) {
 
   return (
     <Link
-      href={`/blogs/${blog.slug}`}
+      href={`/bloqlar/${blog.slug}`}
       className="flex flex-col gap-4 rounded-2xl border border-[var(--content-secondary-inverse)] bg-white p-3 transition-shadow hover:shadow-[0px_0px_4px_0px_#00000014,0px_4px_8px_0px_#0000001A] sm:flex-row"
     >
       <div className="relative aspect-[296/150] w-full shrink-0 overflow-hidden rounded-lg bg-header-icon-bg sm:w-[296px]">

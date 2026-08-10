@@ -22,7 +22,7 @@ export async function generateMetadata() {
   return {
     title: meta.title,
     description: meta.description,
-    alternates: { canonical: "/return-policy" },
+    alternates: { canonical: "/geri-qaytarma" },
   };
 }
 

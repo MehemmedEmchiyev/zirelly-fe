@@ -21,7 +21,7 @@ export default function CartLink({ onNavigate }) {
 
   return (
     <Link
-      href="/cart"
+      href="/sebet"
       aria-label="Cart"
       onClick={handleClick}
       className="relative flex h-11 w-11 shrink-0 items-center justify-center"

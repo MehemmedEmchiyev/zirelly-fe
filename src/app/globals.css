@@ -26,6 +26,18 @@
   --color-header-border: var(--header-border);
   --font-sans: var(--font-geist-sans);
   --font-serif: var(--font-cormorant);
+  --animate-toast-in: toast-in 0.25s ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 body {

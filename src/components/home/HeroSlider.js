@@ -55,7 +55,7 @@ export default function HeroSlider({ slides }) {
 
               {!slide.hide_button && (
                 <Button
-                  href={slide.link || "/products"}
+                  href={slide.link || "/mehsullar"}
                   className="w-full sm:w-auto md:w-max"
                 >
                   {slide.button_text || t("home.seeProducts")}

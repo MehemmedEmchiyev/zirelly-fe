@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 
 const navLinks = [
-  { href: "/about", labelKey: "nav.about" },
-  { href: "/products", labelKey: "nav.products" },
-  { href: "/blogs", labelKey: "nav.blogs" },
-  { href: "/contact", labelKey: "nav.contact" },
+  { href: "/haqqimizda", labelKey: "nav.about" },
+  { href: "/mehsullar", labelKey: "nav.products" },
+  { href: "/bloqlar", labelKey: "nav.blogs" },
+  { href: "/elaqe", labelKey: "nav.contact" },
 ];
 
 export default function HeaderNav() {

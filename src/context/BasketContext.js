@@ -9,12 +9,16 @@ import {
   useState,
 } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
+import { useToast } from "@/context/ToastContext";
 import { authFetch } from "@/utils/api";
 
 const BasketContext = createContext(null);
 
 export function BasketProvider({ children }) {
   const { isLoggedIn, isReady } = useAuth();
+  const { showToast } = useToast();
+  const { t } = useLanguage();
   const [productIds, setProductIds] = useState(() => new Set());
 
   const refresh = useCallback(async () => {
@@ -40,20 +44,28 @@ export function BasketProvider({ children }) {
     refresh();
   }, [refresh, isReady]);
 
-  const addProduct = useCallback(async (productId) => {
-    await authFetch("/basket/items", {
-      method: "POST",
-      body: JSON.stringify({ product_id: productId, quantity: 1 }),
-    });
+  const addProduct = useCallback(
+    async (productId) => {
+      await authFetch("/basket/items", {
+        method: "POST",
+        body: JSON.stringify({ product_id: productId, quantity: 1 }),
+      });
 
-    setProductIds((prev) => {
-      if (prev.has(productId)) return prev;
+      setProductIds((prev) => {
+        if (prev.has(productId)) return prev;
 
-      const next = new Set(prev);
-      next.add(productId);
-      return next;
-    });
-  }, []);
+        const next = new Set(prev);
+        next.add(productId);
+        return next;
+      });
+
+      showToast(t("toast.addedToCart"), {
+        actionLabel: t("toast.viewCart"),
+        actionHref: "/sebet",
+      });
+    },
+    [showToast, t],
+  );
 
   const has = useCallback((productId) => productIds.has(productId), [productIds]);
 

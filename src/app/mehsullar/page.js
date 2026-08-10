@@ -20,7 +20,7 @@ export async function generateMetadata() {
 
       return {
         title: data.meta_title || fallback.title,
-        alternates: { canonical: "/products" },
+        alternates: { canonical: "/mehsullar" },
         description: data.meta_description || fallback.description,
       };
     }
@@ -31,7 +31,7 @@ export async function generateMetadata() {
   return {
     title: fallback.title,
     description: fallback.description,
-    alternates: { canonical: "/products" },
+    alternates: { canonical: "/mehsullar" },
   };
 }
 

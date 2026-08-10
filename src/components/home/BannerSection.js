@@ -13,7 +13,7 @@ export default function BannerSection({ banner }) {
 
   const image = banner.image.url;
   const buttonText = banner.button_text || t("home.seeAllProducts");
-  const buttonHref = banner.link || "/products";
+  const buttonHref = banner.link || "/mehsullar";
 
   return (
     <section className="w-full px-4 py-10 sm:px-6 sm:py-16 lg:px-[108px] lg:py-20">

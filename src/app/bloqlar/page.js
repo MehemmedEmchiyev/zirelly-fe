@@ -14,7 +14,7 @@ export async function generateMetadata() {
   return {
     title: meta.title,
     description: meta.description,
-    alternates: { canonical: "/blogs" },
+    alternates: { canonical: "/bloqlar" },
   };
 }
 

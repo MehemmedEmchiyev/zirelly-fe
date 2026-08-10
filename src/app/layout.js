@@ -6,6 +6,7 @@ import Header from "@/components/layout/Header";
 import { AuthProvider } from "@/context/AuthContext";
 import { BasketProvider } from "@/context/BasketContext";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { ToastProvider } from "@/context/ToastContext";
 import { SITE_NAME, SITE_URL } from "@/constants/site";
 import { getServerLang } from "@/utils/server-lang";
 import "./globals.css";
@@ -78,13 +79,15 @@ export default async function RootLayout({ children }) {
         />
         <LanguageProvider>
           <AuthProvider>
-            <BasketProvider>
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-              <GlobalAuthModals />
-              <DeferredPopup />
-            </BasketProvider>
+            <ToastProvider>
+              <BasketProvider>
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+                <GlobalAuthModals />
+                <DeferredPopup />
+              </BasketProvider>
+            </ToastProvider>
           </AuthProvider>
         </LanguageProvider>
       </body>

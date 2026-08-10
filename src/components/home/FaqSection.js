@@ -82,7 +82,7 @@ export default function FaqSection({ title, items }) {
           <p className="text-base font-normal leading-5 text-zinc-500">
             {t("home.faqContact")}
             <Link
-              href="/contact"
+              href="/elaqe"
               className="text-foreground transition-colors hover:text-brand-primary"
             >
               Zirelly.az

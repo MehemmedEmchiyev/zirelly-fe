@@ -31,7 +31,7 @@ export default function LoginButton({ className = "" }) {
   if (isLoggedIn) {
     return (
       <Link
-        href="/profile"
+        href="/profil"
         className={`flex h-11 items-center gap-2 rounded-full bg-brand-primary px-5 text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover ${className}`}
       >
         <UserIcon />
