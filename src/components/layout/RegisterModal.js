@@ -30,10 +30,27 @@ export default function RegisterModal({
   const { t } = useLanguage();
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState(null);
+  const [phoneError, setPhoneError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function handlePhoneChange(value) {
+    updateField("phone", value);
+
+    if (phoneError && isValidPhone(value)) {
+      setPhoneError(null);
+    }
+  }
+
+  function handlePhoneBlur() {
+    setPhoneError(
+      form.phone.trim() !== "" && !isValidPhone(form.phone)
+        ? t("auth.phoneInvalid")
+        : null,
+    );
   }
 
   async function handleSubmit(event) {
@@ -41,7 +58,7 @@ export default function RegisterModal({
     setError(null);
 
     if (!isValidPhone(form.phone)) {
-      setError(t("auth.phoneInvalid"));
+      setPhoneError(t("auth.phoneInvalid"));
       return;
     }
 
@@ -143,11 +160,16 @@ export default function RegisterModal({
                 type="tel"
                 required
                 value={form.phone}
-                onChange={(event) => updateField("phone", event.target.value)}
-                placeholder="+994501234567"
+                onChange={(event) => handlePhoneChange(event.target.value)}
+                onBlur={handlePhoneBlur}
+                placeholder="+994775387707"
                 inputMode="tel"
-                className={inputClasses}
+                aria-invalid={phoneError ? true : undefined}
+                className={`${inputClasses} ${phoneError ? "border-red-500 focus:border-red-500" : ""}`}
               />
+              {phoneError && (
+                <p className="mt-1.5 text-xs leading-4 text-red-600">{phoneError}</p>
+              )}
             </div>
 
             <div className="min-w-0 flex-1">
