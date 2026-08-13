@@ -57,7 +57,7 @@ export const TRANSLATIONS = {
     "auth.registerSuccess":
       "Qeydiyyat tamamlandı! E-poçtunuza təsdiq linki göndərildi.",
     "auth.registerError": "Qeydiyyat alınmadı. Yenidən cəhd edin.",
-    "auth.phoneInvalid": "Nömrə düzgün deyil. Nümunə: +994501234567",
+    "auth.phoneInvalid": "Nömrə düzgün deyil. Nümunə: +994775387707 və ya 0775387707",
     "auth.otpTitle": "Kodu daxil edin",
     "auth.otpSubtitle": "6 rəqəmli təsdiq kodunu bu ünvana göndərdik:",
     "auth.otpCode": "Təsdiq kodu",
@@ -230,7 +230,7 @@ export const TRANSLATIONS = {
     "auth.registerSuccess":
       "Registration complete! A verification link was sent to your email.",
     "auth.registerError": "Registration failed. Please try again.",
-    "auth.phoneInvalid": "Invalid phone number. Example: +994501234567",
+    "auth.phoneInvalid": "Invalid phone number. Example: +994775387707 or 0775387707",
     "auth.otpTitle": "Enter the code",
     "auth.otpSubtitle": "We sent a 6-digit verification code to:",
     "auth.otpCode": "Verification code",
@@ -403,7 +403,7 @@ export const TRANSLATIONS = {
     "auth.registerSuccess":
       "Регистрация завершена! Ссылка для подтверждения отправлена на почту.",
     "auth.registerError": "Не удалось зарегистрироваться. Попробуйте ещё раз.",
-    "auth.phoneInvalid": "Неверный номер. Пример: +994501234567",
+    "auth.phoneInvalid": "Неверный номер. Пример: +994775387707 или 0775387707",
     "auth.otpTitle": "Введите код",
     "auth.otpSubtitle": "Мы отправили 6-значный код подтверждения на:",
     "auth.otpCode": "Код подтверждения",
