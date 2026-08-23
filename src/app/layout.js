@@ -1,3 +1,4 @@
+import { GoogleTagManager } from "@next/third-parties/google";
 import { Cormorant_Garamond, Geist } from "next/font/google";
 import DeferredPopup from "@/components/layout/DeferredPopup";
 import Footer from "@/components/layout/Footer";
@@ -68,6 +69,7 @@ export default async function RootLayout({ children }) {
       lang={lang}
       className={`${geistSans.variable} ${cormorant.variable} h-full antialiased`}
     >
+      <GoogleTagManager gtmId="GTM-MXN574BN" />
       <body className="flex min-h-full flex-col bg-white text-foreground">
         <script
           type="application/ld+json"
