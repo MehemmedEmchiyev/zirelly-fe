@@ -11,7 +11,7 @@ export const TRANSLATIONS = {
     "header.profile": "Profil",
     "footer.learn": "KƏŞF ET",
     "footer.socialMedia": "SOSİAL MEDİA",
-    "footer.copyright": "© 2025 Müəllif hüququ",
+    "footer.copyright": "Müəllif hüququ",
     "footer.rights": "Bütün hüquqlar qorunur",
     "footer.description":
       "Biz inanırıq ki, hər gözəllik rutini sizin üslubunuzu əks etdirməlidir. Zirelly.az-da diqqətlə seçilmiş saç baxımı, dəri baxımı və gözəllik məhsullarını kəşf edin.",
@@ -193,7 +193,7 @@ export const TRANSLATIONS = {
     "header.profile": "Profile",
     "footer.learn": "LEARN",
     "footer.socialMedia": "SOCIAL MEDIA",
-    "footer.copyright": "© 2025 Copyright",
+    "footer.copyright": "Copyright",
     "footer.rights": "All rights reserved",
     "footer.description":
       "We believe every beauty routine should reflect your style. Discover carefully selected haircare, skincare, and beauty essentials at Zirelly.az",
@@ -375,7 +375,7 @@ export const TRANSLATIONS = {
     "header.profile": "Профиль",
     "footer.learn": "УЗНАТЬ",
     "footer.socialMedia": "СОЦСЕТИ",
-    "footer.copyright": "© 2025 Авторские права",
+    "footer.copyright": "Авторские права",
     "footer.rights": "Все права защищены",
     "footer.description":
       "Мы верим, что каждый бьюти-ритуал должен отражать ваш стиль. Откройте для себя тщательно подобранные средства по уходу за волосами, кожей и косметику на Zirelly.az",

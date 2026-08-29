@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import HeroSlider from "@/components/home/HeroSlider";
-import ProductsSlider from "@/components/products/ProductsSlider";
+import ProductCard from "@/components/ui/card/ProductCard";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch } from "@/utils/api";
-import fallbackFeaturedImage from "@/assets/images/products/productImage.png";
 
 function formatPrice(value) {
   return `${Number(value).toFixed(2)} ₼`;
@@ -88,10 +87,22 @@ export default function ProductsPage() {
           )}
 
           {products !== null && items.length > 0 && (
-            <ProductsSlider
-              products={items}
-              featuredImage={page?.side_image?.url ?? fallbackFeaturedImage}
-            />
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {items.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  className="h-full"
+                  productId={product.id}
+                  slug={product.slug}
+                  title={product.title}
+                  description={product.description}
+                  price={product.price}
+                  originalPrice={product.originalPrice}
+                  inStock={product.inStock}
+                  image={product.image}
+                />
+              ))}
+            </div>
           )}
         </div>
       </section>

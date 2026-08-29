@@ -20,31 +20,34 @@ const learnLinks = [
   { href: "/elaqe", labelKey: "nav.contact" },
 ];
 
-const socialLinks = [
-  { href: "#", label: "Facebook", icon: facebookIcon },
-  { href: "#", label: "Instagram", icon: instagramIcon },
-  { href: "#", label: "TikTok", icon: tiktokIcon },
-  { href: "#", label: "LinkedIn", icon: linkedinIcon },
-];
-
 export default function Footer() {
-  const { t } = useLanguage();
-  const [phone, setPhone] = useState(null);
+  const { t, language } = useLanguage();
+  const [contact, setContact] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
 
-    apiFetch("/contact")
+    apiFetch("/contact", { lang: language })
       .then((response) => {
         if (cancelled) return;
-        setPhone(response.data?.phone || null);
+        setContact(response.data ?? null);
       })
       .catch(() => {});
 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [language]);
+
+  const phone = contact?.phone || null;
+  const year = new Date().getFullYear();
+
+  const socialLinks = [
+    { href: contact?.facebook_url, label: "Facebook", icon: facebookIcon },
+    { href: contact?.instagram_url, label: "Instagram", icon: instagramIcon },
+    { href: contact?.tiktok_url, label: "TikTok", icon: tiktokIcon },
+    { href: contact?.linkedin_url, label: "LinkedIn", icon: linkedinIcon },
+  ].filter((social) => social.href);
 
   return (
     <footer className="mt-auto mb-10 w-full">
@@ -60,7 +63,7 @@ export default function Footer() {
                 />
               </Link>
               <p className="max-w-[320px] text-sm leading-6 text-zinc-500">
-                {t("footer.description")}
+                {contact?.footer_description || t("footer.description")}
               </p>
             </div>
 
@@ -84,7 +87,7 @@ export default function Footer() {
                 </div>
 
                 <div className="hidden text-sm leading-6 text-zinc-500 lg:block">
-                  <p>{t("footer.copyright")}</p>
+                  <p>© {year} {t("footer.copyright")}</p>
                   <p>{t("footer.rights")}</p>
                   <p className="mt-2 flex flex-col gap-1">
                     <Link
@@ -121,10 +124,15 @@ export default function Footer() {
                     {t("footer.socialMedia")}
                   </h3>
                   <div className="mt-3 grid w-fit grid-cols-2 gap-3">
+                    {socialLinks.length === 0 && (
+                      <span className="text-sm text-zinc-400">—</span>
+                    )}
                     {socialLinks.map((social) => (
                       <a
                         key={social.label}
                         href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         aria-label={social.label}
                         className="shrink-0 transition-opacity hover:opacity-80"
                       >
@@ -149,7 +157,7 @@ export default function Footer() {
 
             <div className="flex items-end justify-between gap-4 lg:hidden">
               <div className="text-sm leading-6 text-zinc-500">
-                <p>{t("footer.copyright")}</p>
+                <p>© {year} {t("footer.copyright")}</p>
                 <p>{t("footer.rights")}</p>
                 <p className="mt-2 flex flex-col gap-1">
                   <Link
