@@ -16,6 +16,7 @@ const initialForm = {
   surname: "",
   phone: "",
   birth_date: "",
+  address: "",
   email: "",
   password: "",
   password_confirmation: "",
@@ -184,6 +185,24 @@ export default function RegisterModal({
                 onChange={(value) => updateField("birth_date", value)}
               />
             </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="register-address"
+              className="mb-2 block text-sm font-medium text-foreground"
+            >
+              {t("auth.address")}
+            </label>
+            <textarea
+              id="register-address"
+              required
+              rows={2}
+              value={form.address}
+              onChange={(event) => updateField("address", event.target.value)}
+              placeholder={t("auth.addressPlaceholder")}
+              className="w-full rounded-xl border border-[var(--content-secondary-inverse)] bg-white px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
+            />
           </div>
 
           <div>

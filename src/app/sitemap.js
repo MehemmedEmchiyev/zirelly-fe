@@ -37,6 +37,8 @@ export default async function sitemap() {
     { path: "/elaqe", priority: 0.5, changeFrequency: "monthly" },
     { path: "/geri-qaytarma", priority: 0.3, changeFrequency: "yearly" },
     { path: "/mexfilik-siyaseti", priority: 0.3, changeFrequency: "yearly" },
+    { path: "/catdirilma-ve-odeme", priority: 0.3, changeFrequency: "yearly" },
+    { path: "/istifade-sertleri", priority: 0.3, changeFrequency: "yearly" },
   ].map((route) => ({
     url: `${SITE_URL}${route.path}`,
     lastModified: new Date(),

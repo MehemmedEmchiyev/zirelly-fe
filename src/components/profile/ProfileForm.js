@@ -38,6 +38,7 @@ function userToForm(user) {
     surname: user.surname ?? "",
     phone: user.phone ?? "",
     birth_date: user.birth_date ? user.birth_date.slice(0, 10) : "",
+    address: user.address ?? "",
     email: user.email ?? "",
   };
 }
@@ -91,6 +92,7 @@ export default function ProfileForm() {
           surname: form.surname,
           phone: normalizePhone(form.phone),
           birth_date: form.birth_date,
+          address: form.address || null,
         }),
       });
 
@@ -159,6 +161,16 @@ export default function ProfileForm() {
               <DateSelect
                 value={form.birth_date}
                 onChange={(value) => updateField("birth_date", value)}
+              />
+            </Field>
+
+            <Field label={t("auth.address")}>
+              <textarea
+                rows={2}
+                value={form.address}
+                onChange={(event) => updateField("address", event.target.value)}
+                placeholder={t("auth.addressPlaceholder")}
+                className="w-full rounded-xl border border-[var(--content-secondary-inverse)] bg-white px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
               />
             </Field>
 

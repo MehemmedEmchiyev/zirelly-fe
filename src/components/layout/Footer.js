@@ -99,6 +99,18 @@ export default function Footer() {
                     >
                       {t("legal.privacyPolicy")}
                     </Link>
+                    <Link
+                      href="/catdirilma-ve-odeme"
+                      className="transition-colors hover:text-brand-primary"
+                    >
+                      {t("legal.delivery")}
+                    </Link>
+                    <Link
+                      href="/istifade-sertleri"
+                      className="transition-colors hover:text-brand-primary"
+                    >
+                      {t("legal.terms")}
+                    </Link>
                   </p>
                 </div>
               </div>
@@ -151,6 +163,18 @@ export default function Footer() {
                     className="transition-colors hover:text-brand-primary"
                   >
                     {t("legal.privacyPolicy")}
+                  </Link>
+                  <Link
+                    href="/catdirilma-ve-odeme"
+                    className="transition-colors hover:text-brand-primary"
+                  >
+                    {t("legal.delivery")}
+                  </Link>
+                  <Link
+                    href="/istifade-sertleri"
+                    className="transition-colors hover:text-brand-primary"
+                  >
+                    {t("legal.terms")}
                   </Link>
                 </p>
               </div>

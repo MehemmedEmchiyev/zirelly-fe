@@ -158,6 +158,9 @@ export default function CartContent({ variant = "page" }) {
   const [promo, setPromo] = useState(null);
   const [promoError, setPromoError] = useState(null);
   const [status, setStatus] = useState(null);
+  const [profileAddress, setProfileAddress] = useState(null);
+  const [addressMode, setAddressMode] = useState("profile");
+  const [customAddress, setCustomAddress] = useState("");
 
   const loadBasket = useCallback(async () => {
     try {
@@ -186,6 +189,14 @@ export default function CartContent({ variant = "page" }) {
     setLoggedOut(false);
     setLoading(true);
     loadBasket();
+
+    authFetch("/auth/me")
+      .then((response) => {
+        const address = response.data?.address || null;
+        setProfileAddress(address);
+        if (!address) setAddressMode("custom");
+      })
+      .catch(() => setAddressMode("custom"));
   }, [loadBasket, isLoggedIn, isReady]);
 
   async function handleQuantityChange(item, quantity) {
@@ -239,13 +250,26 @@ export default function CartContent({ variant = "page" }) {
   }
 
   async function handlePlaceOrder() {
+    const address =
+      addressMode === "profile" && profileAddress
+        ? profileAddress
+        : customAddress.trim();
+
+    if (!address) {
+      setStatus({ ok: false, text: t("cart.addressRequired") });
+      return;
+    }
+
     setBusy(true);
     setStatus(null);
 
     try {
       const response = await authFetch("/checkout", {
         method: "POST",
-        body: JSON.stringify(promo ? { promocode: promo.code } : {}),
+        body: JSON.stringify({
+          address,
+          ...(promo ? { promocode: promo.code } : {}),
+        }),
       });
 
       if (response?.payment_url) {
@@ -427,6 +451,54 @@ export default function CartContent({ variant = "page" }) {
                   {formatPrice(total)}
                 </span>
               </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-medium leading-5 text-foreground">
+                {t("cart.deliveryAddress")}
+              </p>
+
+              {profileAddress && (
+                <div className="flex flex-col gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setAddressMode("profile")}
+                    className={`rounded-xl border px-3 py-2 text-left text-sm leading-5 transition-colors ${
+                      addressMode === "profile"
+                        ? "border-brand-primary bg-white"
+                        : "border-header-border bg-white/60 text-zinc-500"
+                    }`}
+                  >
+                    <span className="font-medium text-foreground">
+                      {t("cart.myAddress")}
+                    </span>
+                    <span className="mt-0.5 block text-xs leading-4 text-zinc-500">
+                      {profileAddress}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAddressMode("custom")}
+                    className={`rounded-xl border px-3 py-2 text-left text-sm font-medium leading-5 transition-colors ${
+                      addressMode === "custom"
+                        ? "border-brand-primary bg-white text-foreground"
+                        : "border-header-border bg-white/60 text-zinc-500"
+                    }`}
+                  >
+                    {t("cart.otherAddress")}
+                  </button>
+                </div>
+              )}
+
+              {(addressMode === "custom" || !profileAddress) && (
+                <textarea
+                  rows={2}
+                  value={customAddress}
+                  onChange={(event) => setCustomAddress(event.target.value)}
+                  placeholder={t("auth.addressPlaceholder")}
+                  className="w-full rounded-xl border border-header-border bg-white px-3 py-2 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
+                />
+              )}
             </div>
 
             {status && !status.ok && (

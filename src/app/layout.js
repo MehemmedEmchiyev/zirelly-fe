@@ -1,6 +1,7 @@
 import { GoogleTagManager } from "@next/third-parties/google";
 import { Cormorant_Garamond, Geist } from "next/font/google";
 import DeferredPopup from "@/components/layout/DeferredPopup";
+import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import Footer from "@/components/layout/Footer";
 import GlobalAuthModals from "@/components/layout/GlobalAuthModals";
 import Header from "@/components/layout/Header";
@@ -88,6 +89,7 @@ export default async function RootLayout({ children }) {
                 <Footer />
                 <GlobalAuthModals />
                 <DeferredPopup />
+                <WhatsAppButton />
               </BasketProvider>
             </ToastProvider>
           </AuthProvider>
