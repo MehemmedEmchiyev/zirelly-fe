@@ -35,7 +35,7 @@ export default function HeroSlider({ slides }) {
             {slide.image?.url ? (
               <Image
                 src={slide.image.url}
-                alt=""
+                alt={slide.image.alt || slide.title || ""}
                 fill
                 priority={index === 0}
                 quality={90}
@@ -47,11 +47,19 @@ export default function HeroSlider({ slides }) {
             )}
 
             <div className="absolute inset-0 z-10 flex flex-col justify-between gap-6 px-5 pb-6 pt-6 sm:static sm:w-full sm:items-start sm:justify-center sm:gap-4 sm:px-10 sm:py-14 lg:px-16 lg:py-16">
-              {slide.title && (
-                <h1 className="max-w-[260px] text-base font-semibold leading-5 text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)] sm:max-w-[440px] sm:text-2xl sm:leading-8 sm:drop-shadow-none md:font-bold">
-                  {slide.title}
-                </h1>
-              )}
+              <div className="flex flex-col gap-3">
+                {slide.title && (
+                  <h1 className="max-w-[260px] text-base font-semibold leading-5 text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)] sm:max-w-[440px] sm:text-2xl sm:leading-8 sm:drop-shadow-none md:font-bold">
+                    {slide.title}
+                  </h1>
+                )}
+
+                {slide.description && (
+                  <p className="max-w-[260px] text-sm leading-5 text-white/90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)] sm:max-w-[440px] sm:text-base sm:leading-6 sm:drop-shadow-none">
+                    {slide.description}
+                  </p>
+                )}
+              </div>
 
               {!slide.hide_button && (
                 <Button

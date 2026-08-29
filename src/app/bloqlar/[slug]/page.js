@@ -30,13 +30,13 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: data.meta_title || data.title || slug,
+    title: data.meta_title ? { absolute: data.meta_title } : data.title || slug,
     description: data.meta_description || undefined,
     alternates: { canonical: `/bloqlar/${slug}` },
     openGraph: {
       type: "article",
-      title: data.meta_title || data.title || slug,
-      description: data.meta_description || undefined,
+      title: data.og_title || data.meta_title || data.title || slug,
+      description: data.og_description || data.meta_description || undefined,
       url: `/bloqlar/${slug}`,
       images: data.image ? [data.image] : [],
       publishedTime: data.created_at || undefined,

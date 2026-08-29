@@ -162,7 +162,7 @@ export default function RegisterModal({
                 value={form.phone}
                 onChange={(event) => handlePhoneChange(event.target.value)}
                 onBlur={handlePhoneBlur}
-                placeholder="+994775387707"
+                placeholder="+994512522410"
                 inputMode="tel"
                 aria-invalid={phoneError ? true : undefined}
                 className={`${inputClasses} ${phoneError ? "border-red-500 focus:border-red-500" : ""}`}

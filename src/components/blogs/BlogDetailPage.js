@@ -1,10 +1,33 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import NotFoundPage from "@/components/common/NotFoundPage";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch } from "@/utils/api";
+
+function processContent(html) {
+  if (!html) return { html: "", toc: [] };
+
+  const toc = [];
+  let counter = 0;
+
+  const processed = html.replace(
+    /<h([23])([^>]*)>([\s\S]*?)<\/h\1>/gi,
+    (match, level, attrs, inner) => {
+      const text = inner.replace(/<[^>]+>/g, "").trim();
+
+      if (!text) return match;
+
+      counter += 1;
+      const id = `basliq-${counter}`;
+      toc.push({ id, text, level: Number(level) });
+      return `<h${level} id="${id}"${attrs}>${inner}</h${level}>`;
+    },
+  );
+
+  return { html: processed, toc };
+}
 
 function BlogDetailSkeleton() {
   return (
@@ -57,6 +80,8 @@ export default function BlogDetailPage({ slug }) {
     };
   }, [slug, language]);
 
+  const content = useMemo(() => processContent(blog?.content), [blog?.content]);
+
   if (notFound) {
     return <NotFoundPage />;
   }
@@ -90,9 +115,29 @@ export default function BlogDetailPage({ slug }) {
                 {blog.title}
               </h1>
 
+              {content.toc.length >= 2 && (
+                <nav className="rounded-2xl border border-header-border bg-header-icon-bg p-5">
+                  <p className="text-sm font-bold uppercase tracking-wide text-zinc-500">
+                    {t("blogs.toc")}
+                  </p>
+                  <ul className="mt-3 flex flex-col gap-2">
+                    {content.toc.map((item) => (
+                      <li key={item.id} className={item.level === 3 ? "pl-4" : ""}>
+                        <a
+                          href={`#${item.id}`}
+                          className="text-sm leading-5 text-foreground transition-colors hover:text-brand-primary"
+                        >
+                          {item.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              )}
+
               <div
-                className="flex flex-col gap-6 text-base leading-5 text-foreground [&_a]:text-brand-primary [&_a]:underline [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:text-xl [&_h3]:font-bold [&_img]:rounded-2xl [&_li]:ml-5 [&_ol]:list-decimal [&_ul]:list-disc"
-                dangerouslySetInnerHTML={{ __html: blog.content ?? "" }}
+                className="flex flex-col gap-5 text-base leading-7 text-foreground [&_a]:text-brand-primary [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-brand-primary [&_blockquote]:pl-4 [&_blockquote]:italic [&_h2]:mt-4 [&_h2]:scroll-mt-24 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:leading-8 [&_h3]:mt-2 [&_h3]:scroll-mt-24 [&_h3]:text-xl [&_h3]:font-bold [&_h4]:font-bold [&_img]:rounded-2xl [&_li]:ml-5 [&_ol]:flex [&_ol]:list-decimal [&_ol]:flex-col [&_ol]:gap-2 [&_strong]:font-semibold [&_ul]:flex [&_ul]:list-disc [&_ul]:flex-col [&_ul]:gap-2"
+                dangerouslySetInnerHTML={{ __html: content.html }}
               />
             </div>
           </article>

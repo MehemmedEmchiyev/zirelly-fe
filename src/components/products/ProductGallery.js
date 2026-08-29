@@ -61,8 +61,8 @@ export default function ProductGallery({ images }) {
         onMouseLeave={() => setZoomOrigin(null)}
       >
         <Image
-          src={activeImage}
-          alt="Product"
+          src={activeImage.url}
+          alt={activeImage.alt ?? ""}
           fill
           priority
           quality={100}
@@ -112,8 +112,8 @@ export default function ProductGallery({ images }) {
               >
                 <span className="relative block h-full w-full overflow-hidden rounded-xl">
                   <Image
-                    src={image}
-                    alt=""
+                    src={image.url}
+                    alt={image.alt ?? ""}
                     fill
                     sizes="120px"
                     className="object-cover object-center"

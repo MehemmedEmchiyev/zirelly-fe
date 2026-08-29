@@ -12,7 +12,7 @@ export async function generateMetadata() {
       const { data } = await response.json();
 
       return {
-        title: data.meta_title || "Home",
+        title: data.meta_title ? { absolute: data.meta_title } : "Home",
         alternates: { canonical: "/" },
         description: data.meta_description || "Welcome to Zirelly",
       };

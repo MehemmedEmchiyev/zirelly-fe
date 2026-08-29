@@ -12,7 +12,7 @@ export async function generateMetadata() {
       const { data } = await response.json();
 
       return {
-        title: data.meta_title || "Contact Us",
+        title: data.meta_title ? { absolute: data.meta_title } : "Contact Us",
         alternates: { canonical: "/elaqe" },
         description: data.meta_description || "Get in touch with Zirelly",
       };

@@ -12,7 +12,7 @@ export async function generateMetadata() {
       const { data } = await response.json();
 
       return {
-        title: data.meta_title || "About Us",
+        title: data.meta_title ? { absolute: data.meta_title } : "About Us",
         alternates: { canonical: "/haqqimizda" },
         description: data.meta_description || "Learn more about Zirelly",
       };

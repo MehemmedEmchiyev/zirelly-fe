@@ -35,12 +35,12 @@ export async function generateMetadata({ params }) {
     .slice(0, 4);
 
   return {
-    title: data.meta_title || data.title || slug,
+    title: data.meta_title ? { absolute: data.meta_title } : data.title || slug,
     description: data.meta_description || undefined,
     alternates: { canonical: `/mehsullar/${slug}` },
     openGraph: {
-      title: data.meta_title || data.title || slug,
-      description: data.meta_description || undefined,
+      title: data.og_title || data.meta_title || data.title || slug,
+      description: data.og_description || data.meta_description || undefined,
       url: `/mehsullar/${slug}`,
       images,
     },

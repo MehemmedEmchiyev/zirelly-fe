@@ -69,7 +69,10 @@ export default function ProductDetailPage({ slug }) {
     return <NotFoundPage />;
   }
 
-  const images = (product?.images ?? []).map((image) => image.url);
+  const images = (product?.images ?? []).map((image) => ({
+    url: image.url,
+    alt: image.alt || product?.title || "",
+  }));
   const features = (product?.features ?? []).map((feature) => ({
     label: feature.name,
     value: feature.value,
