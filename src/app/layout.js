@@ -80,7 +80,7 @@ export default async function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
         />
-        <LanguageProvider>
+        <LanguageProvider initialLanguage={lang}>
           <AuthProvider>
             <ToastProvider>
               <BasketProvider>

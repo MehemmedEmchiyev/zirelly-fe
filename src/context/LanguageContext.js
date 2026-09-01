@@ -22,16 +22,40 @@ function writeLanguageCookie(code) {
   document.cookie = `${STORAGE_KEYS.LANGUAGE}=${code}; path=/; max-age=31536000; SameSite=Lax`;
 }
 
-export function LanguageProvider({ children }) {
-  const [language, setLanguageState] = useState(DEFAULT_LANGUAGE);
+// URL-dən dil prefiksini oxuyur: /ru/elaqe → "ru", /elaqe → defolt (az)
+function languageFromPath(pathname) {
+  const segment = pathname.split("/")[1];
+  return segment !== DEFAULT_LANGUAGE && TRANSLATIONS[segment]
+    ? segment
+    : DEFAULT_LANGUAGE;
+}
+
+// Prefiksi dəyişərək yeni URL qurur: az prefikssiz, digərləri /ru, /en
+function pathWithLanguage(code) {
+  const { pathname, search, hash } = window.location;
+  const segment = pathname.split("/")[1];
+  const bare = TRANSLATIONS[segment]
+    ? pathname.slice(segment.length + 1) || "/"
+    : pathname;
+
+  const prefixed =
+    code === DEFAULT_LANGUAGE ? bare : `/${code}${bare === "/" ? "" : bare}`;
+
+  return `${prefixed}${search}${hash}`;
+}
+
+export function LanguageProvider({ children, initialLanguage }) {
+  const [language, setLanguageState] = useState(
+    TRANSLATIONS[initialLanguage] ? initialLanguage : DEFAULT_LANGUAGE,
+  );
   const [languages, setLanguages] = useState([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEYS.LANGUAGE);
-    if (stored && TRANSLATIONS[stored]) {
-      setLanguageState(stored);
-      writeLanguageCookie(stored);
-    }
+    // URL mənbə sayılır — proxy cookie-yə görə düzgün prefiksə yönləndirir
+    const fromPath = languageFromPath(window.location.pathname);
+    setLanguageState(fromPath);
+    localStorage.setItem(STORAGE_KEYS.LANGUAGE, fromPath);
+    writeLanguageCookie(fromPath);
   }, []);
 
   useEffect(() => {
@@ -57,6 +81,15 @@ export function LanguageProvider({ children }) {
     setLanguageState(code);
     localStorage.setItem(STORAGE_KEYS.LANGUAGE, code);
     writeLanguageCookie(code);
+
+    // URL prefiksini yenilə (/ru/..., /en/... və ya az üçün prefikssiz) —
+    // tam yüklənmə server metadata-nın da yeni dildə gəlməsini təmin edir
+    const target = pathWithLanguage(code);
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+    if (target !== current) {
+      window.location.assign(target);
+    }
   }, []);
 
   const t = useCallback(

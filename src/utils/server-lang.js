@@ -1,13 +1,32 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { STORAGE_KEYS } from "@/constants/storage-keys";
-import { DEFAULT_LANGUAGE } from "@/constants/translations";
+import { DEFAULT_LANGUAGE, TRANSLATIONS } from "@/constants/translations";
 
-// Server-də (generateMetadata və s.) seçilmiş dili cookie-dən oxuyur
+// Server-də (generateMetadata və s.) seçilmiş dili oxuyur.
+// Əsas mənbə URL prefiksidir (proxy x-locale header-i ilə ötürür),
+// ehtiyat olaraq cookie-yə baxılır.
 export async function getServerLang() {
   try {
-    const store = await cookies();
-    return store.get(STORAGE_KEYS.LANGUAGE)?.value || DEFAULT_LANGUAGE;
+    const headerStore = await headers();
+    const fromPath = headerStore.get("x-locale");
+
+    if (fromPath && TRANSLATIONS[fromPath]) {
+      return fromPath;
+    }
   } catch {
-    return DEFAULT_LANGUAGE;
+    // headers() əlçatan olmayanda cookie-yə düşür
   }
+
+  try {
+    const store = await cookies();
+    const stored = store.get(STORAGE_KEYS.LANGUAGE)?.value;
+
+    if (stored && TRANSLATIONS[stored]) {
+      return stored;
+    }
+  } catch {
+    // cookie oxunmayanda defolt qalır
+  }
+
+  return DEFAULT_LANGUAGE;
 }
