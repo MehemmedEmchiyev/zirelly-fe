@@ -1,9 +1,30 @@
 "use client";
 
-const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
+import { useEffect, useState } from "react";
+import { apiFetch } from "@/utils/api";
+
+const FALLBACK_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
 
 export default function WhatsAppButton() {
-  const digits = WHATSAPP_NUMBER.replace(/\D/g, "");
+  const [number, setNumber] = useState(FALLBACK_NUMBER);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    apiFetch("/contact")
+      .then((response) => {
+        if (cancelled) return;
+        const adminNumber = response.data?.whatsapp_number;
+        if (adminNumber) setNumber(adminNumber);
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const digits = number.replace(/\D/g, "");
 
   if (!digits) {
     return null;

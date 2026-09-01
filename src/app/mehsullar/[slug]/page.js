@@ -29,10 +29,12 @@ export async function generateMetadata({ params }) {
     return { title: slug, alternates: { canonical: `/mehsullar/${slug}` } };
   }
 
-  const images = (data.images ?? [])
-    .map((image) => image.url)
-    .filter(Boolean)
-    .slice(0, 4);
+  const images = data.og_image?.url
+    ? [data.og_image.url]
+    : (data.images ?? [])
+        .map((image) => image.url)
+        .filter(Boolean)
+        .slice(0, 4);
 
   return {
     title: data.meta_title ? { absolute: data.meta_title } : data.title || slug,

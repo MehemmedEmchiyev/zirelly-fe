@@ -1,5 +1,6 @@
 import AboutPage from "@/components/about/AboutPage";
 import { API_URL } from "@/utils/api";
+import { buildOpenGraph } from "@/utils/og";
 import { getServerLang } from "@/utils/server-lang";
 
 export async function generateMetadata() {
@@ -15,6 +16,11 @@ export async function generateMetadata() {
         title: data.meta_title ? { absolute: data.meta_title } : "About Us",
         alternates: { canonical: "/haqqimizda" },
         description: data.meta_description || "Learn more about Zirelly",
+        openGraph: buildOpenGraph(data, {
+          url: "/haqqimizda",
+          title: "About Us",
+          description: "Learn more about Zirelly",
+        }),
       };
     }
   } catch {

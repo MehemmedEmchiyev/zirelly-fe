@@ -1,5 +1,6 @@
 import ProductsPage from "@/components/products/ProductsPage";
 import { API_URL } from "@/utils/api";
+import { buildOpenGraph } from "@/utils/og";
 import { getServerLang } from "@/utils/server-lang";
 
 const FALLBACK = {
@@ -22,6 +23,11 @@ export async function generateMetadata() {
         title: data.meta_title ? { absolute: data.meta_title } : fallback.title,
         alternates: { canonical: "/mehsullar" },
         description: data.meta_description || fallback.description,
+        openGraph: buildOpenGraph(data, {
+          url: "/mehsullar",
+          title: fallback.title,
+          description: fallback.description,
+        }),
       };
     }
   } catch {

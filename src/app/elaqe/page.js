@@ -1,5 +1,6 @@
 import ContactPage from "@/components/contact/ContactPage";
 import { API_URL } from "@/utils/api";
+import { buildOpenGraph } from "@/utils/og";
 import { getServerLang } from "@/utils/server-lang";
 
 export async function generateMetadata() {
@@ -15,6 +16,11 @@ export async function generateMetadata() {
         title: data.meta_title ? { absolute: data.meta_title } : "Contact Us",
         alternates: { canonical: "/elaqe" },
         description: data.meta_description || "Get in touch with Zirelly",
+        openGraph: buildOpenGraph(data, {
+          url: "/elaqe",
+          title: "Contact Us",
+          description: "Get in touch with Zirelly",
+        }),
       };
     }
   } catch {

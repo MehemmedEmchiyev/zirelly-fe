@@ -7,6 +7,7 @@ import starIcon from "@/assets/images/testimonials/Star.svg";
 import ProductReviewModal from "@/components/products/ProductReviewModal";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useToast } from "@/context/ToastContext";
 import { apiFetch } from "@/utils/api";
 import { formatDate } from "@/utils/blog";
 
@@ -30,6 +31,7 @@ function Stars({ value, size = 16 }) {
 export default function ProductReviews({ productId }) {
   const { language, t } = useLanguage();
   const { isLoggedIn, openAuth } = useAuth();
+  const { showToast } = useToast();
   const [reviews, setReviews] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -131,7 +133,7 @@ export default function ProductReviews({ productId }) {
         productId={productId}
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onCreated={(review) => setReviews((prev) => [review, ...(prev ?? [])])}
+        onCreated={() => showToast(t("review.pending"))}
       />
     </section>
   );

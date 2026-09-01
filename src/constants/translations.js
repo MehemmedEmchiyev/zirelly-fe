@@ -182,6 +182,7 @@ export const TRANSLATIONS = {
     "review.empty": "Hələ rəy yoxdur.",
     "review.loginRequired": "Rəy yazmaq üçün daxil olun.",
     "review.success": "Rəyiniz əlavə olundu!",
+    "review.pending": "Rəyiniz göndərildi. Moderator təsdiqindən sonra dərc olunacaq.",
   },
   en: {
     "nav.about": "About us",
@@ -364,6 +365,7 @@ export const TRANSLATIONS = {
     "review.empty": "No reviews yet.",
     "review.loginRequired": "Log in to write a review.",
     "review.success": "Your review has been added!",
+    "review.pending": "Your review has been submitted and will appear after moderation.",
   },
   ru: {
     "nav.about": "О нас",
@@ -546,6 +548,7 @@ export const TRANSLATIONS = {
     "review.empty": "Отзывов пока нет.",
     "review.loginRequired": "Войдите, чтобы оставить отзыв.",
     "review.success": "Ваш отзыв добавлен!",
+    "review.pending": "Ваш отзыв отправлен и появится после модерации.",
   },
 };
 
