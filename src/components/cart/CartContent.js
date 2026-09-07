@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import basketImage from "@/assets/images/card/shopping_bag.svg";
 import { useAuth } from "@/context/AuthContext";
 import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { authFetch } from "@/utils/api";
+import { apiFetch, authFetch } from "@/utils/api";
 
 function formatPrice(value) {
   return `${Number(value).toFixed(2)} ₼`;
@@ -64,6 +64,97 @@ function CardIcon() {
       <path d="M2.75 8.5H21.25M2.75 12H21.25" stroke="currentColor" strokeWidth="1.5" />
       <path d="M6 17H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
+  );
+}
+
+function SearchableSelect({ label, required, value, onChange, options, t, error }) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const wrapRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function handleClickOutside(event) {
+      if (wrapRef.current && !wrapRef.current.contains(event.target)) {
+        setOpen(false);
+        setQuery("");
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
+  const filtered = query.trim()
+    ? options.filter((option) =>
+        option.toLowerCase().includes(query.trim().toLowerCase())
+      )
+    : options;
+
+  return (
+    <div ref={wrapRef} className="relative flex flex-col gap-1">
+      <span className="text-[12px] font-medium leading-4 text-[#333333]">
+        {label}
+        {required && <span className="text-red-600"> *</span>}
+      </span>
+
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className={`flex h-10 w-full items-center justify-between rounded-xl border bg-white px-3 text-left text-sm leading-5 transition-colors ${
+          error ? "border-red-500" : "border-header-border focus:border-brand-primary"
+        } ${value ? "text-foreground" : "text-zinc-400"}`}
+      >
+        <span className="truncate">{value || t("cart.addressSelect")}</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path
+            d="M2.5 4.5L6 8L9.5 4.5"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute top-full z-20 mt-1 w-full overflow-hidden rounded-xl border border-header-border bg-white shadow-lg">
+          <input
+            type="text"
+            autoFocus
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={t("cart.addressSearch")}
+            className="w-full border-b border-header-border px-3 py-2 text-sm leading-5 text-foreground outline-none placeholder:text-zinc-400"
+          />
+          <ul className="max-h-48 overflow-y-auto py-1">
+            {filtered.map((option) => (
+              <li key={option}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onChange(option);
+                    setOpen(false);
+                    setQuery("");
+                  }}
+                  className={`w-full cursor-pointer px-3 py-2 text-left text-sm leading-5 transition-colors hover:bg-header-icon-bg ${
+                    option === value ? "font-semibold text-brand-primary" : "text-foreground"
+                  }`}
+                >
+                  {option}
+                </button>
+              </li>
+            ))}
+            {filtered.length === 0 && (
+              <li className="px-3 py-2 text-sm text-zinc-400">
+                {t("cart.addressNoResults")}
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -158,9 +249,16 @@ export default function CartContent({ variant = "page" }) {
   const [promo, setPromo] = useState(null);
   const [promoError, setPromoError] = useState(null);
   const [status, setStatus] = useState(null);
-  const [profileAddress, setProfileAddress] = useState(null);
-  const [addressMode, setAddressMode] = useState("profile");
-  const [customAddress, setCustomAddress] = useState("");
+  const [locations, setLocations] = useState(null);
+  const [addrCity, setAddrCity] = useState("");
+  const [addrDistrict, setAddrDistrict] = useState("");
+  const [addrStreet, setAddrStreet] = useState("");
+  const [addrBuilding, setAddrBuilding] = useState("");
+  const [addrApartment, setAddrApartment] = useState("");
+  const [addrNote, setAddrNote] = useState("");
+  const [addrErrors, setAddrErrors] = useState({});
+
+  const isBaku = addrCity === (locations?.baku ?? "Bakı");
 
   const loadBasket = useCallback(async () => {
     try {
@@ -189,15 +287,13 @@ export default function CartContent({ variant = "page" }) {
     setLoggedOut(false);
     setLoading(true);
     loadBasket();
-
-    authFetch("/auth/me")
-      .then((response) => {
-        const address = response.data?.address || null;
-        setProfileAddress(address);
-        if (!address) setAddressMode("custom");
-      })
-      .catch(() => setAddressMode("custom"));
   }, [loadBasket, isLoggedIn, isReady]);
+
+  useEffect(() => {
+    apiFetch("/delivery-locations")
+      .then(setLocations)
+      .catch(() => setLocations(null));
+  }, []);
 
   async function handleQuantityChange(item, quantity) {
     if (quantity < 1) return;
@@ -250,13 +346,16 @@ export default function CartContent({ variant = "page" }) {
   }
 
   async function handlePlaceOrder() {
-    const address =
-      addressMode === "profile" && profileAddress
-        ? profileAddress
-        : customAddress.trim();
+    const errors = {};
+    if (!addrCity) errors.city = true;
+    if (isBaku && !addrDistrict) errors.district = true;
+    if (!addrStreet.trim()) errors.street = true;
+    if (!addrBuilding.trim()) errors.building = true;
 
-    if (!address) {
-      setStatus({ ok: false, text: t("cart.addressRequired") });
+    setAddrErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      setStatus({ ok: false, text: t("cart.addressFillRequired") });
       return;
     }
 
@@ -267,7 +366,12 @@ export default function CartContent({ variant = "page" }) {
       const response = await authFetch("/checkout", {
         method: "POST",
         body: JSON.stringify({
-          address,
+          address_city: addrCity,
+          address_district: isBaku ? addrDistrict : null,
+          address_street: addrStreet.trim(),
+          address_building: addrBuilding.trim(),
+          address_apartment: addrApartment.trim() || null,
+          address_note: addrNote.trim() || null,
           ...(promo ? { promocode: promo.code } : {}),
         }),
       });
@@ -453,52 +557,104 @@ export default function CartContent({ variant = "page" }) {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               <p className="text-sm font-medium leading-5 text-foreground">
                 {t("cart.deliveryAddress")}
               </p>
 
-              {profileAddress && (
-                <div className="flex flex-col gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setAddressMode("profile")}
-                    className={`rounded-xl border px-3 py-2 text-left text-sm leading-5 transition-colors ${
-                      addressMode === "profile"
-                        ? "border-brand-primary bg-white"
-                        : "border-header-border bg-white/60 text-zinc-500"
-                    }`}
-                  >
-                    <span className="font-medium text-foreground">
-                      {t("cart.myAddress")}
-                    </span>
-                    <span className="mt-0.5 block text-xs leading-4 text-zinc-500">
-                      {profileAddress}
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setAddressMode("custom")}
-                    className={`rounded-xl border px-3 py-2 text-left text-sm font-medium leading-5 transition-colors ${
-                      addressMode === "custom"
-                        ? "border-brand-primary bg-white text-foreground"
-                        : "border-header-border bg-white/60 text-zinc-500"
-                    }`}
-                  >
-                    {t("cart.otherAddress")}
-                  </button>
-                </div>
-              )}
+              <SearchableSelect
+                label={t("cart.addressCity")}
+                required
+                value={addrCity}
+                onChange={(city) => {
+                  setAddrCity(city);
+                  setAddrDistrict("");
+                  setAddrErrors((prev) => ({ ...prev, city: false, district: false }));
+                }}
+                options={locations?.cities ?? ["Bakı"]}
+                t={t}
+                error={addrErrors.city}
+              />
 
-              {(addressMode === "custom" || !profileAddress) && (
-                <textarea
-                  rows={2}
-                  value={customAddress}
-                  onChange={(event) => setCustomAddress(event.target.value)}
-                  placeholder={t("auth.addressPlaceholder")}
-                  className="w-full rounded-xl border border-header-border bg-white px-3 py-2 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
+              {isBaku && (
+                <SearchableSelect
+                  label={t("cart.addressDistrict")}
+                  required
+                  value={addrDistrict}
+                  onChange={(district) => {
+                    setAddrDistrict(district);
+                    setAddrErrors((prev) => ({ ...prev, district: false }));
+                  }}
+                  options={locations?.baku_districts ?? []}
+                  t={t}
+                  error={addrErrors.district}
                 />
               )}
+
+              <div className="flex flex-col gap-1">
+                <span className="text-[12px] font-medium leading-4 text-[#333333]">
+                  {t("cart.addressStreet")}
+                  <span className="text-red-600"> *</span>
+                </span>
+                <input
+                  type="text"
+                  value={addrStreet}
+                  onChange={(event) => {
+                    setAddrStreet(event.target.value);
+                    setAddrErrors((prev) => ({ ...prev, street: false }));
+                  }}
+                  placeholder={t("cart.addressStreetPlaceholder")}
+                  className={`h-10 w-full rounded-xl border bg-white px-3 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 ${
+                    addrErrors.street ? "border-red-500" : "border-header-border focus:border-brand-primary"
+                  }`}
+                />
+              </div>
+
+              <div className="flex gap-2">
+                <div className="flex min-w-0 flex-1 flex-col gap-1">
+                  <span className="text-[12px] font-medium leading-4 text-[#333333]">
+                    {t("cart.addressBuilding")}
+                    <span className="text-red-600"> *</span>
+                  </span>
+                  <input
+                    type="text"
+                    value={addrBuilding}
+                    onChange={(event) => {
+                      setAddrBuilding(event.target.value);
+                      setAddrErrors((prev) => ({ ...prev, building: false }));
+                    }}
+                    placeholder={t("cart.addressBuildingPlaceholder")}
+                    className={`h-10 w-full rounded-xl border bg-white px-3 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 ${
+                      addrErrors.building ? "border-red-500" : "border-header-border focus:border-brand-primary"
+                    }`}
+                  />
+                </div>
+
+                <div className="flex min-w-0 flex-1 flex-col gap-1">
+                  <span className="text-[12px] font-medium leading-4 text-[#333333]">
+                    {t("cart.addressApartment")}
+                  </span>
+                  <input
+                    type="text"
+                    value={addrApartment}
+                    onChange={(event) => setAddrApartment(event.target.value)}
+                    className="h-10 w-full rounded-xl border border-header-border bg-white px-3 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <span className="text-[12px] font-medium leading-4 text-[#333333]">
+                  {t("cart.addressNote")}
+                </span>
+                <textarea
+                  rows={2}
+                  value={addrNote}
+                  onChange={(event) => setAddrNote(event.target.value)}
+                  placeholder={t("cart.addressNotePlaceholder")}
+                  className="w-full rounded-xl border border-header-border bg-white px-3 py-2 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
+                />
+              </div>
             </div>
 
             {status && !status.ok && (
