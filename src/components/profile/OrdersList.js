@@ -59,6 +59,7 @@ function OrderCard({ order, language, t }) {
   return (
     <div className="rounded-2xl bg-white">
       <button
+        id={`btn-order-toggle-${order.id}`}
         type="button"
         onClick={toggle}
         className="flex w-full cursor-pointer flex-wrap items-center justify-between gap-3 p-4 text-left"

@@ -68,7 +68,7 @@ export default function ProfileSidebar({ activeTab, onTabChange, onLogout }) {
 
         if (tab.type === "link") {
           return (
-            <Link key={tab.id} href={tab.href} className={classes}>
+            <Link key={tab.id} id={`btn-profile-tab-${tab.id}`} href={tab.href} className={classes}>
               <TabContent Icon={tab.icon} label={label} />
             </Link>
           );
@@ -76,7 +76,7 @@ export default function ProfileSidebar({ activeTab, onTabChange, onLogout }) {
 
         if (tab.type === "action") {
           return (
-            <button key={tab.id} type="button" onClick={onLogout} className={classes}>
+            <button key={tab.id} id="btn-profile-logout" type="button" onClick={onLogout} className={classes}>
               <TabContent Icon={tab.icon} label={label} />
             </button>
           );
@@ -85,6 +85,7 @@ export default function ProfileSidebar({ activeTab, onTabChange, onLogout }) {
         return (
           <button
             key={tab.id}
+            id={`btn-profile-tab-${tab.id}`}
             type="button"
             onClick={() => onTabChange(tab.id)}
             className={classes}

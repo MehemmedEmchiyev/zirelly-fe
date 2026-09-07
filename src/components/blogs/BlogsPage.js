@@ -112,6 +112,7 @@ export default function BlogsPage() {
             {hasMore && (
               <div className="mt-[60px] flex justify-center">
                 <button
+                  id="btn-blogs-load-more"
                   type="button"
                   onClick={handleLoadMore}
                   disabled={loadingMore}

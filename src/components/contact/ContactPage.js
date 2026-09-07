@@ -255,6 +255,7 @@ export default function ContactPage() {
           )}
 
           <button
+            id="btn-contact-submit"
             type="submit"
             disabled={sending}
             className="flex h-12 w-fit cursor-pointer items-center gap-2 rounded-3xl bg-brand-primary px-4 text-base font-medium leading-5 text-white transition-colors hover:bg-brand-primary-hover disabled:cursor-default disabled:opacity-60"

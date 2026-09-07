@@ -33,7 +33,7 @@ export default function BannerSection({ banner }) {
           {t("home.bannerText1")}
         </p>
 
-        <Button href={buttonHref} className="relative z-10 w-full">
+        <Button id="btn-banner-cta-mobile" href={buttonHref} className="relative z-10 w-full">
           {buttonText}
         </Button>
       </div>
@@ -60,7 +60,7 @@ export default function BannerSection({ banner }) {
             {t("home.bannerText2")}
           </p>
 
-          <Button href={buttonHref} className="shrink-0">
+          <Button id="btn-banner-cta" href={buttonHref} className="shrink-0">
             {buttonText}
           </Button>
         </div>

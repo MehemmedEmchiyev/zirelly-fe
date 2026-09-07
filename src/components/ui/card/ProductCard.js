@@ -133,6 +133,7 @@ export default function ProductCard({
         </span>
 
         <button
+          id={`btn-card-add-to-cart-${productId}`}
           type="button"
           disabled={adding}
           onClick={handleAddToCart}

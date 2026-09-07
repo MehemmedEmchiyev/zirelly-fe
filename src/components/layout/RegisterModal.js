@@ -97,6 +97,7 @@ export default function RegisterModal({
       isOpen={isOpen}
       onClose={onClose}
       titleId="register-modal-title"
+      name="register"
       maxWidthClass="max-w-[560px]"
     >
       <div className="pt-2 text-center">
@@ -268,6 +269,7 @@ export default function RegisterModal({
           {error && <p className="text-sm text-red-600">{error}</p>}
 
           <button
+            id="btn-register-submit"
             type="submit"
             disabled={loading}
             className="mt-2 h-12 w-full cursor-pointer rounded-full bg-brand-primary text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover disabled:cursor-default disabled:opacity-60"
@@ -278,6 +280,7 @@ export default function RegisterModal({
           <p className="text-center text-sm text-zinc-500">
             {t("auth.haveAccount")}{" "}
             <button
+              id="btn-register-switch-login"
               type="button"
               onClick={onSwitchToLogin}
               className="cursor-pointer font-medium text-brand-primary hover:underline"

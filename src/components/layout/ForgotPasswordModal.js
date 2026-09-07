@@ -40,7 +40,7 @@ export default function ForgotPasswordModal({
   }
 
   return (
-    <ModalShell isOpen={isOpen} onClose={onClose} titleId="forgot-modal-title">
+    <ModalShell isOpen={isOpen} onClose={onClose} titleId="forgot-modal-title" name="forgot-password">
       <div className="pt-2 text-center">
         <h2 id="forgot-modal-title" className="text-xl font-semibold text-foreground">
           {t("auth.forgotTitle")}
@@ -70,6 +70,7 @@ export default function ForgotPasswordModal({
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         <button
+          id="btn-forgot-password-submit"
           type="submit"
           disabled={loading}
           className="mt-2 h-12 w-full cursor-pointer rounded-full bg-brand-primary text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover disabled:cursor-default disabled:opacity-60"
@@ -79,6 +80,7 @@ export default function ForgotPasswordModal({
 
         <p className="text-center text-sm text-zinc-500">
           <button
+            id="btn-forgot-password-back-login"
             type="button"
             onClick={onSwitchToLogin}
             className="cursor-pointer font-medium text-brand-primary hover:underline"

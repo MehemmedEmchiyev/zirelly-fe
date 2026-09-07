@@ -56,7 +56,7 @@ export default function OtpModal({ isOpen, onClose, email, onSwitchToLogin }) {
   }
 
   return (
-    <ModalShell isOpen={isOpen} onClose={onClose} titleId="otp-modal-title">
+    <ModalShell isOpen={isOpen} onClose={onClose} titleId="otp-modal-title" name="otp">
       <div className="pt-2 text-center">
         <h2 id="otp-modal-title" className="text-xl font-semibold text-foreground">
           {t("auth.otpTitle")}
@@ -93,6 +93,7 @@ export default function OtpModal({ isOpen, onClose, email, onSwitchToLogin }) {
         {info && <p className="text-sm text-[#2F7A4E]">{info}</p>}
 
         <button
+          id="btn-otp-submit"
           type="submit"
           disabled={loading || code.length !== 6}
           className="mt-2 h-12 w-full cursor-pointer rounded-full bg-brand-primary text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover disabled:cursor-default disabled:opacity-60"
@@ -102,6 +103,7 @@ export default function OtpModal({ isOpen, onClose, email, onSwitchToLogin }) {
 
         <div className="flex items-center justify-between text-sm text-zinc-500">
           <button
+            id="btn-otp-resend"
             type="button"
             onClick={handleResend}
             className="cursor-pointer font-medium text-brand-primary hover:underline"
@@ -110,6 +112,7 @@ export default function OtpModal({ isOpen, onClose, email, onSwitchToLogin }) {
           </button>
 
           <button
+            id="btn-otp-back-login"
             type="button"
             onClick={onSwitchToLogin}
             className="cursor-pointer hover:underline"

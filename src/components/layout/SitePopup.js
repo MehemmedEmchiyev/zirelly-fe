@@ -97,6 +97,7 @@ export default function SitePopup() {
   return createPortal(
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
       <button
+        id="btn-popup-backdrop"
         type="button"
         aria-label="Close"
         className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ease-out ${
@@ -130,6 +131,7 @@ export default function SitePopup() {
           {popup.button_text &&
             (popup.button_link ? (
               <Link
+                id="btn-popup-cta"
                 href={popup.button_link}
                 onClick={handleClose}
                 className="mt-2 flex h-12 w-full items-center justify-center rounded-full bg-brand-primary text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover"
@@ -138,6 +140,7 @@ export default function SitePopup() {
               </Link>
             ) : (
               <button
+                id="btn-popup-ok"
                 type="button"
                 onClick={handleClose}
                 className="mt-2 flex h-12 w-full cursor-pointer items-center justify-center rounded-full bg-brand-primary text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover"
@@ -159,6 +162,7 @@ export default function SitePopup() {
           )}
 
           <button
+            id="btn-popup-close"
             type="button"
             aria-label="Close"
             onClick={handleClose}

@@ -25,10 +25,11 @@ function ChevronIcon({ className }) {
   );
 }
 
-function FaqItem({ question, answer, isOpen, onToggle }) {
+function FaqItem({ id, question, answer, isOpen, onToggle }) {
   return (
     <div className="overflow-hidden rounded-[40px] bg-[var(--content-secondary-inverse,#F3F3F3)]">
       <button
+        id={`btn-faq-${id}`}
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
@@ -94,6 +95,7 @@ export default function FaqSection({ title, items }) {
           {items.map((faq) => (
             <FaqItem
               key={faq.id}
+              id={faq.id}
               question={faq.question}
               answer={faq.answer}
               isOpen={openId === faq.id}

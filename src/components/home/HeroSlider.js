@@ -63,6 +63,7 @@ export default function HeroSlider({ slides }) {
 
               {!slide.hide_button && (
                 <Button
+                  id={`btn-hero-slide-${index + 1}`}
                   href={slide.link || "/mehsullar"}
                   className="w-full sm:w-auto md:w-max"
                 >

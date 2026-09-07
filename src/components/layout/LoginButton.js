@@ -24,13 +24,14 @@ function UserIcon() {
   );
 }
 
-export default function LoginButton({ className = "" }) {
+export default function LoginButton({ className = "", id = "btn-header-login" }) {
   const { t } = useLanguage();
   const { isLoggedIn, openAuth } = useAuth();
 
   if (isLoggedIn) {
     return (
       <Link
+        id={`${id}-profile`}
         href="/profil"
         className={`flex h-11 items-center gap-2 rounded-full bg-brand-primary px-5 text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover ${className}`}
       >
@@ -42,6 +43,7 @@ export default function LoginButton({ className = "" }) {
 
   return (
     <button
+        id={id}
         type="button"
         onClick={() => openAuth()}
         className={`flex h-11 cursor-pointer items-center gap-2 rounded-full bg-brand-primary px-5 text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover ${className}`}

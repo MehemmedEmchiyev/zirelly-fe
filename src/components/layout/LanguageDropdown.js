@@ -48,6 +48,7 @@ export default function LanguageDropdown() {
   return (
     <div ref={containerRef} className="relative shrink-0">
       <button
+        id="btn-lang-dropdown"
         type="button"
         aria-label="Change language"
         aria-expanded={isOpen}
@@ -80,6 +81,7 @@ export default function LanguageDropdown() {
           {languages.map((item) => (
             <button
               key={item.code}
+              id={`btn-lang-${item.code}`}
               type="button"
               onClick={() => handleSelect(item.code)}
               className={`flex cursor-pointer items-center gap-3 rounded-xl px-1 py-1 text-left text-[15px] text-foreground transition-colors hover:bg-header-icon-bg ${

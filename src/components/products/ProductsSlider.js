@@ -33,10 +33,11 @@ function ArrowIcon({ direction }) {
   );
 }
 
-function SliderArrows({ swiper, isBeginning, isEnd }) {
+function SliderArrows({ swiper, isBeginning, isEnd, idPrefix }) {
   return (
     <div className="flex items-center justify-center gap-3">
       <button
+        id={`${idPrefix}-prev`}
         type="button"
         aria-label="Previous products"
         disabled={isBeginning}
@@ -51,6 +52,7 @@ function SliderArrows({ swiper, isBeginning, isEnd }) {
       </button>
 
       <button
+        id={`${idPrefix}-next`}
         type="button"
         aria-label="Next products"
         disabled={isEnd}
@@ -142,6 +144,7 @@ export default function ProductsSlider({ products, featuredImage }) {
         </Swiper>
 
         <SliderArrows
+          idPrefix="btn-products-slider-mobile"
           swiper={mobileNav.swiper}
           isBeginning={mobileNav.isBeginning}
           isEnd={mobileNav.isEnd}
@@ -190,6 +193,7 @@ export default function ProductsSlider({ products, featuredImage }) {
         </div>
 
         <SliderArrows
+          idPrefix="btn-products-slider"
           swiper={desktopNav.swiper}
           isBeginning={desktopNav.isBeginning}
           isEnd={desktopNav.isEnd}

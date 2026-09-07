@@ -21,6 +21,7 @@ export default function ModalShell({
   onClose,
   titleId,
   maxWidthClass = "max-w-[400px]",
+  name = "modal",
   children,
 }) {
   const [mounted, setMounted] = useState(false);
@@ -60,6 +61,7 @@ export default function ModalShell({
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <button
+        id={`btn-${name}-backdrop`}
         type="button"
         aria-label="Close modal"
         className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ease-out ${
@@ -79,6 +81,7 @@ export default function ModalShell({
         }`}
       >
         <button
+          id={`btn-${name}-close`}
           type="button"
           aria-label="Close"
           onClick={onClose}

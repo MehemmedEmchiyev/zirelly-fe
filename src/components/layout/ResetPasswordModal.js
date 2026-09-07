@@ -66,7 +66,7 @@ export default function ResetPasswordModal({
   }
 
   return (
-    <ModalShell isOpen={isOpen} onClose={onClose} titleId="reset-modal-title">
+    <ModalShell isOpen={isOpen} onClose={onClose} titleId="reset-modal-title" name="reset-password">
       <div className="pt-2 text-center">
         <h2 id="reset-modal-title" className="text-xl font-semibold text-foreground">
           {t("auth.resetTitle")}
@@ -138,6 +138,7 @@ export default function ResetPasswordModal({
         {info && <p className="text-sm text-[#2F7A4E]">{info}</p>}
 
         <button
+          id="btn-reset-password-submit"
           type="submit"
           disabled={loading}
           className="mt-2 h-12 w-full cursor-pointer rounded-full bg-brand-primary text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover disabled:cursor-default disabled:opacity-60"
@@ -147,6 +148,7 @@ export default function ResetPasswordModal({
 
         <div className="flex items-center justify-between text-sm text-zinc-500">
           <button
+            id="btn-reset-password-resend"
             type="button"
             onClick={handleResend}
             className="cursor-pointer font-medium text-brand-primary hover:underline"
@@ -155,6 +157,7 @@ export default function ResetPasswordModal({
           </button>
 
           <button
+            id="btn-reset-password-back-login"
             type="button"
             onClick={onSwitchToLogin}
             className="cursor-pointer hover:underline"

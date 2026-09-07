@@ -22,6 +22,7 @@ export default function LanguageSwitcher() {
       {languages.map((item) => (
         <button
           key={item.code}
+          id={`btn-lang-mobile-${item.code}`}
           type="button"
           onClick={() => setLanguage(item.code)}
           aria-pressed={language === item.code}

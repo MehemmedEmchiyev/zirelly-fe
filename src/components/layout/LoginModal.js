@@ -56,7 +56,7 @@ export default function LoginModal({
   }
 
   return (
-    <ModalShell isOpen={isOpen} onClose={onClose} titleId="login-modal-title">
+    <ModalShell isOpen={isOpen} onClose={onClose} titleId="login-modal-title" name="login">
       <div className="pt-2 text-center">
         <h2
           id="login-modal-title"
@@ -104,6 +104,7 @@ export default function LoginModal({
           />
 
           <button
+            id="btn-login-forgot-password"
             type="button"
             onClick={onForgotPassword}
             className="mt-2 block cursor-pointer text-sm font-medium text-brand-primary hover:underline"
@@ -115,6 +116,7 @@ export default function LoginModal({
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         <button
+          id="btn-login-submit"
           type="submit"
           disabled={loading}
           className="mt-2 h-12 w-full cursor-pointer rounded-full bg-brand-primary text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover disabled:cursor-default disabled:opacity-60"
@@ -125,6 +127,7 @@ export default function LoginModal({
         <p className="text-center text-sm text-zinc-500">
           {t("auth.noAccount")}{" "}
           <button
+            id="btn-login-switch-register"
             type="button"
             onClick={onSwitchToRegister}
             className="cursor-pointer font-medium text-brand-primary hover:underline"

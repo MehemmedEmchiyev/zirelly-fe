@@ -6,7 +6,7 @@ import cartIcon from "@/assets/images/header/cart.svg";
 import { useAuth } from "@/context/AuthContext";
 import { useBasket } from "@/context/BasketContext";
 
-export default function CartLink({ onNavigate }) {
+export default function CartLink({ onNavigate, id = "btn-header-cart" }) {
   const { isLoggedIn, openAuth } = useAuth();
   const { count } = useBasket();
 
@@ -21,6 +21,7 @@ export default function CartLink({ onNavigate }) {
 
   return (
     <Link
+      id={id}
       href="/sebet"
       aria-label="Cart"
       onClick={handleClick}

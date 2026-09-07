@@ -195,6 +195,7 @@ export default function ProfileForm() {
         )}
 
         <button
+          id="btn-profile-save"
           type="submit"
           disabled={saving || form === null}
           className="inline-flex w-max cursor-pointer items-center justify-center gap-2 rounded-[24px] border border-[var(--background-brand,#755C44)] bg-[var(--background-brand,#755C44)] px-4 py-3 text-sm font-normal leading-5 text-white transition-colors hover:bg-brand-primary-hover disabled:cursor-default disabled:opacity-60"

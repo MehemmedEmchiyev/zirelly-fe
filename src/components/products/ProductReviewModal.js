@@ -15,6 +15,7 @@ function StarPicker({ value, onSelect }) {
       {Array.from({ length: 5 }, (_, index) => (
         <button
           key={index}
+          id={`btn-review-star-${index + 1}`}
           type="button"
           aria-label={`${index + 1}`}
           onClick={() => onSelect(index + 1)}
@@ -77,7 +78,7 @@ export default function ProductReviewModal({
   }
 
   return (
-    <ModalShell isOpen={isOpen} onClose={onClose} titleId="review-modal-title">
+    <ModalShell isOpen={isOpen} onClose={onClose} titleId="review-modal-title" name="review">
       <div className="pt-2 text-center">
         <h2
           id="review-modal-title"
@@ -102,6 +103,7 @@ export default function ProductReviewModal({
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         <button
+          id="btn-review-submit"
           type="submit"
           disabled={sending}
           className="h-12 w-full cursor-pointer rounded-full bg-brand-primary text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover disabled:cursor-default disabled:opacity-60"

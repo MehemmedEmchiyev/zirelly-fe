@@ -123,6 +123,7 @@ export default function ProductInfo({ product, phone, onOpenReviews }) {
       )}
 
       <button
+        id="btn-product-add-to-cart"
         type="button"
         disabled={adding}
         onClick={handleAddToCart}
@@ -148,6 +149,7 @@ export default function ProductInfo({ product, phone, onOpenReviews }) {
         </p>
 
         <button
+          id="btn-product-open-reviews"
           type="button"
           onClick={onOpenReviews}
           className="flex w-full cursor-pointer items-center gap-3 rounded-3xl bg-[#F3F3F3] p-4 text-left opacity-100 transition-colors hover:bg-[#ececec]"

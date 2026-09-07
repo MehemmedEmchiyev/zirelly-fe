@@ -74,6 +74,7 @@ export default function ProductReviews({ productId }) {
         </h2>
 
         <button
+          id="btn-review-write"
           type="button"
           onClick={handleWriteClick}
           className="h-11 cursor-pointer rounded-full bg-brand-primary px-6 text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover"

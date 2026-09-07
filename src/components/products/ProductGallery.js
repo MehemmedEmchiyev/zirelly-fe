@@ -81,6 +81,7 @@ export default function ProductGallery({ images }) {
 
       <div className="flex items-center gap-2">
         <button
+          id="btn-gallery-prev"
           type="button"
           aria-label="Previous image"
           onClick={() => thumbsSwiper?.slidePrev()}
@@ -102,6 +103,7 @@ export default function ProductGallery({ images }) {
           {images.map((image, index) => (
             <SwiperSlide key={index}>
               <button
+                id={`btn-gallery-thumb-${index + 1}`}
                 type="button"
                 onClick={() => setActiveIndex(index)}
                 className={`aspect-square w-full cursor-pointer rounded-xl border p-1.5 transition-colors ${
@@ -125,6 +127,7 @@ export default function ProductGallery({ images }) {
         </Swiper>
 
         <button
+          id="btn-gallery-next"
           type="button"
           aria-label="Next image"
           onClick={() => thumbsSwiper?.slideNext()}

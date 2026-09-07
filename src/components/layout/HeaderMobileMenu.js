@@ -80,6 +80,7 @@ export default function HeaderMobileMenu() {
   return (
     <div className="lg:hidden">
       <button
+        id="btn-mobile-menu-open"
         type="button"
         aria-label="Open menu"
         aria-expanded={isOpen}
@@ -92,6 +93,7 @@ export default function HeaderMobileMenu() {
       {isMounted && (
         <>
           <button
+            id="btn-mobile-menu-backdrop"
             type="button"
             aria-label="Close menu"
             tabIndex={isOpen ? 0 : -1}
@@ -113,6 +115,7 @@ export default function HeaderMobileMenu() {
               </Link>
 
               <button
+                id="btn-mobile-menu-close"
                 type="button"
                 aria-label="Close menu"
                 onClick={() => setIsOpen(false)}
@@ -139,9 +142,9 @@ export default function HeaderMobileMenu() {
               <LanguageSwitcher />
 
               <div className="flex items-center justify-between gap-3">
-                <CartLink onNavigate={() => setIsOpen(false)} />
+                <CartLink id="btn-header-cart-mobile" onNavigate={() => setIsOpen(false)} />
 
-                <LoginButton />
+                <LoginButton id="btn-header-login-mobile" />
               </div>
             </div>
           </aside>

@@ -67,7 +67,7 @@ function CardIcon() {
   );
 }
 
-function SearchableSelect({ label, required, value, onChange, options, t, error }) {
+function SearchableSelect({ id, label, required, value, onChange, options, t, error }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const wrapRef = useRef(null);
@@ -100,6 +100,7 @@ function SearchableSelect({ label, required, value, onChange, options, t, error 
       </span>
 
       <button
+        id={id}
         type="button"
         onClick={() => setOpen((prev) => !prev)}
         className={`flex h-10 w-full items-center justify-between rounded-xl border bg-white px-3 text-left text-sm leading-5 transition-colors ${
@@ -132,6 +133,7 @@ function SearchableSelect({ label, required, value, onChange, options, t, error 
             {filtered.map((option) => (
               <li key={option}>
                 <button
+                  id={`${id}-option-${option.replace(/\s+/g, "-")}`}
                   type="button"
                   onClick={() => {
                     onChange(option);
@@ -199,6 +201,7 @@ function CartItem({ item, onQuantityChange, onRemove, busy }) {
       <div className="flex items-center gap-5">
         <div className="flex items-center gap-2 rounded-[14px] border border-header-border px-[13px] py-[9px]">
           <button
+            id={`btn-cart-decrease-${item.id}`}
             type="button"
             aria-label="Decrease quantity"
             disabled={busy || item.quantity <= 1}
@@ -213,6 +216,7 @@ function CartItem({ item, onQuantityChange, onRemove, busy }) {
           </span>
 
           <button
+            id={`btn-cart-increase-${item.id}`}
             type="button"
             aria-label="Increase quantity"
             disabled={busy}
@@ -224,6 +228,7 @@ function CartItem({ item, onQuantityChange, onRemove, busy }) {
         </div>
 
         <button
+          id={`btn-cart-remove-${item.id}`}
           type="button"
           aria-label="Remove item"
           disabled={busy}
@@ -426,8 +431,9 @@ export default function CartContent({ variant = "page" }) {
             <div className="flex flex-col items-start gap-4 py-6">
               <p className="text-zinc-500">{t("cart.loginRequired")}</p>
               <button
+                id="btn-cart-login"
                 type="button"
-                onClick={() => setAuthOpen(true)}
+                onClick={() => openAuth()}
                 className="flex h-11 cursor-pointer items-center rounded-full bg-brand-primary px-5 text-sm font-medium text-white transition-colors hover:bg-brand-primary-hover"
               >
                 {t("header.login")}
@@ -455,6 +461,7 @@ export default function CartContent({ variant = "page" }) {
               </div>
 
               <Link
+                id="btn-cart-start-shopping"
                 href="/mehsullar"
                 className="inline-flex w-max cursor-pointer items-center justify-center rounded-3xl bg-brand-primary px-5 py-3 text-sm font-medium leading-5 text-white transition-colors hover:bg-brand-primary-hover"
               >
@@ -534,6 +541,7 @@ export default function CartContent({ variant = "page" }) {
                     className="h-11 w-[159px] min-w-0 rounded-xl border border-[#CCCCCC] bg-white px-4 text-[14px] leading-5 text-foreground outline-none transition-colors focus:border-brand-primary"
                   />
                   <button
+                    id="btn-cart-apply-promo"
                     type="button"
                     onClick={handleApplyPromo}
                     className="h-11 min-w-0 flex-1 cursor-pointer rounded-3xl border border-brand-primary text-[14px] font-medium leading-5 text-brand-primary transition-colors hover:bg-brand-primary hover:text-white"
@@ -563,6 +571,7 @@ export default function CartContent({ variant = "page" }) {
               </p>
 
               <SearchableSelect
+                id="btn-address-city"
                 label={t("cart.addressCity")}
                 required
                 value={addrCity}
@@ -578,6 +587,7 @@ export default function CartContent({ variant = "page" }) {
 
               {isBaku && (
                 <SearchableSelect
+                  id="btn-address-district"
                   label={t("cart.addressDistrict")}
                   required
                   value={addrDistrict}
@@ -662,6 +672,7 @@ export default function CartContent({ variant = "page" }) {
             )}
 
             <button
+              id="btn-cart-place-order"
               type="button"
               disabled={busy}
               onClick={handlePlaceOrder}
