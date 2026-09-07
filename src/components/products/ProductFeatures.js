@@ -1,7 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import featuresIcon from "@/assets/images/products/Features.svg";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ProductFeatures({ features }) {
+  const { t } = useLanguage();
+
   return (
     <section className="w-full rounded-3xl bg-[#F3F3F3] p-6 sm:p-8">
       <div className="mb-6 flex items-center gap-3">
@@ -15,7 +20,7 @@ export default function ProductFeatures({ features }) {
           />
         </span>
         <h2 className="text-lg font-semibold leading-6 text-foreground">
-          Features
+          {t("product.features")}
         </h2>
       </div>
 
