@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch, authFetch } from "@/utils/api";
+import { SearchableSelect } from "@/components/common/DeliveryAddressFields";
 
 function formatPrice(value) {
   return `${Number(value).toFixed(2)} ₼`;
@@ -64,99 +65,6 @@ function CardIcon() {
       <path d="M2.75 8.5H21.25M2.75 12H21.25" stroke="currentColor" strokeWidth="1.5" />
       <path d="M6 17H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
-  );
-}
-
-function SearchableSelect({ id, label, required, value, onChange, options, t, error }) {
-  const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const wrapRef = useRef(null);
-
-  useEffect(() => {
-    if (!open) return;
-
-    function handleClickOutside(event) {
-      if (wrapRef.current && !wrapRef.current.contains(event.target)) {
-        setOpen(false);
-        setQuery("");
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [open]);
-
-  const filtered = query.trim()
-    ? options.filter((option) =>
-        option.toLowerCase().includes(query.trim().toLowerCase())
-      )
-    : options;
-
-  return (
-    <div ref={wrapRef} className="relative flex flex-col gap-1">
-      <span className="text-[12px] font-medium leading-4 text-[#333333]">
-        {label}
-        {required && <span className="text-red-600"> *</span>}
-      </span>
-
-      <button
-        id={id}
-        type="button"
-        onClick={() => setOpen((prev) => !prev)}
-        className={`flex h-10 w-full items-center justify-between rounded-xl border bg-white px-3 text-left text-sm leading-5 transition-colors ${
-          error ? "border-red-500" : "border-header-border focus:border-brand-primary"
-        } ${value ? "text-foreground" : "text-zinc-400"}`}
-      >
-        <span className="truncate">{value || t("cart.addressSelect")}</span>
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-          <path
-            d="M2.5 4.5L6 8L9.5 4.5"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </button>
-
-      {open && (
-        <div className="absolute top-full z-20 mt-1 w-full overflow-hidden rounded-xl border border-header-border bg-white shadow-lg">
-          <input
-            type="text"
-            autoFocus
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder={t("cart.addressSearch")}
-            className="w-full border-b border-header-border px-3 py-2 text-sm leading-5 text-foreground outline-none placeholder:text-zinc-400"
-          />
-          <ul className="max-h-48 overflow-y-auto py-1">
-            {filtered.map((option) => (
-              <li key={option}>
-                <button
-                  id={`${id}-option-${option.replace(/\s+/g, "-")}`}
-                  type="button"
-                  onClick={() => {
-                    onChange(option);
-                    setOpen(false);
-                    setQuery("");
-                  }}
-                  className={`w-full cursor-pointer px-3 py-2 text-left text-sm leading-5 transition-colors hover:bg-header-icon-bg ${
-                    option === value ? "font-semibold text-brand-primary" : "text-foreground"
-                  }`}
-                >
-                  {option}
-                </button>
-              </li>
-            ))}
-            {filtered.length === 0 && (
-              <li className="px-3 py-2 text-sm text-zinc-400">
-                {t("cart.addressNoResults")}
-              </li>
-            )}
-          </ul>
-        </div>
-      )}
-    </div>
   );
 }
 

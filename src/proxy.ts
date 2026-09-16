@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://api.zirelly.az/api";
-const CACHE_TTL_MS = 60_000;
+const CACHE_TTL_MS = 5_000;
 
 // URL prefiksi olan dillər. Defolt dil (az) prefikssiz göstərilir: /elaqe,
 // digərləri prefikslə: /ru/elaqe, /en/elaqe
@@ -23,6 +23,7 @@ async function loadRedirects(): Promise<Map<string, RedirectRule>> {
 
   try {
     const res = await fetch(`${API_URL}/redirects`, {
+      cache: "no-store",
       headers: { Accept: "application/json" },
       signal: AbortSignal.timeout(2000),
     });
@@ -56,7 +57,11 @@ export async function proxy(request: NextRequest) {
   if (locale === DEFAULT_LOCALE) {
     const url = request.nextUrl.clone();
     url.pathname = bare;
-    return NextResponse.redirect(url, 301);
+    const redirectRes = NextResponse.redirect(url, 301);
+    redirectRes.headers.set("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+    redirectRes.headers.set("Pragma", "no-cache");
+    redirectRes.headers.set("Expires", "0");
+    return redirectRes;
   }
 
   // Admin paneldən idarə olunan yönləndirmə qaydaları (prefikssiz yola görə)
@@ -65,12 +70,15 @@ export async function proxy(request: NextRequest) {
   const rule = map.get(normalized);
 
   if (rule) {
-    if (rule.to.startsWith("http")) {
-      return NextResponse.redirect(rule.to, rule.code);
-    }
+    const destination = rule.to.startsWith("http")
+      ? rule.to
+      : new URL(locale ? `/${locale}${rule.to === "/" ? "" : rule.to}` : rule.to, request.url);
 
-    const prefixed = locale ? `/${locale}${rule.to === "/" ? "" : rule.to}` : rule.to;
-    return NextResponse.redirect(new URL(prefixed, request.url), rule.code);
+    const redirectRes = NextResponse.redirect(destination, rule.code);
+    redirectRes.headers.set("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+    redirectRes.headers.set("Pragma", "no-cache");
+    redirectRes.headers.set("Expires", "0");
+    return redirectRes;
   }
 
   if (!locale) {
@@ -80,7 +88,10 @@ export async function proxy(request: NextRequest) {
     if (cookieLang && cookieLang !== DEFAULT_LOCALE && LOCALES.includes(cookieLang)) {
       const url = request.nextUrl.clone();
       url.pathname = `/${cookieLang}${pathname === "/" ? "" : pathname}`;
-      return NextResponse.redirect(url);
+      const redirectRes = NextResponse.redirect(url);
+      redirectRes.headers.set("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+      redirectRes.headers.set("Pragma", "no-cache");
+      return redirectRes;
     }
 
     const headers = new Headers(request.headers);

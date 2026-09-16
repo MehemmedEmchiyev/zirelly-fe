@@ -5,6 +5,8 @@ import ModalShell from "@/components/layout/ModalShell";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch } from "@/utils/api";
 import DateSelect from "@/components/ui/DateSelect";
+import DeliveryAddressFields from "@/components/common/DeliveryAddressFields";
+import { composeDeliveryAddress } from "@/constants/delivery-locations";
 import { isValidPhone, normalizePhone } from "@/utils/validation";
 import { isValidBirthDate } from "@/utils/date";
 
@@ -16,7 +18,12 @@ const initialForm = {
   surname: "",
   phone: "",
   birth_date: "",
-  address: "",
+  address_city: "Bakı",
+  address_district: "",
+  address_street: "",
+  address_building: "",
+  address_apartment: "",
+  address_note: "",
   email: "",
   password: "",
   password_confirmation: "",
@@ -30,6 +37,7 @@ export default function RegisterModal({
 }) {
   const { t } = useLanguage();
   const [form, setForm] = useState(initialForm);
+  const [addrErrors, setAddrErrors] = useState({});
   const [error, setError] = useState(null);
   const [phoneError, setPhoneError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -68,16 +76,68 @@ export default function RegisterModal({
       return;
     }
 
+    const aErrors = {};
+    if (!form.address_city) aErrors.city = true;
+    if (form.address_city === "Bakı" && !form.address_district) aErrors.district = true;
+    if (!form.address_street.trim()) aErrors.street = true;
+    if (!form.address_building.trim()) aErrors.building = true;
+
+    setAddrErrors(aErrors);
+
+    if (Object.keys(aErrors).length > 0) {
+      setError(t("cart.addressFillRequired"));
+      return;
+    }
+
     setLoading(true);
 
+    const composedAddress = composeDeliveryAddress({
+      city: form.address_city,
+      district: form.address_district,
+      street: form.address_street.trim(),
+      building: form.address_building.trim(),
+      apartment: form.address_apartment.trim() || null,
+    });
+
+    const savedAddressObj = {
+      city: form.address_city,
+      district: form.address_city === "Bakı" ? form.address_district : "",
+      street: form.address_street.trim(),
+      building: form.address_building.trim(),
+      apartment: form.address_apartment.trim(),
+      note: form.address_note.trim(),
+      composed: composedAddress,
+    };
+
     try {
-      const submitted = { ...form, phone: normalizePhone(form.phone) };
+      localStorage.setItem("zirelly_delivery_address", JSON.stringify(savedAddressObj));
+    } catch {}
+
+    try {
+      const submitted = {
+        name: form.name,
+        surname: form.surname,
+        phone: normalizePhone(form.phone),
+        birth_date: form.birth_date,
+        address: composedAddress,
+        address_city: form.address_city,
+        address_district: form.address_city === "Bakı" ? form.address_district : null,
+        address_street: form.address_street.trim(),
+        address_building: form.address_building.trim(),
+        address_apartment: form.address_apartment.trim() || null,
+        address_note: form.address_note.trim() || null,
+        email: form.email,
+        password: form.password,
+        password_confirmation: form.password_confirmation,
+      };
+
       await apiFetch("/auth/register", {
         method: "POST",
         body: JSON.stringify(submitted),
       });
 
       setForm(initialForm);
+      setAddrErrors({});
       setError(null);
       onOtpRequired(submitted.email);
     } catch (err) {
@@ -188,21 +248,26 @@ export default function RegisterModal({
             </div>
           </div>
 
-          <div>
-            <label
-              htmlFor="register-address"
-              className="mb-2 block text-sm font-medium text-foreground"
-            >
-              {t("auth.address")}
-            </label>
-            <textarea
-              id="register-address"
-              required
-              rows={2}
-              value={form.address}
-              onChange={(event) => updateField("address", event.target.value)}
-              placeholder={t("auth.addressPlaceholder")}
-              className="w-full rounded-xl border border-[var(--content-secondary-inverse)] bg-white px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
+          <div className="rounded-2xl border border-header-border bg-header-icon-bg/50 p-4">
+            <p className="mb-3 text-sm font-semibold text-foreground">
+              {t("cart.deliveryAddress")}
+            </p>
+            <DeliveryAddressFields
+              idPrefix="register-addr"
+              values={{
+                city: form.address_city,
+                district: form.address_district,
+                street: form.address_street,
+                building: form.address_building,
+                apartment: form.address_apartment,
+                note: form.address_note,
+              }}
+              onChange={(field, value) => {
+                updateField(`address_${field}`, value);
+                setAddrErrors((prev) => ({ ...prev, [field]: false }));
+              }}
+              errors={addrErrors}
+              t={t}
             />
           </div>
 
