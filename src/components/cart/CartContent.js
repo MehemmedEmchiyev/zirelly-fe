@@ -9,6 +9,7 @@ import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch, authFetch } from "@/utils/api";
 import { SearchableSelect } from "@/components/common/DeliveryAddressFields";
+import { parseDeliveryAddress } from "@/constants/delivery-locations";
 
 function formatPrice(value) {
   return `${Number(value).toFixed(2)} ₼`;
@@ -200,6 +201,25 @@ export default function CartContent({ variant = "page" }) {
     setLoggedOut(false);
     setLoading(true);
     loadBasket();
+
+    // Qeydiyyatda yazılan ünvan default gəlir — istifadəçi istəsə dəyişir
+    authFetch("/auth/me")
+      .then((response) => {
+        const u = response.data;
+        if (!u) return;
+
+        // Struktur sahələr yoxdursa (köhnə hesablar), vahid sətirdən çıxarılır
+        const parsed =
+          !u.address_city && u.address ? parseDeliveryAddress(u.address) : null;
+
+        setAddrCity((prev) => prev || u.address_city || parsed?.city || "");
+        setAddrDistrict((prev) => prev || u.address_district || parsed?.district || "");
+        setAddrStreet((prev) => prev || u.address_street || parsed?.street || "");
+        setAddrBuilding((prev) => prev || u.address_building || parsed?.building || "");
+        setAddrApartment((prev) => prev || u.address_apartment || parsed?.apartment || "");
+        setAddrNote((prev) => prev || u.address_note || "");
+      })
+      .catch(() => {});
   }, [loadBasket, isLoggedIn, isReady]);
 
   useEffect(() => {
