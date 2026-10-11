@@ -330,7 +330,24 @@ export default function CartContent({ variant = "page" }) {
   const items = basket?.items ?? [];
   const subtotal = basket?.summary?.subtotal ?? 0;
   const discount = promo?.discount ?? 0;
-  const total = promo?.total ?? subtotal;
+  const goodsTotal = promo?.total ?? subtotal;
+
+  // Çatdırılma haqqı seçilmiş şəhərə və malların yekununa görə (backend ilə eyni qayda)
+  const fees = locations?.fees;
+  let deliveryFee = null;
+  if (addrCity && fees) {
+    if (addrCity === (locations?.baku ?? "Bakı")) {
+      deliveryFee = goodsTotal >= fees.baku_free_threshold ? 0 : fees.baku_fee;
+    } else if (locations?.zones?.nakhchivan?.includes(addrCity)) {
+      deliveryFee = fees.nakhchivan_fee;
+    } else if (locations?.zones?.karabakh?.includes(addrCity)) {
+      deliveryFee = fees.karabakh_fee;
+    } else {
+      deliveryFee = fees.region_fee;
+    }
+  }
+
+  const total = goodsTotal + (deliveryFee ?? 0);
 
   return (
     <div className="flex w-full flex-col items-start gap-6 lg:flex-row">
@@ -482,6 +499,26 @@ export default function CartContent({ variant = "page" }) {
                   <p className="text-[12px] leading-[18px] text-red-600">{promoError}</p>
                 )}
               </div>
+
+              {deliveryFee !== null && (
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[14px] leading-5 text-[#666666]">
+                      {t("cart.delivery")}
+                    </span>
+                    <span className="text-[14px] font-semibold leading-5 text-foreground">
+                      {deliveryFee === 0 ? t("cart.freeDelivery") : formatPrice(deliveryFee)}
+                    </span>
+                  </div>
+                  {deliveryFee > 0 &&
+                    addrCity === (locations?.baku ?? "Bakı") &&
+                    fees?.baku_free_threshold > 0 && (
+                      <p className="text-[12px] leading-[18px] text-zinc-500">
+                        {Number(fees.baku_free_threshold)} {t("cart.freeOverSuffix")}
+                      </p>
+                    )}
+                </div>
+              )}
 
               <div className="flex flex-col border-t border-[#CCCCCC] pt-[17px]">
                 <span className="text-[14px] leading-5 text-[#666666]">
