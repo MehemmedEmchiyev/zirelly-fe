@@ -4,6 +4,7 @@ import DeferredPopup from "@/components/layout/DeferredPopup";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import Footer from "@/components/layout/Footer";
 import GlobalAuthModals from "@/components/layout/GlobalAuthModals";
+import GtmPageView from "@/components/layout/GtmPageView";
 import Header from "@/components/layout/Header";
 import { AuthProvider } from "@/context/AuthContext";
 import { BasketProvider } from "@/context/BasketContext";
@@ -72,6 +73,7 @@ export default async function RootLayout({ children }) {
     >
       <GoogleTagManager gtmId="GTM-MXN574BN" />
       <body className="flex min-h-full flex-col bg-white text-foreground">
+        <GtmPageView />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
