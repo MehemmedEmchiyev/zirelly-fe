@@ -132,6 +132,7 @@ export default function DeliveryAddressFields({
   t,
   idPrefix = "addr",
   showNote = true,
+  noteRequired = false,
 }) {
   const cities = locations?.cities?.length ? locations.cities : CITIES;
   const bakuName = locations?.baku || BAKU;
@@ -241,6 +242,10 @@ export default function DeliveryAddressFields({
         <div className="flex flex-col gap-1">
           <span className="text-[12px] font-medium leading-4 text-[#333333]">
             {t ? t("cart.addressNote") : "Əlavə qeyd"}
+            {noteRequired && <span className="text-red-600"> *</span>}{" "}
+            <span className="font-normal text-zinc-500">
+              ({t ? t("cart.addressNoteHint") : "blok, mərtəbə, domofon və s."})
+            </span>
           </span>
           <textarea
             id={`${idPrefix}-note`}
@@ -252,7 +257,11 @@ export default function DeliveryAddressFields({
                 ? t("cart.addressNotePlaceholder")
                 : "Məs.: 2-ci blok, 5-ci mərtəbə, domofon işləmir və s."
             }
-            className="w-full rounded-xl border border-header-border bg-white px-3 py-2 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
+            className={`w-full rounded-xl border bg-white px-3 py-2 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 ${
+              errors.note
+                ? "border-red-500"
+                : "border-header-border focus:border-brand-primary"
+            }`}
           />
         </div>
       )}

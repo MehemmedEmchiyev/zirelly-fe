@@ -81,6 +81,7 @@ export default function RegisterModal({
     if (form.address_city === "Bakı" && !form.address_district) aErrors.district = true;
     if (!form.address_street.trim()) aErrors.street = true;
     if (!form.address_building.trim()) aErrors.building = true;
+    if (!form.address_note.trim()) aErrors.note = true;
 
     setAddrErrors(aErrors);
 
@@ -125,7 +126,7 @@ export default function RegisterModal({
         address_street: form.address_street.trim(),
         address_building: form.address_building.trim(),
         address_apartment: form.address_apartment.trim() || null,
-        address_note: form.address_note.trim() || null,
+        address_note: form.address_note.trim(),
         email: form.email,
         password: form.password,
         password_confirmation: form.password_confirmation,
@@ -268,6 +269,7 @@ export default function RegisterModal({
               }}
               errors={addrErrors}
               t={t}
+              noteRequired
             />
           </div>
 

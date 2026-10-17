@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import DateSelect from "@/components/ui/DateSelect";
+import DeliveryAddressFields from "@/components/common/DeliveryAddressFields";
+import { BAKU, parseDeliveryAddress } from "@/constants/delivery-locations";
 import { useLanguage } from "@/context/LanguageContext";
 import { authFetch } from "@/utils/api";
 import { isValidPhone, normalizePhone } from "@/utils/validation";
@@ -33,13 +35,24 @@ function FormSkeleton() {
 }
 
 function userToForm(user) {
+  // Köhnə hesablarda ünvan yalnız vahid sətir kimi saxlanılıb — sahələrə ayrılır
+  const parsed =
+    !user.address_city && user.address ? parseDeliveryAddress(user.address) : null;
+
   return {
     name: user.name ?? "",
     surname: user.surname ?? "",
     phone: user.phone ?? "",
     birth_date: user.birth_date ? user.birth_date.slice(0, 10) : "",
-    address: user.address ?? "",
     email: user.email ?? "",
+    address: {
+      city: user.address_city || parsed?.city || "",
+      district: user.address_district || parsed?.district || "",
+      street: user.address_street || parsed?.street || "",
+      building: user.address_building || parsed?.building || "",
+      apartment: user.address_apartment || parsed?.apartment || "",
+      note: user.address_note || "",
+    },
   };
 }
 
@@ -48,6 +61,7 @@ export default function ProfileForm() {
   const [form, setForm] = useState(null);
   const [status, setStatus] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [addrErrors, setAddrErrors] = useState({});
 
   useEffect(() => {
     let cancelled = false;
@@ -82,6 +96,22 @@ export default function ProfileForm() {
       return;
     }
 
+    const addr = form.address;
+    const isBaku = addr.city === BAKU;
+    const errors = {};
+    if (!addr.city) errors.city = true;
+    if (isBaku && !addr.district) errors.district = true;
+    if (!addr.street.trim()) errors.street = true;
+    if (!addr.building.trim()) errors.building = true;
+    if (!addr.note.trim()) errors.note = true;
+
+    setAddrErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      setStatus({ ok: false, text: t("cart.addressFillRequired") });
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -92,7 +122,12 @@ export default function ProfileForm() {
           surname: form.surname,
           phone: normalizePhone(form.phone),
           birth_date: form.birth_date,
-          address: form.address || null,
+          address_city: addr.city,
+          address_district: isBaku ? addr.district : null,
+          address_street: addr.street.trim(),
+          address_building: addr.building.trim(),
+          address_apartment: addr.apartment.trim() || null,
+          address_note: addr.note.trim(),
         }),
       });
 
@@ -164,16 +199,6 @@ export default function ProfileForm() {
               />
             </Field>
 
-            <Field label={t("auth.address")}>
-              <textarea
-                rows={2}
-                value={form.address}
-                onChange={(event) => updateField("address", event.target.value)}
-                placeholder={t("auth.addressPlaceholder")}
-                className="w-full rounded-xl border border-[var(--content-secondary-inverse)] bg-white px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
-              />
-            </Field>
-
             <Field label={t("auth.email")}>
               <input
                 type="email"
@@ -183,6 +208,28 @@ export default function ProfileForm() {
                 className={`${inputClasses} cursor-not-allowed bg-[#efefef] text-[#999]`}
               />
             </Field>
+
+            <div className="flex min-w-0 flex-col gap-1 sm:col-span-2">
+              <span className="text-sm font-normal leading-5 text-foreground">
+                {t("auth.address")}
+              </span>
+              <div className="rounded-xl border border-[#CCCCCC] bg-white/60 p-4">
+                <DeliveryAddressFields
+                  idPrefix="profile-addr"
+                  values={form.address}
+                  onChange={(field, value) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      address: { ...prev.address, [field]: value },
+                    }));
+                    setAddrErrors((prev) => ({ ...prev, [field]: false }));
+                  }}
+                  errors={addrErrors}
+                  t={t}
+                  noteRequired
+                />
+              </div>
+            </div>
           </div>
         )}
 

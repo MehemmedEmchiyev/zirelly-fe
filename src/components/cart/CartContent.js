@@ -8,8 +8,20 @@ import { useAuth } from "@/context/AuthContext";
 import { useBasket } from "@/context/BasketContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch, authFetch } from "@/utils/api";
-import { SearchableSelect } from "@/components/common/DeliveryAddressFields";
-import { parseDeliveryAddress } from "@/constants/delivery-locations";
+import DeliveryAddressFields from "@/components/common/DeliveryAddressFields";
+import {
+  composeDeliveryAddress,
+  parseDeliveryAddress,
+} from "@/constants/delivery-locations";
+
+const EMPTY_ADDRESS = {
+  city: "",
+  district: "",
+  street: "",
+  building: "",
+  apartment: "",
+  note: "",
+};
 
 function formatPrice(value) {
   return `${Number(value).toFixed(2)} ₼`;
@@ -164,15 +176,14 @@ export default function CartContent({ variant = "page" }) {
   const [promoError, setPromoError] = useState(null);
   const [status, setStatus] = useState(null);
   const [locations, setLocations] = useState(null);
-  const [addrCity, setAddrCity] = useState("");
-  const [addrDistrict, setAddrDistrict] = useState("");
-  const [addrStreet, setAddrStreet] = useState("");
-  const [addrBuilding, setAddrBuilding] = useState("");
-  const [addrApartment, setAddrApartment] = useState("");
-  const [addrNote, setAddrNote] = useState("");
+  const [addr, setAddr] = useState(EMPTY_ADDRESS);
+  const [savedAddr, setSavedAddr] = useState(null);
+  const [addrMode, setAddrMode] = useState("custom");
   const [addrErrors, setAddrErrors] = useState({});
 
-  const isBaku = addrCity === (locations?.baku ?? "Bakı");
+  const bakuName = locations?.baku ?? "Bakı";
+  const isBaku = addr.city === bakuName;
+  const addrCity = addr.city;
 
   const loadBasket = useCallback(async () => {
     try {
@@ -212,12 +223,26 @@ export default function CartContent({ variant = "page" }) {
         const parsed =
           !u.address_city && u.address ? parseDeliveryAddress(u.address) : null;
 
-        setAddrCity((prev) => prev || u.address_city || parsed?.city || "");
-        setAddrDistrict((prev) => prev || u.address_district || parsed?.district || "");
-        setAddrStreet((prev) => prev || u.address_street || parsed?.street || "");
-        setAddrBuilding((prev) => prev || u.address_building || parsed?.building || "");
-        setAddrApartment((prev) => prev || u.address_apartment || parsed?.apartment || "");
-        setAddrNote((prev) => prev || u.address_note || "");
+        const saved = {
+          city: u.address_city || parsed?.city || "",
+          district: u.address_district || parsed?.district || "",
+          street: u.address_street || parsed?.street || "",
+          building: u.address_building || parsed?.building || "",
+          apartment: u.address_apartment || parsed?.apartment || "",
+          note: u.address_note || "",
+        };
+
+        const complete =
+          saved.city &&
+          saved.street &&
+          saved.building &&
+          (saved.city !== "Bakı" || saved.district);
+
+        if (!complete) return;
+
+        setSavedAddr(saved);
+        setAddr(saved);
+        setAddrMode("saved");
       })
       .catch(() => {});
   }, [loadBasket, isLoggedIn, isReady]);
@@ -280,10 +305,13 @@ export default function CartContent({ variant = "page" }) {
 
   async function handlePlaceOrder() {
     const errors = {};
-    if (!addrCity) errors.city = true;
-    if (isBaku && !addrDistrict) errors.district = true;
-    if (!addrStreet.trim()) errors.street = true;
-    if (!addrBuilding.trim()) errors.building = true;
+    if (!addr.city) errors.city = true;
+    if (isBaku && !addr.district) errors.district = true;
+    if (!addr.street.trim()) errors.street = true;
+    if (!addr.building.trim()) errors.building = true;
+
+    // Qeydiyyat ünvanı seçilibsə, amma natamamdırsa, inputları açıb göstər
+    if (Object.keys(errors).length > 0) setAddrMode("custom");
 
     setAddrErrors(errors);
 
@@ -299,12 +327,12 @@ export default function CartContent({ variant = "page" }) {
       const response = await authFetch("/checkout", {
         method: "POST",
         body: JSON.stringify({
-          address_city: addrCity,
-          address_district: isBaku ? addrDistrict : null,
-          address_street: addrStreet.trim(),
-          address_building: addrBuilding.trim(),
-          address_apartment: addrApartment.trim() || null,
-          address_note: addrNote.trim() || null,
+          address_city: addr.city,
+          address_district: isBaku ? addr.district : null,
+          address_street: addr.street.trim(),
+          address_building: addr.building.trim(),
+          address_apartment: addr.apartment.trim() || null,
+          address_note: addr.note.trim() || null,
           ...(promo ? { promocode: promo.code } : {}),
         }),
       });
@@ -535,101 +563,84 @@ export default function CartContent({ variant = "page" }) {
                 {t("cart.deliveryAddress")}
               </p>
 
-              <SearchableSelect
-                id="btn-address-city"
-                label={t("cart.addressCity")}
-                required
-                value={addrCity}
-                onChange={(city) => {
-                  setAddrCity(city);
-                  setAddrDistrict("");
-                  setAddrErrors((prev) => ({ ...prev, city: false, district: false }));
-                }}
-                options={locations?.cities ?? ["Bakı"]}
-                t={t}
-                error={addrErrors.city}
-              />
+              {addrMode === "saved" && savedAddr ? (
+                <div className="flex flex-col gap-3 rounded-xl border border-brand-primary bg-white p-3">
+                  <div className="flex items-start gap-2">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      aria-hidden="true"
+                      className="mt-0.5 shrink-0 text-brand-primary"
+                    >
+                      <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" />
+                      <path
+                        d="M5.5 9.2L7.8 11.5L12.5 6.8"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <div className="flex min-w-0 flex-col gap-1">
+                      <span className="text-sm font-medium leading-5 text-foreground">
+                        {t("cart.savedAddressTitle")}
+                      </span>
+                      <span className="text-xs leading-4 text-zinc-600">
+                        {composeDeliveryAddress({
+                          city: savedAddr.city,
+                          district: savedAddr.city === bakuName ? savedAddr.district : "",
+                          street: savedAddr.street,
+                          building: savedAddr.building,
+                          apartment: savedAddr.apartment || null,
+                        })}
+                      </span>
+                      {savedAddr.note && (
+                        <span className="text-xs leading-4 text-zinc-500">{savedAddr.note}</span>
+                      )}
+                    </div>
+                  </div>
 
-              {isBaku && (
-                <SearchableSelect
-                  id="btn-address-district"
-                  label={t("cart.addressDistrict")}
-                  required
-                  value={addrDistrict}
-                  onChange={(district) => {
-                    setAddrDistrict(district);
-                    setAddrErrors((prev) => ({ ...prev, district: false }));
-                  }}
-                  options={locations?.baku_districts ?? []}
-                  t={t}
-                  error={addrErrors.district}
-                />
-              )}
-
-              <div className="flex flex-col gap-1">
-                <span className="text-[12px] font-medium leading-4 text-[#333333]">
-                  {t("cart.addressStreet")}
-                  <span className="text-red-600"> *</span>
-                </span>
-                <input
-                  type="text"
-                  value={addrStreet}
-                  onChange={(event) => {
-                    setAddrStreet(event.target.value);
-                    setAddrErrors((prev) => ({ ...prev, street: false }));
-                  }}
-                  placeholder={t("cart.addressStreetPlaceholder")}
-                  className={`h-10 w-full rounded-xl border bg-white px-3 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 ${
-                    addrErrors.street ? "border-red-500" : "border-header-border focus:border-brand-primary"
-                  }`}
-                />
-              </div>
-
-              <div className="flex gap-2">
-                <div className="flex min-w-0 flex-1 flex-col gap-1">
-                  <span className="text-[12px] font-medium leading-4 text-[#333333]">
-                    {t("cart.addressBuilding")}
-                    <span className="text-red-600"> *</span>
-                  </span>
-                  <input
-                    type="text"
-                    value={addrBuilding}
-                    onChange={(event) => {
-                      setAddrBuilding(event.target.value);
-                      setAddrErrors((prev) => ({ ...prev, building: false }));
+                  <button
+                    id="btn-cart-change-address"
+                    type="button"
+                    onClick={() => setAddrMode("custom")}
+                    className="h-10 w-full cursor-pointer rounded-3xl border border-brand-primary text-sm font-medium leading-5 text-brand-primary transition-colors hover:bg-brand-primary hover:text-white"
+                  >
+                    {t("cart.changeAddress")}
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <DeliveryAddressFields
+                    idPrefix="btn-address"
+                    values={addr}
+                    onChange={(field, value) => {
+                      setAddr((prev) => ({ ...prev, [field]: value }));
+                      setAddrErrors((prev) => ({ ...prev, [field]: false }));
                     }}
-                    placeholder={t("cart.addressBuildingPlaceholder")}
-                    className={`h-10 w-full rounded-xl border bg-white px-3 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 ${
-                      addrErrors.building ? "border-red-500" : "border-header-border focus:border-brand-primary"
-                    }`}
+                    errors={addrErrors}
+                    locations={locations}
+                    t={t}
                   />
-                </div>
 
-                <div className="flex min-w-0 flex-1 flex-col gap-1">
-                  <span className="text-[12px] font-medium leading-4 text-[#333333]">
-                    {t("cart.addressApartment")}
-                  </span>
-                  <input
-                    type="text"
-                    value={addrApartment}
-                    onChange={(event) => setAddrApartment(event.target.value)}
-                    className="h-10 w-full rounded-xl border border-header-border bg-white px-3 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <span className="text-[12px] font-medium leading-4 text-[#333333]">
-                  {t("cart.addressNote")}
-                </span>
-                <textarea
-                  rows={2}
-                  value={addrNote}
-                  onChange={(event) => setAddrNote(event.target.value)}
-                  placeholder={t("cart.addressNotePlaceholder")}
-                  className="w-full rounded-xl border border-header-border bg-white px-3 py-2 text-sm leading-5 text-foreground outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-primary"
-                />
-              </div>
+                  {savedAddr && (
+                    <button
+                      id="btn-cart-use-saved-address"
+                      type="button"
+                      onClick={() => {
+                        setAddr(savedAddr);
+                        setAddrErrors({});
+                        setAddrMode("saved");
+                      }}
+                      className="w-max cursor-pointer text-sm text-brand-primary underline transition-colors hover:text-brand-primary-hover"
+                    >
+                      {t("cart.useSavedAgain")}
+                    </button>
+                  )}
+                </>
+              )}
             </div>
 
             {status && !status.ok && (
