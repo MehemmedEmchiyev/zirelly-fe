@@ -84,7 +84,9 @@ function OrderCard({ order, language, t }) {
             {t(`orders.status.${order.status}`)}
           </span>
           <span className="text-base font-bold leading-5 text-foreground">
-            {formatPrice(order.total)}
+            {formatPrice(
+              order.grand_total ?? Number(order.total) + Number(order.delivery_fee ?? 0)
+            )}
           </span>
         </div>
       </button>
@@ -124,6 +126,30 @@ function OrderCard({ order, language, t }) {
                   <span>-{formatPrice(details.discount_amount)}</span>
                 </div>
               )}
+
+              <div className="flex flex-col gap-1 border-t border-header-border pt-2 text-sm leading-5">
+                <div className="flex items-center justify-between gap-3 text-zinc-600">
+                  <span>{t("orders.goodsAmount")}</span>
+                  <span>{formatPrice(details.total)}</span>
+                </div>
+                <div className="flex items-center justify-between gap-3 text-zinc-600">
+                  <span>{t("orders.deliveryFee")}</span>
+                  <span>
+                    {Number(details.delivery_fee ?? 0) > 0
+                      ? formatPrice(details.delivery_fee)
+                      : t("cart.freeDelivery")}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-3 font-semibold text-foreground">
+                  <span>{t("orders.totalPayment")}</span>
+                  <span>
+                    {formatPrice(
+                      details.grand_total ??
+                        Number(details.total) + Number(details.delivery_fee ?? 0)
+                    )}
+                  </span>
+                </div>
+              </div>
             </div>
           )}
         </div>
