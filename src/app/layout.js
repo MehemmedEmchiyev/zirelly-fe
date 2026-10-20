@@ -1,4 +1,4 @@
-import { GoogleTagManager } from "@next/third-parties/google";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { Suspense } from "react";
 import { Cormorant_Garamond, Geist } from "next/font/google";
 import DeferredPopup from "@/components/layout/DeferredPopup";
@@ -101,6 +101,8 @@ export default async function RootLayout({ children }) {
           </AuthProvider>
         </LanguageProvider>
       </body>
+      {/* GA4 birbaşa qoşulub. Saytdaxili keçidləri GA4 özü sayır (Enhanced Measurement → browser history). GTM-də də GA4 tag-i qurulsa, bunu silin, yoxsa baxışlar ikiqat sayılar. */}
+      <GoogleAnalytics gaId="G-DW0L4ZFR4L" />
     </html>
   );
 }
