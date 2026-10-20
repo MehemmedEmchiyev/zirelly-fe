@@ -1,4 +1,5 @@
 import { GoogleTagManager } from "@next/third-parties/google";
+import { Suspense } from "react";
 import { Cormorant_Garamond, Geist } from "next/font/google";
 import DeferredPopup from "@/components/layout/DeferredPopup";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
@@ -73,7 +74,10 @@ export default async function RootLayout({ children }) {
     >
       <GoogleTagManager gtmId="GTM-MXN574BN" />
       <body className="flex min-h-full flex-col bg-white text-foreground">
-        <GtmPageView />
+        {/* useSearchParams Suspense olmadan build-də bütün səhifəni klientə keçirir */}
+        <Suspense fallback={null}>
+          <GtmPageView />
+        </Suspense>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

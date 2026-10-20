@@ -1,27 +1,22 @@
 "use client";
 
 import { sendGTMEvent } from "@next/third-parties/google";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
-// Sayt daxili keçidlərdə səhifə yenidən yüklənmir, ona görə GTM-in "All Pages"
-// triggeri yalnız ilk açılışda işləyir. Hər sonrakı keçid üçün dataLayer-ə
-// "route_change" hadisəsi göndərilir. İlk yükləmə ötürülür ki, mövcud
-// "All Pages" triggeri ilə ikiqat sayılmasın.
+// Hər səhifə baxışında (ilk açılış, refresh və sayt daxili keçid) dataLayer-ə
+// tam olaraq bir "virtual_page_view" göndərilir. GTM-də səhifə baxışı tag-ləri
+// "Page View" / "History Change" yox, yalnız bu Custom Event-ə bağlanmalıdır.
 export default function GtmPageView() {
   const pathname = usePathname();
-  const isFirstLoad = useRef(true);
+  const searchParams = useSearchParams();
+  const query = searchParams?.toString() ?? "";
 
   useEffect(() => {
-    if (isFirstLoad.current) {
-      isFirstLoad.current = false;
-      return;
-    }
-
     // document.title yeni səhifənin metadata-sı ilə bir az gec yenilənir
     const timer = setTimeout(() => {
       sendGTMEvent({
-        event: "route_change",
+        event: "virtual_page_view",
         page_path: window.location.pathname + window.location.search,
         page_location: window.location.href,
         page_title: document.title,
@@ -29,7 +24,7 @@ export default function GtmPageView() {
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [pathname]);
+  }, [pathname, query]);
 
   return null;
 }
