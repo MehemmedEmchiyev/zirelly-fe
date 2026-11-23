@@ -31,10 +31,6 @@ export const TRANSLATIONS = {
     "home.faqLabel": "Tez-tez verilən suallar",
     "home.faqTitle": "Sualınız var? Gəlin cavablandıraq!",
     "home.faqContact": "Hələ də sualınız var? Bizimlə əlaqə saxlayın: ",
-    "home.bannerText1":
-      "Məkanları sadəcə gözəl görünmək üçün deyil, orada yaşamağı əsl zövqə çevirmək üçün dizayn edirik.",
-    "home.bannerText2":
-      "Hər detal hər addımda harmoniya və təbii tarazlığı hiss etməyiniz üçün diqqətlə seçilib.",
     "card.inStock": "Stokda var",
     "card.addToCart": "Səbətə at",
     "auth.title": "Daxil ol",
@@ -243,10 +239,6 @@ export const TRANSLATIONS = {
     "home.faqLabel": "Frequently Asked Questions",
     "home.faqTitle": "Have a question? Let’s answer it!",
     "home.faqContact": "Still have questions? Contact us at ",
-    "home.bannerText1":
-      "We design spaces not just to look beautiful, but to make living within them a true pleasure.",
-    "home.bannerText2":
-      "Each detail is thoughtfully selected to let you experience harmony and natural balance in every step.",
     "card.inStock": "In Stock",
     "card.addToCart": "Add to Card",
     "auth.title": "Log In",
@@ -455,10 +447,6 @@ export const TRANSLATIONS = {
     "home.faqLabel": "Часто задаваемые вопросы",
     "home.faqTitle": "Есть вопрос? Давайте ответим!",
     "home.faqContact": "Остались вопросы? Свяжитесь с нами: ",
-    "home.bannerText1":
-      "Мы создаём пространства не просто красивыми — мы делаем жизнь в них настоящим удовольствием.",
-    "home.bannerText2":
-      "Каждая деталь тщательно подобрана, чтобы вы ощущали гармонию и природный баланс на каждом шагу.",
     "card.inStock": "В наличии",
     "card.addToCart": "В корзину",
     "auth.title": "Войти",

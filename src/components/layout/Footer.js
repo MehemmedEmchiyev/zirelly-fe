@@ -149,14 +149,14 @@ export default function Footer() {
                 </div>
 
                 <div className="hidden text-sm leading-6 text-foreground lg:block">
-                  <p>{phone ?? FALLBACK_PHONE}</p>
+                  <p className="whitespace-nowrap">{phone ?? FALLBACK_PHONE}</p>
                   <p>Zirelly.az</p>
                 </div>
               </div>
             </div>
 
             <div className="flex items-end justify-between gap-4 lg:hidden">
-              <div className="text-sm leading-6 text-zinc-500">
+              <div className="min-w-0 text-sm leading-6 text-zinc-500">
                 <p>© {year} {t("footer.copyright")}</p>
                 <p>{t("footer.rights")}</p>
                 <p className="mt-2 flex flex-col gap-1">
@@ -187,8 +187,8 @@ export default function Footer() {
                 </p>
               </div>
 
-              <div className="text-right text-sm leading-6 text-foreground">
-                <p>{phone ?? FALLBACK_PHONE}</p>
+              <div className="shrink-0 text-right text-sm leading-6 text-foreground">
+                <p className="whitespace-nowrap">{phone ?? FALLBACK_PHONE}</p>
                 <p>Zirelly.az</p>
               </div>
             </div>
